@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MainPaper Hub - Jobs</title>
+<meta name="description" content="MainPaper Hub Jobs - Latest jobs and career opportunities.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:Arial,Helvetica,sans-serif;background:#f3f6fb;color:#172033;line-height:1.5}
+a{text-decoration:none}
+header{background:#111827;color:#fff;position:sticky;top:0;z-index:1000;box-shadow:0 3px 15px rgba(0,0,0,.15)}
+.navbar{max-width:1300px;margin:auto;min-height:70px;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{color:#fff;font-size:22px;font-weight:bold}
+.logo span{color:#60a5fa}
+.nav-links{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.nav-links a{color:#e5e7eb;padding:9px 13px;border-radius:7px;font-weight:bold;font-size:14px}
+.nav-links a:hover,.nav-links a.active{background:#1e293b;color:#fff}
+.menu-btn{display:none;border:0;background:#1e293b;color:#fff;padding:9px 12px;border-radius:7px;font-size:20px}
+.hero{background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;padding:65px 20px}
+.hero-inner{max-width:1000px;margin:auto;text-align:center}
+.hero h1{font-size:42px;margin-bottom:12px}
+.hero p{font-size:18px;color:#e0e7ff;max-width:720px;margin:auto}
+.container{max-width:1200px;margin:auto;padding:35px 20px}
+.toolbar{background:#fff;padding:20px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,.07);margin-bottom:25px}
+.search-row{display:grid;grid-template-columns:1fr auto;gap:10px}
+input,select{width:100%;padding:13px;border:1px solid #cbd5e1;border-radius:9px;font:inherit;outline:none}
+button{cursor:pointer;font:inherit}
+.primary-btn{border:0;background:#2563eb;color:#fff;padding:13px 20px;border-radius:9px;font-weight:bold}
+.primary-btn:hover{background:#1d4ed8}
+.jobs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.job-card{background:#fff;border:1px solid #e2e8f0;border-radius:15px;padding:22px;box-shadow:0 5px 20px rgba(0,0,0,.06);transition:.2s}
+.job-card:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,.1)}
+.job-icon{width:55px;height:55px;border-radius:12px;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:14px}
+.job-card h2{font-size:20px;color:#1e3a8a;margin-bottom:8px}
+.meta{color:#64748b;font-size:14px;margin:5px 0}
+.tags{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}
+.tag{background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:bold}
+.apply-btn{display:block;text-align:center;background:#16a34a;color:#fff;padding:11px;border-radius:8px;font-weight:bold;margin-top:15px}
+.apply-btn:hover{background:#15803d}
+.no-results{background:#fff;border-radius:15px;padding:50px 20px;text-align:center;color:#64748b;box-shadow:0 5px 20px rgba(0,0,0,.06)}
+footer{margin-top:40px;background:#111827;color:#cbd5e1;padding:35px 20px;text-align:center}
+.footer-logo{color:#fff;font-size:22px;font-weight:bold;margin-bottom:10px}
+.footer-links{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:15px 0}
+.footer-links a{color:#cbd5e1}
+@media(max-width:900px){.jobs-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){
+.navbar{flex-wrap:wrap}.menu-btn{display:block}.nav-links{display:none;width:100%;flex-direction:column;align-items:stretch}
+.nav-links.show{display:flex}.nav-links a{text-align:center;background:#1e293b}
+.hero{padding:50px 15px}.hero h1{font-size:32px}.hero p{font-size:15px}
+.search-row{grid-template-columns:1fr}.jobs-grid{grid-template-columns:1fr}.container{padding:25px 15px}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="navbar">
+<a href="index.html" class="logo">📚 MainPaper <span>Hub</span></a>
+<button class="menu-btn" onclick="toggleMenu()" aria-label="Open menu">☰</button>
+<nav><a href="index.html">Home</a><a href="exam-preparation.html">Exam Preparation</a><a href="jobs.html">Jobs</a></nav>
+</div>
+</header>
+
+<section class="hero">
+<div class="hero-inner">
+<h1>💼 Find Jobs & Career Opportunities</h1>
+<p>Explore job opportunities posted on MainPaper Hub. Students can search jobs by title, company, location, qualification and category.</p>
+</div>
+</section>
+
+<main class="container">
+<div class="toolbar">
+<div class="search-row">
+<input id="jobSearch" type="search" placeholder="🔎 Search jobs, company, location, qualification..." oninput="renderJobs()">
+<button class="primary-btn" onclick="renderJobs()">Search Jobs</button>
+</div>
+</div>
+
+<div id="jobsGrid" class="jobs-grid"></div>
+<div id="noJobs" class="no-results" style="display:none">
+<div style="font-size:48px;margin-bottom:10px">💼</div>
+<h2>No Jobs Found</h2>
+<p>New job opportunities will appear here when they are posted by MainPaper Hub admin.</p>
+</div>
+</main>
+
+<footer>
+<div class="footer-logo">📚 MainPaper Hub</div>
+<p>Past Papers. Better Preparation. Brighter Future.</p>
+<div class="footer-links">
+<a href="index.html">Home</a>
+<a href="index.html#papers">Question Papers</a>
+<a href="index.html#categories">Categories</a>
+<a href="exam-preparation.html">Exam Preparation</a>
+</div>
+<p style="margin-top:15px;color:#94a3b8;font-size:13px">© 2026 MainPaper Hub. All rights reserved.</p>
+</footer>
+
+<script>
+const jobs = [
+  {
+    title:"Sample Graduate Trainee",
+    company:"MainPaper Hub Demo",
+    location:"India",
+    type:"Full Time",
+    qualification:"Graduate",
+    category:"Education",
+    description:"Demo job card. Replace this with real jobs from your admin panel.",
+    link:"#"
+  },
+  {
+    title:"Sample Web Developer",
+    company:"MainPaper Hub Demo",
+    location:"Remote",
+    type:"Internship",
+    qualification:"B.Tech / BCA / MCA",
+    category:"Technology",
+    description:"Demo opportunity for students interested in web development.",
+    link:"#"
+  },
+  {
+    title:"Sample Teaching Assistant",
+    company:"MainPaper Hub Demo",
+    location:"Punjab",
+    type:"Part Time",
+    qualification:"Graduate",
+    category:"Education",
+    description:"Demo teaching opportunity. Real listings can be added later.",
+    link:"#"
+  }
+];
+
+function toggleMenu(){
+  document.getElementById("navLinks").classList.toggle("show");
+}
+
+function renderJobs(){
+  const q = document.getElementById("jobSearch").value.trim().toLowerCase();
+  const grid = document.getElementById("jobsGrid");
+  const noJobs = document.getElementById("noJobs");
+
+  const filtered = jobs.filter(job =>
+    [job.title,job.company,job.location,job.type,job.qualification,job.category,job.description]
+      .join(" ").toLowerCase().includes(q)
+  );
+
+  grid.innerHTML = filtered.map(job => `
+    <article class="job-card">
+      <div class="job-icon">💼</div>
+      <h2>${escapeHtml(job.title)}</h2>
+      <div class="meta">🏢 <strong>${escapeHtml(job.company)}</strong></div>
+      <div class="meta">📍 ${escapeHtml(job.location)}</div>
+      <div class="meta">🕒 ${escapeHtml(job.type)}</div>
+      <div class="meta">🎓 ${escapeHtml(job.qualification)}</div>
+      <div class="tags">
+        <span class="tag">${escapeHtml(job.category)}</span>
+      </div>
+      <p class="meta">${escapeHtml(job.description)}</p>
+      <a class="apply-btn" href="${job.link}" target="_blank" rel="noopener">Apply Now →</a>
+    </article>
+  `).join("");
+
+  noJobs.style.display = filtered.length ? "none" : "block";
+}
+
+function escapeHtml(value){
+  return String(value).replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[ch]));
+}
+
+renderJobs();
+</script>
+
+<!-- MainPaper Hub shared admin-controlled popup ads: 3 minutes / 3 seconds -->
+<style>
+#mphSharedAdOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:99999;align-items:center;justify-content:center;padding:18px}
+#mphSharedAdBox{width:min(760px,96vw);background:#fff;border-radius:16px;padding:14px;box-shadow:0 20px 60px rgba(0,0,0,.35);text-align:center}
+#mphSharedAdBox h3{margin:4px 0 10px;font-size:20px}
+#mphSharedAdMedia{max-height:62vh;overflow:hidden;border-radius:10px}
+#mphSharedAdMedia img,#mphSharedAdMedia video{max-width:100%;max-height:62vh;border-radius:10px;display:block;margin:auto}
+#mphSharedAdTimer{font-weight:700;margin-top:10px}
+</style>
+<div id="mphSharedAdOverlay" aria-label="Advertisement">
+  <div id="mphSharedAdBox">
+    <h3 id="mphSharedAdTitle">Advertisement</h3>
+    <div id="mphSharedAdMedia"></div>
+    <div id="mphSharedAdTimer">Advertisement finishing in 3 seconds</div>
+  </div>
+</div>
+<script>
+(function(){
+  const DB_NAME='MainPaperHubDB', DB_VERSION=6;
+  let popupTimer=null, repeatTimer=null, activeAd=null;
+  function openDb(){return new Promise((resolve,reject)=>{const r=indexedDB.open(DB_NAME,DB_VERSION);r.onsuccess=e=>resolve(e.target.result);r.onerror=()=>reject(r.error)});}
+  function getAds(db){return new Promise((resolve,reject)=>{if(!db.objectStoreNames.contains('ads'))return resolve([]);const r=db.transaction('ads','readonly').objectStore('ads').getAll();r.onsuccess=()=>resolve(r.result||[]);r.onerror=()=>reject(r.error)});}
+  function putAd(db,a){return new Promise((resolve,reject)=>{try{const r=db.transaction('ads','readwrite').objectStore('ads').put(a);r.onsuccess=()=>resolve();r.onerror=()=>reject(r.error)}catch(e){reject(e)}})}
+  function today(){return new Date().toISOString().slice(0,10)}
+  async function findAd(){try{const db=await openDb(),ads=await getAds(db),d=today();return ads.find(a=>(a.placement||'download')==='popup'&&Number(a.views||0)<Number(a.maxViews||a.maxImpressions||0)&&d>=a.start&&d<=a.end)||null}catch(e){return null}}
+  function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+  async function show(ad){
+    if(!ad)return; activeAd=ad;
+    const overlay=document.getElementById('mphSharedAdOverlay'),media=document.getElementById('mphSharedAdMedia');
+    document.getElementById('mphSharedAdTitle').textContent=ad.title||'Advertisement';
+    const content=ad.type==='image'?`<img src="${ad.fileData}" alt="${esc(ad.title||'Advertisement')}">`:`<video src="${ad.fileData}" autoplay muted playsinline></video>`;
+    media.innerHTML=ad.link?`<a href="${esc(ad.link)}" target="_blank" rel="noopener" onclick="window.__mphAdClick&&window.__mphAdClick()">${content}</a>`:content;
+    overlay.style.display='flex';
+    let n=3;document.getElementById('mphSharedAdTimer').textContent=`Advertisement finishing in ${n} seconds`;
+    const db=await openDb().catch(()=>null); if(db){ad.impressions=Number(ad.impressions||0)+1;await putAd(db,ad).catch(()=>{});}
+    clearInterval(popupTimer);popupTimer=setInterval(async()=>{n--;document.getElementById('mphSharedAdTimer').textContent=n>0?`Advertisement finishing in ${n} seconds`:'Advertisement complete';if(n<=0){clearInterval(popupTimer);overlay.style.display='none';}},1000);
+  }
+  window.__mphAdClick=async function(){if(!activeAd)return;try{const db=await openDb();activeAd.clicks=Number(activeAd.clicks||0)+1;await putAd(db,activeAd)}catch(e){}}
+  function schedule(){clearTimeout(repeatTimer);repeatTimer=setTimeout(async()=>{if(document.getElementById('mphSharedAdOverlay').style.display!=='flex'){const a=await findAd();if(a)await show(a)}scheduleRepeat()},180000)}
+  function scheduleRepeat(){clearInterval(repeatTimer);repeatTimer=setInterval(async()=>{if(document.getElementById('mphSharedAdOverlay').style.display==='flex')return;const a=await findAd();if(a)await show(a)},180000)}
+  schedule();
+})();
+</script>
+
+</body>
+</html>
