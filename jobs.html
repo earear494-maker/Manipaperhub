@@ -5,76 +5,125 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MainPaper Hub - Jobs</title>
 <meta name="description" content="MainPaper Hub Jobs - Latest jobs and career opportunities.">
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+:root{--blue:#2563eb;--indigo:#4f46e5;--dark:#0f172a;--muted:#64748b;--bg:#f5f7fb;--card:#fff;--line:#e2e8f0}
+*{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:Arial,Helvetica,sans-serif;background:#f3f6fb;color:#172033;line-height:1.5}
-a{text-decoration:none}
-header{background:#111827;color:#fff;position:sticky;top:0;z-index:1000;box-shadow:0 3px 15px rgba(0,0,0,.15)}
-.navbar{max-width:1300px;margin:auto;min-height:70px;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.logo{color:#fff;font-size:22px;font-weight:bold}
-.logo span{color:#60a5fa}
-.nav-links{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.nav-links a{color:#e5e7eb;padding:9px 13px;border-radius:7px;font-weight:bold;font-size:14px}
-.nav-links a:hover,.nav-links a.active{background:#1e293b;color:#fff}
-.menu-btn{display:none;border:0;background:#1e293b;color:#fff;padding:9px 12px;border-radius:7px;font-size:20px}
-.hero{background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;padding:65px 20px}
-.hero-inner{max-width:1000px;margin:auto;text-align:center}
-.hero h1{font-size:42px;margin-bottom:12px}
-.hero p{font-size:18px;color:#e0e7ff;max-width:720px;margin:auto}
-.container{max-width:1200px;margin:auto;padding:35px 20px}
-.toolbar{background:#fff;padding:20px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,.07);margin-bottom:25px}
-.search-row{display:grid;grid-template-columns:1fr auto;gap:10px}
-input,select{width:100%;padding:13px;border:1px solid #cbd5e1;border-radius:9px;font:inherit;outline:none}
-button{cursor:pointer;font:inherit}
-.primary-btn{border:0;background:#2563eb;color:#fff;padding:13px 20px;border-radius:9px;font-weight:bold}
-.primary-btn:hover{background:#1d4ed8}
-.jobs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.job-card{background:#fff;border:1px solid #e2e8f0;border-radius:15px;padding:22px;box-shadow:0 5px 20px rgba(0,0,0,.06);transition:.2s}
-.job-card:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,.1)}
-.job-icon{width:55px;height:55px;border-radius:12px;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:14px}
-.job-card h2{font-size:20px;color:#1e3a8a;margin-bottom:8px}
-.meta{color:#64748b;font-size:14px;margin:5px 0}
+body{font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--dark);line-height:1.55}
+a{text-decoration:none;color:inherit}
+button,input,select{font:inherit}
+.container{width:min(1180px,calc(100% - 36px));margin:auto}
+
+header{position:sticky;top:0;z-index:20;background:rgba(15,23,42,.96);backdrop-filter:blur(12px);box-shadow:0 8px 25px rgba(15,23,42,.14)}
+.nav{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{font-size:21px;font-weight:900;color:#fff}
+.brand span{color:#60a5fa}
+.links{display:flex;align-items:center;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.links a{color:#cbd5e1;padding:9px 11px;border-radius:9px;font-size:13px;font-weight:700}
+.links a:hover,.links .active{background:#1e293b;color:#fff}
+.menu{display:none;background:#1e293b;border:0;color:#fff;border-radius:9px;padding:9px 12px}
+
+.hero{position:relative;overflow:hidden;padding:78px 0 82px;color:#fff;background:linear-gradient(135deg,#1d4ed8,#4f46e5 55%,#7c3aed)}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.09)}
+.hero:before{width:320px;height:320px;right:-100px;top:-130px}
+.hero:after{width:240px;height:240px;left:-100px;bottom:-120px}
+.hero-content{position:relative;z-index:1;text-align:center;max-width:850px;margin:auto}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 13px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);border-radius:999px;font-weight:800;font-size:13px;margin-bottom:18px}
+.hero h1{font-size:clamp(36px,6vw,62px);line-height:1.05;margin-bottom:17px;letter-spacing:-1.5px}
+.hero p{font-size:18px;color:#e0e7ff;max-width:720px;margin:0 auto 28px}
+.hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 19px;border-radius:10px;font-weight:800;border:1px solid transparent}
+.btn-light{background:#fff;color:#1e40af}
+.btn-ghost{border-color:rgba(255,255,255,.35);color:#fff;background:rgba(255,255,255,.08)}
+
+main{padding:46px 0 65px}
+.section-head{text-align:center;margin-bottom:25px}
+.section-head h2{font-size:30px;letter-spacing:-.5px}
+.section-head p{color:var(--muted);margin-top:5px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:25px;box-shadow:0 8px 25px rgba(15,23,42,.05);margin-bottom:28px}
+.panel h3{font-size:21px;margin-bottom:7px}
+.panel>p{color:var(--muted);font-size:14px;margin-bottom:19px}
+.search{display:flex;gap:9px}
+.search input{flex:1;border:1px solid #cbd5e1;border-radius:10px;padding:12px 13px;outline:none}
+.search input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.search button{border:0;background:var(--blue);color:#fff;padding:0 17px;border-radius:10px;font-weight:800;cursor:pointer}
+
+.jobs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.job-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(15,23,42,.05);transition:.2s}
+.job-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(15,23,42,.09)}
+.job-icon{width:56px;height:56px;border-radius:14px;background:#dbeafe;display:grid;place-items:center;font-size:29px;margin-bottom:14px}
+.job-card h2{font-size:20px;margin-bottom:8px}
+.meta{color:var(--muted);font-size:14px;margin:6px 0}
 .tags{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}
-.tag{background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:bold}
-.apply-btn{display:block;text-align:center;background:#16a34a;color:#fff;padding:11px;border-radius:8px;font-weight:bold;margin-top:15px}
-.apply-btn:hover{background:#15803d}
-.no-results{background:#fff;border-radius:15px;padding:50px 20px;text-align:center;color:#64748b;box-shadow:0 5px 20px rgba(0,0,0,.06)}
-footer{margin-top:40px;background:#111827;color:#cbd5e1;padding:35px 20px;text-align:center}
-.footer-logo{color:#fff;font-size:22px;font-weight:bold;margin-bottom:10px}
-.footer-links{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:15px 0}
-.footer-links a{color:#cbd5e1}
+.tag{background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:6px 9px;font-size:12px;font-weight:800}
+.apply-btn{display:block;text-align:center;background:var(--blue);color:#fff;padding:11px;border-radius:10px;font-weight:800;margin-top:15px}
+.apply-btn:hover{background:#1d4ed8}
+.no-results{background:#fff;border:1px dashed #cbd5e1;border-radius:16px;padding:50px 20px;text-align:center;color:var(--muted);box-shadow:0 8px 24px rgba(15,23,42,.04)}
+
+footer{background:#0b1120;color:#cbd5e1;padding:35px 0}
+.footer-inner{display:flex;justify-content:space-between;gap:20px;align-items:center}
+.footer h3{color:#fff;margin-bottom:5px}
+.footer p{font-size:14px}
+.footer a{color:#93c5fd;font-weight:700}
+.footer-links{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}
+
 @media(max-width:900px){.jobs-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:700px){
-.navbar{flex-wrap:wrap}.menu-btn{display:block}.nav-links{display:none;width:100%;flex-direction:column;align-items:stretch}
-.nav-links.show{display:flex}.nav-links a{text-align:center;background:#1e293b}
-.hero{padding:50px 15px}.hero h1{font-size:32px}.hero p{font-size:15px}
-.search-row{grid-template-columns:1fr}.jobs-grid{grid-template-columns:1fr}.container{padding:25px 15px}
+ .nav{padding:10px 0}
+ .links{display:none;position:absolute;top:68px;left:0;right:0;background:#0f172a;padding:12px 18px;box-shadow:0 10px 20px rgba(0,0,0,.2)}
+ .links.open{display:flex;flex-direction:column;align-items:stretch}
+ .links a{text-align:center}
+ .menu{display:block}
+ .hero{padding:60px 0}
+ .hero h1{font-size:40px}
+ .hero p{font-size:16px}
+ .search{flex-direction:column}
+ .search button{padding:12px}
+ .jobs-grid{grid-template-columns:1fr}
+ .footer-inner{flex-direction:column;text-align:center}
 }
 </style>
 </head>
 <body>
 
 <header>
-<div class="navbar">
-<a href="index.html" class="logo">📚 MainPaper <span>Hub</span></a>
-<button class="menu-btn" onclick="toggleMenu()" aria-label="Open menu">☰</button>
-<nav><a href="index.html">Home</a><a href="exam-preparation.html">Exam Preparation</a><a href="jobs.html">Jobs</a></nav>
+<div class="container nav">
+<a href="index.html" class="brand">📚 MainPaper <span>Hub</span></a>
+<button class="menu" onclick="toggleMenu()" aria-label="Open menu">☰</button>
+<nav id="navLinks" class="links">
+<a href="index.html">🏠 Home</a>
+<a href="exam-preparation.html">📚 Exam Preparation</a>
+<a href="jobs.html" class="active">💼 Jobs</a>
+</nav>
 </div>
 </header>
 
 <section class="hero">
-<div class="hero-inner">
-<h1>💼 Find Jobs & Career Opportunities</h1>
-<p>Explore job opportunities posted on MainPaper Hub. Students can search jobs by title, company, location, qualification and category.</p>
+<div class="container hero-content">
+<div class="eyebrow">💼 MainPaper Hub Careers</div>
+<h1>Find Jobs & Career Opportunities</h1>
+<p>Explore job opportunities posted on MainPaper Hub. Search by job title, company, location, qualification, type or category.</p>
+<div class="hero-actions">
+<a class="btn btn-light" href="#jobs">🔎 Browse Jobs</a>
+<a class="btn btn-ghost" href="exam-preparation.html">📚 Exam Preparation</a>
+</div>
 </div>
 </section>
 
-<main class="container">
-<div class="toolbar">
-<div class="search-row">
-<input id="jobSearch" type="search" placeholder="🔎 Search jobs, company, location, qualification..." oninput="renderJobs()">
-<button class="primary-btn" onclick="renderJobs()">Search Jobs</button>
+<main id="jobs">
+<div class="container">
+<div class="section-head">
+<h2>💼 Latest Job Opportunities</h2>
+<p>Search and explore opportunities available for students and graduates.</p>
+</div>
+
+<div class="panel">
+<h3>🔎 Search Jobs</h3>
+<p>Find jobs by title, company, location, qualification, job type or category.</p>
+<div class="search">
+<input id="jobSearch" type="search" placeholder="Search jobs, company, location, qualification..." oninput="renderJobs()">
+<button onclick="renderJobs()">Search Jobs</button>
 </div>
 </div>
 
@@ -84,10 +133,13 @@ footer{margin-top:40px;background:#111827;color:#cbd5e1;padding:35px 20px;text-a
 <h2>No Jobs Found</h2>
 <p>New job opportunities will appear here when they are posted by MainPaper Hub admin.</p>
 </div>
+</div>
 </main>
 
 <footer>
-<div class="footer-logo">📚 MainPaper Hub</div>
+<div class="container footer-inner">
+<div>
+<h3>📚 MainPaper Hub</h3>
 <p>Past Papers. Better Preparation. Brighter Future.</p>
 <div class="footer-links">
 <a href="index.html">Home</a>
@@ -95,45 +147,16 @@ footer{margin-top:40px;background:#111827;color:#cbd5e1;padding:35px 20px;text-a
 <a href="index.html#categories">Categories</a>
 <a href="exam-preparation.html">Exam Preparation</a>
 </div>
-<p style="margin-top:15px;color:#94a3b8;font-size:13px">© 2026 MainPaper Hub. All rights reserved.</p>
+</div>
+<div style="font-size:13px;color:#94a3b8">© 2026 MainPaper Hub. All rights reserved.</div>
+</div>
 </footer>
 
 <script>
-const jobs = [
-  {
-    title:"Sample Graduate Trainee",
-    company:"MainPaper Hub Demo",
-    location:"India",
-    type:"Full Time",
-    qualification:"Graduate",
-    category:"Education",
-    description:"Demo job card. Replace this with real jobs from your admin panel.",
-    link:"#"
-  },
-  {
-    title:"Sample Web Developer",
-    company:"MainPaper Hub Demo",
-    location:"Remote",
-    type:"Internship",
-    qualification:"B.Tech / BCA / MCA",
-    category:"Technology",
-    description:"Demo opportunity for students interested in web development.",
-    link:"#"
-  },
-  {
-    title:"Sample Teaching Assistant",
-    company:"MainPaper Hub Demo",
-    location:"Punjab",
-    type:"Part Time",
-    qualification:"Graduate",
-    category:"Education",
-    description:"Demo teaching opportunity. Real listings can be added later.",
-    link:"#"
-  }
-];
+const jobs = [];
 
 function toggleMenu(){
-  document.getElementById("navLinks").classList.toggle("show");
+  document.getElementById("navLinks").classList.toggle("open");
 }
 
 function renderJobs(){
