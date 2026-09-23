@@ -43,6 +43,8 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 
 .hero-tagline{margin:10px 0 18px;font-size:1.5rem;line-height:1.35;font-weight:700;}
 @media(max-width:600px){.hero-tagline{font-size:1.15rem;}}
+
+.course-add-wrap{display:flex;gap:8px;align-items:stretch}.course-add-wrap input{flex:1;min-width:0}.add-course-btn{display:none;align-items:center;justify-content:center;border:1px solid #cbd5e1;background:#fff;border-radius:10px;padding:0 12px;font-weight:700;cursor:pointer;white-space:nowrap}.add-course-btn.show{display:inline-flex}.add-course-btn:hover{background:#f1f5f9}
 </style>
 <style>
 .search-dropdown{display:none;position:absolute;left:0;right:0;top:calc(100% + 4px);max-height:260px;overflow-y:auto;background:#fff;border:1px solid #cbd5e1;border-radius:10px;box-shadow:0 10px 25px rgba(15,23,42,.15);z-index:9999;padding:5px}.search-dropdown.open{display:block}.search-option{display:block;width:100%;text-align:left;border:0;background:#fff;padding:10px 12px;border-radius:7px;cursor:pointer;font:inherit}.search-option:hover{background:#f1f5f9}.form-group{position:relative}</style>
@@ -105,8 +107,8 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 <h2>📄 Upload Question Paper</h2>
 <div class="form-grid">
 <div><label>Institute</label><input id="university" placeholder="🔎 Type institute name..." oninput="searchInstitutes()"><div id="instituteDropdown" class="search-dropdown"></div></div>
-<div><label>Course</label><input id="course" placeholder="🔎 Type course / B.Tech branch..." oninput="searchCourses()"><div id="courseDropdown" class="search-dropdown"></div></div><div><label>Semester</label><select id="semester" onchange="loadSubjects()"><option value="">Select Semester</option></select></div>
-<div><label>Subject</label><select id="subject"><option value="">Select Subject</option></select></div>
+<div><label>Course</label><div class="course-add-wrap"><input id="course" placeholder="🔎 Type course / B.Tech branch..." oninput="searchCourses()"><button type="button" id="addCourseBtn" class="add-course-btn" onclick="addNewCourse()">➕ Add Course</button></div><div id="courseDropdown" class="search-dropdown"></div></div><div><label>Semester</label><select id="semester" onchange="loadSubjects()"><option value="">Select Semester</option></select></div>
+<div><label>Subject</label><div class="subject-add-wrap"><select id="subject" onchange="updateAddSubjectButton()"><option value="">Select Subject</option></select><button type="button" id="addSubjectBtn" class="add-course-btn" onclick="addNewSubject()" style="display:none">➕ Add Subject</button></div></div>
 <div><label>Year</label><select id="year"><option value="">Select Year</option></select></div>
 <div class="full"><label>Exam Name</label><input id="paperExamName" placeholder="Example: B.Ed Entrance 2026"></div>
 <div class="full" style="margin:10px 0;padding:12px;border:1px solid #bfdbfe;border-radius:10px;background:#eff6ff"><strong>🛡️ Production Security</strong><div class="small-text" style="margin-top:5px;line-height:1.7"><strong>File validation:</strong> type, MIME/signature and size checks. <strong>Malware/virus scanning:</strong> scan and quarantine before storage/publication. <strong>Secure admin authentication:</strong> server-side authentication, hashed passwords, secure sessions and authorization. <strong>Rate limiting:</strong> limit repeated login, upload, request, report and API calls to prevent brute-force, spam and abuse. Students can use the public website without login.</div></div>
@@ -318,18 +320,45 @@ function initInstitutes(){
  loadCourses();
  setupSearchDropdowns();
 }
+function getCustomCourses(){try{return JSON.parse(localStorage.getItem("MPH_CUSTOM_COURSES")||"{}")}catch(e){return {}}}
+function saveCustomCourses(d){localStorage.setItem("MPH_CUSTOM_COURSES",JSON.stringify(d))}
 function getInstituteCourses(name){
  const key=instituteNames.find(x=>x.toLowerCase()===String(name||"").trim().toLowerCase());
- return key && courseData[key] ? courseData[key] : Object.keys(courseCatalog);
+ const base=key && courseData[key] ? courseData[key] : Object.keys(courseCatalog);
+ const custom=getCustomCourses()[key]||[];
+ return [...new Set([...base,...custom.map(x=>x.name||x)])];
 }
+function updateAddCourseButton(){
+ const u=document.getElementById("university")?.value.trim()||"", b=document.getElementById("addCourseBtn");
+ if(!b)return;
+ const selected=instituteNames.some(x=>x.toLowerCase()===u.toLowerCase());
+ b.classList.toggle("show",selected);
+}
+function addNewCourse(){
+ const u=document.getElementById("university")?.value.trim()||"";
+ if(!instituteNames.some(x=>x.toLowerCase()===u.toLowerCase())){alert("Please select an Institute from the list first.");return}
+ const name=prompt("Enter new course name:"); if(!name||!name.trim())return;
+ const clean=name.trim(); const n=parseInt(prompt("How many semesters does this course have?","8"),10);
+ if(!n||n<1||n>20){alert("Please enter a valid semester count (1–20).");return}
+ const key=instituteNames.find(x=>x.toLowerCase()===u.toLowerCase()); const d=getCustomCourses(); d[key]=d[key]||[];
+ if(d[key].some(x=>(x.name||x).toLowerCase()===clean.toLowerCase())){alert("This course already exists for this Institute.");return}
+ d[key].push({name:clean,semesters:n}); saveCustomCourses(d);
+ courseCatalog[clean]=courseCatalog[clean]||{semesters:n}; courseData[key]=[...(courseData[key]||[]),clean];
+ document.getElementById("course").value=clean; document.getElementById("courseDropdown")?.classList.remove("open"); loadSemesters();
+ alert("✅ Course added successfully for "+key+".");
+}
+
 function searchInstitutes(){
  const input=document.getElementById("university"),box=document.getElementById("instituteDropdown");
  const q=input.value.trim().toLowerCase();
  const filtered=instituteNames.filter(x=>!q||x.toLowerCase().startsWith(q)).sort((a,b)=>a.localeCompare(b));
- renderSearchDropdown(box,filtered,(value)=>{input.value=value;box.classList.remove("open");loadCourses();});
+ renderSearchDropdown(box,filtered,(value)=>{input.value=value;box.classList.remove("open");updateAddCourseButton();loadCourses();});
+ updateAddCourseButton();
+ updateAddSubjectButton();
  loadCourses();
 }
 function loadCourses(){
+ updateAddCourseButton();
  const u=document.getElementById("university").value.trim();
  const c=document.getElementById("course");
  const box=document.getElementById("courseDropdown");
@@ -364,10 +393,11 @@ function setupSearchDropdowns(){
  });
 }
 function loadSemesters(){const c=document.getElementById("course").value,sem=document.getElementById("semester");sem.innerHTML='<option value="">Select Semester</option>';const n=courseCatalog[c]?.semesters||0;for(let i=1;i<=n;i++)sem.innerHTML+=`<option value="${i}">Semester ${i}</option>`;document.getElementById("subject").innerHTML='<option value="">Select Subject</option>';}
-function loadSubjects(){const c=document.getElementById("course").value,sem=document.getElementById("semester").value,s=document.getElementById("subject");s.innerHTML='<option value="">Select Subject</option>';const list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);[...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>s.innerHTML+=`<option>${x}</option>`)}
-function loadYears(){
-const y=document.getElementById("year");y.innerHTML='<option value="">Select Year</option>';for(let i=2001;i<=2099;i++)y.innerHTML+=`<option>${i}</option>`;
-}
+function getCustomSubjects(){try{return JSON.parse(localStorage.getItem("MPH_CUSTOM_SUBJECTS")||"{}")}catch(e){return {}}}
+function saveCustomSubjects(d){localStorage.setItem("MPH_CUSTOM_SUBJECTS",JSON.stringify(d))}
+function updateAddSubjectButton(){const u=document.getElementById("university")?.value.trim()||"",c=document.getElementById("course")?.value.trim()||"",sem=document.getElementById("semester")?.value||"",b=document.getElementById("addSubjectBtn");if(!b)return;b.style.display=(u&&c&&sem)?"inline-flex":"none"}
+function addNewSubject(){const u=document.getElementById("university")?.value.trim()||"",c=document.getElementById("course")?.value.trim()||"",sem=document.getElementById("semester")?.value||"";if(!u||!c||!sem){alert("Please select Institute, Course and Semester first.");return}const name=prompt("Enter new subject name:");if(!name||!name.trim())return;const clean=name.trim(),key=u+"||"+c+"||"+sem,d=getCustomSubjects();d[key]=d[key]||[];const existing=[...(semesterData[c]?.[sem]||[]),...(d[key]||[])];if(existing.some(x=>String(x).toLowerCase()===clean.toLowerCase())){alert("This subject already exists for this semester.");return}d[key].push(clean);saveCustomSubjects(d);loadSubjects();document.getElementById("subject").value=clean;alert("✅ Subject added successfully for Semester "+sem+".")}
+function loadSubjects(){const c=document.getElementById("course").value,sem=document.getElementById("semester").value,s=document.getElementById("subject");s.innerHTML='<option value="">Select Subject</option>';let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);const d=getCustomSubjects(),key=(document.getElementById("university")?.value.trim()||"")+"||"+c+"||"+sem;list=[...new Set([...list,...(d[key]||[])])];if(!c)list=[...new Set(Object.values(subjectData).flat())];[...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>s.innerHTML+=`<option>${x}</option>`);updateAddSubjectButton();}
 function fileToDataURL(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})}
 
 async function extractPdfQuestions(fileData){
