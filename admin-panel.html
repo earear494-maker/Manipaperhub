@@ -43,8 +43,7 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 
 .hero-tagline{margin:10px 0 18px;font-size:1.5rem;line-height:1.35;font-weight:700;}
 @media(max-width:600px){.hero-tagline{font-size:1.15rem;}}
-
-.course-add-wrap{display:flex;gap:8px;align-items:stretch}.course-add-wrap input{flex:1;min-width:0}.add-course-btn{display:none;align-items:center;justify-content:center;border:1px solid #cbd5e1;background:#fff;border-radius:10px;padding:0 12px;font-weight:700;cursor:pointer;white-space:nowrap}.add-course-btn.show{display:inline-flex}.add-course-btn:hover{background:#f1f5f9}
+.admin-select-add{display:flex;gap:8px;align-items:stretch;width:100%}.admin-select-add input,.admin-select-add select{flex:1;min-width:0}.admin-add-btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid #cbd5e1;background:#fff;color:#0f172a;border-radius:9px;padding:10px 12px;font-weight:800;cursor:pointer;white-space:nowrap}.admin-add-btn:hover{background:#f1f5f9}@media(max-width:700px){.admin-select-add{flex-direction:column}.admin-add-btn{width:100%}}
 </style>
 <style>
 .search-dropdown{display:none;position:absolute;left:0;right:0;top:calc(100% + 4px);max-height:260px;overflow-y:auto;background:#fff;border:1px solid #cbd5e1;border-radius:10px;box-shadow:0 10px 25px rgba(15,23,42,.15);z-index:9999;padding:5px}.search-dropdown.open{display:block}.search-option{display:block;width:100%;text-align:left;border:0;background:#fff;padding:10px 12px;border-radius:7px;cursor:pointer;font:inherit}.search-option:hover{background:#f1f5f9}.form-group{position:relative}</style>
@@ -78,8 +77,6 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 <div class="stat-card"><div class="icon">🆕</div><h3 id="newPapersMonthStat">0</h3><p>New Papers This Month</p></div>
 </div>
 
-<div class="card" id="studentDemandTop"><h2>💡 Students Are Searching For</h2><p>Missing papers with repeated zero-result searches are prioritized here. At <strong>5 searches</strong>, an automatic Paper Request is created.</p><div id="studentDemandTopList" class="intelligence-list"><div class="intelligence-muted">Waiting for demand activity.</div></div><div class="intelligence-actions"><button type="button" onclick="renderAdminIntelligence()">↻ Refresh Demand</button></div></div>
-
 <div class="card" id="securityCenter" style="display:none !important" style="margin-top:18px" style="display:none !important">
 <h2>🛡️ Security Center</h2>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:12px">
@@ -106,9 +103,9 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 <div class="card">
 <h2>📄 Upload Question Paper</h2>
 <div class="form-grid">
-<div><label>Institute</label><input id="university" placeholder="🔎 Type institute name..." oninput="searchInstitutes()"><div id="instituteDropdown" class="search-dropdown"></div></div>
-<div><label>Course</label><div class="course-add-wrap"><input id="course" placeholder="🔎 Type course / B.Tech branch..." oninput="searchCourses()"><button type="button" id="addCourseBtn" class="add-course-btn" onclick="addNewCourse()">➕ Add Course</button></div><div id="courseDropdown" class="search-dropdown"></div></div><div><label>Semester</label><select id="semester" onchange="loadSubjects()"><option value="">Select Semester</option></select></div>
-<div><label>Subject</label><div class="subject-add-wrap"><select id="subject" onchange="updateAddSubjectButton()"><option value="">Select Subject</option></select><button type="button" id="addSubjectBtn" class="add-course-btn" onclick="addNewSubject()" style="display:none">➕ Add Subject</button></div></div>
+<div><label>Institute</label><select id="university" onchange="loadCourses()"><option value="">Select Institute</option></select></div>
+<div><label>Course</label><div class="admin-select-add"><select id="course" onchange="loadSemesters()"><option value="">Select Course</option></select><button type="button" class="admin-add-btn" onclick="adminAddPaperCourse()">➕ Add Course</button></div></div><div><label>Semester</label><select id="semester" onchange="loadSubjects()"><option value="">Select Semester</option></select></div>
+<div><label>Subject</label><div class="admin-select-add"><select id="subject"><option value="">Select Subject</option></select><button type="button" class="admin-add-btn" onclick="adminAddPaperSubject()">➕ Add Subject</button></div></div>
 <div><label>Year</label><select id="year"><option value="">Select Year</option></select></div>
 <div class="full"><label>Exam Name</label><input id="paperExamName" placeholder="Example: B.Ed Entrance 2026"></div>
 <div class="full" style="margin:10px 0;padding:12px;border:1px solid #bfdbfe;border-radius:10px;background:#eff6ff"><strong>🛡️ Production Security</strong><div class="small-text" style="margin-top:5px;line-height:1.7"><strong>File validation:</strong> type, MIME/signature and size checks. <strong>Malware/virus scanning:</strong> scan and quarantine before storage/publication. <strong>Secure admin authentication:</strong> server-side authentication, hashed passwords, secure sessions and authorization. <strong>Rate limiting:</strong> limit repeated login, upload, request, report and API calls to prevent brute-force, spam and abuse. Students can use the public website without login.</div></div>
@@ -119,6 +116,24 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 <div class="card"><h2>📚 Uploaded Question Papers</h2><div class="table-wrapper"><table>
 <thead><tr><th>#</th><th>Institute</th><th>Course</th><th>Semester</th><th>Subject</th><th>Year</th><th>Exam</th><th>File</th><th>Action</th></tr></thead>
 <tbody id="papersTableBody"></tbody></table></div></div>
+
+<div class="card">
+<h2>📚 Upload Notes for Exam Preparation</h2>
+<p>Admin uploads approved preparation notes here. Students will see these notes in <strong>📚 Find Your Notes for Preparation</strong> after selecting Institute, Course, Semester and Subject.</p>
+<div class="form-grid">
+<div><label>Institute</label><select id="noteInstitute" onchange="loadNoteCourses()"><option value="">Select Institute</option></select></div>
+<div><label>Course</label><div class="admin-select-add"><select id="noteCourse" onchange="loadNoteSemesters()"><option value="">Select Course</option></select><button type="button" class="admin-add-btn" onclick="adminAddNoteCourse()">➕ Add Course</button></div></div>
+<div><label>Semester</label><select id="noteSemester" onchange="loadNoteSubjects()"><option value="">Select Semester</option></select></div>
+<div><label>Subject</label><div class="admin-select-add"><select id="noteSubject"><option value="">Select Subject</option></select><button type="button" class="admin-add-btn" onclick="adminAddNoteSubject()">➕ Add Subject</button></div></div>
+<div><label>Year</label><select id="noteYear"><option value="">Select Year</option></select></div>
+<div><label>Notes Title</label><input id="noteTitle" placeholder="Example: DBMS Complete Notes"></div>
+<div class="full"><label>Description</label><input id="noteDescription" placeholder="Short description of these preparation notes"></div>
+<div class="full"><label>Notes PDF</label><input type="file" id="noteFile" accept="application/pdf"></div>
+</div><br><button class="primary-btn" onclick="uploadNote()">📤 Upload Notes</button>
+</div>
+<div class="card"><h2>📚 Uploaded Preparation Notes</h2><div class="table-wrapper"><table>
+<thead><tr><th>#</th><th>Title</th><th>Institute</th><th>Course</th><th>Semester</th><th>Subject</th><th>Year</th><th>Pages</th><th>File</th><th>Action</th></tr></thead>
+<tbody id="notesTableBody"></tbody></table></div></div>
 
 <div class="card">
 <h2>💼 Post Jobs</h2>
@@ -141,7 +156,7 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 
 <div class="card">
 <h2>📥 Upload Ads — Before PDF Download</h2>
-<p class="small-text">Shown when a student clicks Download PDF. Countdown: 20 seconds.</p>
+<p class="small-text">Shown when a student clicks Download PDF. Countdown: 30 seconds.</p>
 <h2>📢 Advertisement Details</h2>
 <div class="form-grid">
 <input type="hidden" id="adPlacement" value="download">
@@ -161,8 +176,8 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 </div>
 
 <div class="card">
-<h2>📺 Upload Ads — Page Popup Every 3 Minutes</h2>
-<p class="small-text">Shown automatically on the website every 3 minutes while the page is open. Video ads can autoplay.</p>
+<h2>📺 Upload Ads — Page Popup Every 2 Minutes</h2>
+<p class="small-text">Shown automatically on the website every 2 minutes while the page is open. Video ads can autoplay.</p>
 <div class="form-grid">
 <div><label>Advertisement Title</label><input id="popupAdTitle" placeholder="Example: Website Promotion"></div>
 <div><label>Advertisement Type</label><select id="popupAdType"><option value="">Select Type</option><option value="image">Image</option><option value="video">Video</option></select></div>
@@ -184,7 +199,7 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 
 <div id="editModal" class="modal"><div class="modal-box"><h2>✏️ Edit Advertisement</h2>
 <input type="hidden" id="editAdId"><label>Advertisement Title</label><input id="editAdTitle">
-<label style="margin-top:15px">Ad Placement</label><select id="editAdPlacement"><option value="download">Before PDF Download (20 sec)</option><option value="popup">Page Popup (every 3 min)</option></select>
+<label style="margin-top:15px">Ad Placement</label><select id="editAdPlacement"><option value="download">Before PDF Download (30 sec)</option><option value="popup">Page Popup (every 2 min)</option></select>
 <label style="margin-top:15px">Advertisement Type</label><select id="editAdType"><option value="image">Image</option><option value="video">Video</option></select>
 <label style="margin-top:15px">Replace Advertisement File</label><input type="file" id="editAdFile" accept="image/*,video/*"><div class="small-text">Leave empty to keep existing file.</div>
 <label style="margin-top:15px">Advertisement Link</label><input type="url" id="editAdLink">
@@ -201,7 +216,7 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 </div></div>
 
 <script>
-const DB_NAME="MainPaperHubDB",DB_VERSION=6;
+const DB_NAME="MainPaperHubDB",DB_VERSION=7;
 let db,pendingDownload=null,adTimer=null;
 
 const instituteData=[{"name": "A.P.J. Abdul Kalam Technological University", "city": "Thiruvananthapuram"}, {"name": "Acharya Nagarjuna University", "city": "Guntur"}, {"name": "Acharya Narendra Deva University of Agriculture and Technology", "city": "Ayodhya"}, {"name": "Adamas University", "city": "Kolkata"}, {"name": "Adesh University", "city": "Bathinda"}, {"name": "Ahmedabad University", "city": "Ahmedabad"}, {"name": "Aligarh Muslim University", "city": "Aligarh"}, {"name": "Amity University", "city": "Noida"}, {"name": "Amrita Vishwa Vidyapeetham", "city": "Coimbatore"}, {"name": "Andhra University", "city": "Visakhapatnam"}, {"name": "Anna University", "city": "Chennai"}, {"name": "Assam University", "city": "Silchar"}, {"name": "Atal Bihari Vajpayee Vishwavidyalaya", "city": "Bilaspur"}, {"name": "Avinashilingam Institute for Home Science and Higher Education for Women", "city": "Coimbatore"}, {"name": "Banaras Hindu University", "city": "Varanasi"}, {"name": "Banasthali Vidyapith", "city": "Banasthali"}, {"name": "Bangalore University", "city": "Bengaluru"}, {"name": "Barkatullah University", "city": "Bhopal"}, {"name": "Bharathiar University", "city": "Coimbatore"}, {"name": "Bharathidasan University", "city": "Tiruchirappalli"}, {"name": "Bharati Vidyapeeth", "city": "Pune"}, {"name": "Bihar Agricultural University", "city": "Sabour"}, {"name": "Biju Patnaik University of Technology", "city": "Rourkela"}, {"name": "Birla Institute of Technology", "city": "Ranchi"}, {"name": "Birla Institute of Technology and Science", "city": "Pilani"}, {"name": "Bundelkhand University", "city": "Jhansi"}, {"name": "Calcutta University", "city": "Kolkata"}, {"name": "Central Agricultural University", "city": "Imphal"}, {"name": "Central University of Andhra Pradesh", "city": "Anantapur"}, {"name": "Central University of Gujarat", "city": "Gandhinagar"}, {"name": "Central University of Haryana", "city": "Mahendragarh"}, {"name": "Central University of Himachal Pradesh", "city": "Dharamshala"}, {"name": "Central University of Jammu", "city": "Jammu"}, {"name": "Central University of Jharkhand", "city": "Ranchi"}, {"name": "Central University of Karnataka", "city": "Kalaburagi"}, {"name": "Central University of Kerala", "city": "Kasaragod"}, {"name": "Central University of Punjab", "city": "Bathinda"}, {"name": "Central University of Rajasthan", "city": "Ajmer"}, {"name": "Central University of South Bihar", "city": "Gaya"}, {"name": "Central University of Tamil Nadu", "city": "Thiruvarur"}, {"name": "Central University of Telangana", "city": "Mulugu"}, {"name": "Chaudhary Charan Singh Haryana Agricultural University", "city": "Hisar"}, {"name": "Chaudhary Charan Singh University", "city": "Meerut"}, {"name": "Chitkara University", "city": "Rajpura"}, {"name": "Christ University", "city": "Bengaluru"}, {"name": "Cochin University of Science and Technology", "city": "Kochi"}, {"name": "Cotton University", "city": "Guwahati"}, {"name": "Dayalbagh Educational Institute", "city": "Agra"}, {"name": "Delhi University", "city": "Delhi"}, {"name": "Devi Ahilya Vishwavidyalaya", "city": "Indore"}, {"name": "Dibrugarh University", "city": "Dibrugarh"}, {"name": "Doon University", "city": "Dehradun"}, {"name": "Dr. A.P.J. Abdul Kalam Technical University", "city": "Lucknow"}, {"name": "Dr. B.R. Ambedkar National Institute of Technology", "city": "Jalandhar"}, {"name": "Dr. B.R. Ambedkar University Delhi", "city": "Delhi"}, {"name": "Dr. Babasaheb Ambedkar Marathwada University", "city": "Chhatrapati Sambhajinagar"}, {"name": "Dr. Harisingh Gour Vishwavidyalaya", "city": "Sagar"}, {"name": "Dr. M.G.R. Educational and Research Institute", "city": "Chennai"}, {"name": "Dr. Ram Manohar Lohia Avadh University", "city": "Ayodhya"}, {"name": "Dr. Y.S. Parmar University of Horticulture and Forestry", "city": "Solan"}, {"name": "English and Foreign Languages University", "city": "Hyderabad"}, {"name": "Fakir Mohan University", "city": "Balasore"}, {"name": "Gandhi Institute of Technology and Management", "city": "Visakhapatnam"}, {"name": "Gauhati University", "city": "Guwahati"}, {"name": "Gujarat University", "city": "Ahmedabad"}, {"name": "Guru Ghasidas Vishwavidyalaya", "city": "Bilaspur"}, {"name": "Guru Gobind Singh Indraprastha University", "city": "Delhi"}, {"name": "Guru Jambheshwar University of Science and Technology", "city": "Hisar"}, {"name": "Guru Nanak Dev University", "city": "Amritsar"}, {"name": "Gurugram University", "city": "Gurugram"}, {"name": "Hemchandracharya North Gujarat University", "city": "Patan"}, {"name": "Hemwati Nandan Bahuguna Garhwal University", "city": "Srinagar"}, {"name": "Himachal Pradesh University", "city": "Shimla"}, {"name": "Hindustan Institute of Technology and Science", "city": "Chennai"}, {"name": "I.K. Gujral Punjab Technical University", "city": "Jalandhar"}, {"name": "ICFAI Foundation for Higher Education", "city": "Hyderabad"}, {"name": "Indian Institute of Science", "city": "Bengaluru"}, {"name": "Indian Institute of Technology (BHU) Varanasi", "city": "Varanasi"}, {"name": "Indian Institute of Technology (Indian School of Mines) Dhanbad", "city": "Dhanbad"}, {"name": "Indian Institute of Technology Bhilai", "city": "Bhilai"}, {"name": "Indian Institute of Technology Bhubaneswar", "city": "Bhubaneswar"}, {"name": "Indian Institute of Technology Bombay", "city": "Mumbai"}, {"name": "Indian Institute of Technology Delhi", "city": "New Delhi"}, {"name": "Indian Institute of Technology Dharwad", "city": "Dharwad"}, {"name": "Indian Institute of Technology Gandhinagar", "city": "Gandhinagar"}, {"name": "Indian Institute of Technology Goa", "city": "Goa"}, {"name": "Indian Institute of Technology Guwahati", "city": "Guwahati"}, {"name": "Indian Institute of Technology Hyderabad", "city": "Hyderabad"}, {"name": "Indian Institute of Technology Indore", "city": "Indore"}, {"name": "Indian Institute of Technology Jammu", "city": "Jammu"}, {"name": "Indian Institute of Technology Jodhpur", "city": "Jodhpur"}, {"name": "Indian Institute of Technology Kanpur", "city": "Kanpur"}, {"name": "Indian Institute of Technology Kharagpur", "city": "Kharagpur"}, {"name": "Indian Institute of Technology Madras", "city": "Chennai"}, {"name": "Indian Institute of Technology Mandi", "city": "Mandi"}, {"name": "Indian Institute of Technology Palakkad", "city": "Palakkad"}, {"name": "Indian Institute of Technology Patna", "city": "Patna"}, {"name": "Indian Institute of Technology Roorkee", "city": "Roorkee"}, {"name": "Indian Institute of Technology Ropar", "city": "Rupnagar"}, {"name": "Indian Institute of Technology Tirupati", "city": "Tirupati"}, {"name": "Indira Gandhi National Open University", "city": "New Delhi"}, {"name": "International Institute of Information Technology Hyderabad", "city": "Hyderabad"}, {"name": "Jadavpur University", "city": "Kolkata"}, {"name": "Jain University", "city": "Bengaluru"}, {"name": "Jamia Hamdard", "city": "New Delhi"}, {"name": "Jamia Millia Islamia", "city": "New Delhi"}, {"name": "Jammu University", "city": "Jammu"}, {"name": "Jawaharlal Nehru University", "city": "New Delhi"}, {"name": "Jiwaji University", "city": "Gwalior"}, {"name": "JSS Academy of Higher Education and Research", "city": "Mysuru"}, {"name": "Kakatiya University", "city": "Warangal"}, {"name": "Kannur University", "city": "Kannur"}, {"name": "Karnataka University", "city": "Dharwad"}, {"name": "Kerala University", "city": "Thiruvananthapuram"}, {"name": "Koneru Lakshmaiah Education Foundation", "city": "Guntur"}, {"name": "Kurukshetra University", "city": "Kurukshetra"}, {"name": "Lovely Professional University", "city": "Phagwara"}, {"name": "Lucknow University", "city": "Lucknow"}, {"name": "Maharaja Sayajirao University of Baroda", "city": "Vadodara"}, {"name": "Maharashtra University of Health Sciences", "city": "Nashik"}, {"name": "Mahatma Gandhi Central University", "city": "Motihari"}, {"name": "Mahatma Gandhi University", "city": "Kottayam"}, {"name": "Malaviya National Institute of Technology", "city": "Jaipur"}, {"name": "Mangalore University", "city": "Mangaluru"}, {"name": "Manipal Academy of Higher Education", "city": "Manipal"}, {"name": "Manipur University", "city": "Imphal"}, {"name": "Maulana Azad National Institute of Technology", "city": "Bhopal"}, {"name": "Maulana Azad National Urdu University", "city": "Hyderabad"}, {"name": "Mizoram University", "city": "Aizawl"}, {"name": "Mohali University of Technology", "city": "Mohali"}, {"name": "Mohanlal Sukhadia University", "city": "Udaipur"}, {"name": "Motilal Nehru National Institute of Technology", "city": "Prayagraj"}, {"name": "Nagaland University", "city": "Lumami"}, {"name": "Nalanda University", "city": "Rajgir"}, {"name": "NALSAR University of Law", "city": "Hyderabad"}, {"name": "Narmada University", "city": "Bharuch"}, {"name": "National Institute of Technology Agartala", "city": "Agartala"}, {"name": "National Institute of Technology Andhra Pradesh", "city": "Tadepalligudem"}, {"name": "National Institute of Technology Arunachal Pradesh", "city": "Yupia"}, {"name": "National Institute of Technology Calicut", "city": "Kozhikode"}, {"name": "National Institute of Technology Delhi", "city": "New Delhi"}, {"name": "National Institute of Technology Durgapur", "city": "Durgapur"}, {"name": "National Institute of Technology Goa", "city": "Cuncolim"}, {"name": "National Institute of Technology Hamirpur", "city": "Hamirpur"}, {"name": "National Institute of Technology Jamshedpur", "city": "Jamshedpur"}, {"name": "National Institute of Technology Karnataka", "city": "Surathkal"}, {"name": "National Institute of Technology Kurukshetra", "city": "Kurukshetra"}, {"name": "National Institute of Technology Manipur", "city": "Imphal"}, {"name": "National Institute of Technology Meghalaya", "city": "Shillong"}, {"name": "National Institute of Technology Mizoram", "city": "Aizawl"}, {"name": "National Institute of Technology Nagaland", "city": "Dimapur"}, {"name": "National Institute of Technology Patna", "city": "Patna"}, {"name": "National Institute of Technology Puducherry", "city": "Karaikal"}, {"name": "National Institute of Technology Raipur", "city": "Raipur"}, {"name": "National Institute of Technology Rourkela", "city": "Rourkela"}, {"name": "National Institute of Technology Sikkim", "city": "Ravangla"}, {"name": "National Institute of Technology Silchar", "city": "Silchar"}, {"name": "National Institute of Technology Srinagar", "city": "Srinagar"}, {"name": "National Institute of Technology Tiruchirappalli", "city": "Tiruchirappalli"}, {"name": "National Institute of Technology Uttarakhand", "city": "Srinagar Garhwal"}, {"name": "National Institute of Technology Warangal", "city": "Warangal"}, {"name": "National Law University Delhi", "city": "New Delhi"}, {"name": "National Law University Jodhpur", "city": "Jodhpur"}, {"name": "Netaji Subhas University of Technology", "city": "New Delhi"}, {"name": "North Eastern Hill University", "city": "Shillong"}, {"name": "North Maharashtra University", "city": "Jalgaon"}, {"name": "Osmania University", "city": "Hyderabad"}, {"name": "Panjab University", "city": "Chandigarh"}, {"name": "Patna University", "city": "Patna"}, {"name": "Periyar University", "city": "Salem"}, {"name": "Pondicherry University", "city": "Puducherry"}, {"name": "Presidency University", "city": "Kolkata"}, {"name": "Punjab Agricultural University", "city": "Ludhiana"}, {"name": "Punjab Engineering College", "city": "Chandigarh"}, {"name": "Punjabi University", "city": "Patiala"}, {"name": "Rajasthan University", "city": "Jaipur"}, {"name": "Rajiv Gandhi National University of Law", "city": "Patiala"}, {"name": "Rajiv Gandhi University", "city": "Itanagar"}, {"name": "Ranchi University", "city": "Ranchi"}, {"name": "Rashtrasant Tukadoji Maharaj Nagpur University", "city": "Nagpur"}, {"name": "Rayat Bahra University", "city": "Mohali"}, {"name": "RIMT University", "city": "Mandi Gobindgarh"}, {"name": "Sardar Patel University", "city": "Vallabh Vidyanagar"}, {"name": "Sardar Vallabhbhai National Institute of Technology", "city": "Surat"}, {"name": "Savitribai Phule Pune University", "city": "Pune"}, {"name": "Sharda University", "city": "Greater Noida"}, {"name": "Shiv Nadar University", "city": "Greater Noida"}, {"name": "Shoolini University", "city": "Solan"}, {"name": "Sikkim University", "city": "Gangtok"}, {"name": "South Asian University", "city": "New Delhi"}, {"name": "Sri Guru Granth Sahib World University", "city": "Fatehgarh Sahib"}, {"name": "Sri Venkateswara University", "city": "Tirupati"}, {"name": "SRM Institute of Science and Technology", "city": "Chennai"}, {"name": "Symbiosis International University", "city": "Pune"}, {"name": "Tamil Nadu Agricultural University", "city": "Coimbatore"}, {"name": "Tamil Nadu Open University", "city": "Chennai"}, {"name": "Teerthanker Mahaveer University", "city": "Moradabad"}, {"name": "Tezpur University", "city": "Tezpur"}, {"name": "The English and Foreign Languages University", "city": "Hyderabad"}, {"name": "Tripura University", "city": "Agartala"}, {"name": "University of Allahabad", "city": "Prayagraj"}, {"name": "University of Calcutta", "city": "Kolkata"}, {"name": "University of Delhi", "city": "New Delhi"}, {"name": "University of Goa", "city": "Panaji"}, {"name": "University of Hyderabad", "city": "Hyderabad"}, {"name": "University of Jammu", "city": "Jammu"}, {"name": "University of Kashmir", "city": "Srinagar"}, {"name": "University of Kerala", "city": "Thiruvananthapuram"}, {"name": "University of Kota", "city": "Kota"}, {"name": "University of Lucknow", "city": "Lucknow"}, {"name": "University of Madras", "city": "Chennai"}, {"name": "University of Mumbai", "city": "Mumbai"}, {"name": "University of Mysore", "city": "Mysuru"}, {"name": "University of Rajasthan", "city": "Jaipur"}, {"name": "University of Science and Technology Meghalaya", "city": "Ri-Bhoi"}, {"name": "University of Tripura", "city": "Agartala"}, {"name": "Veer Narmad South Gujarat University", "city": "Surat"}, {"name": "Vellore Institute of Technology", "city": "Vellore"}, {"name": "Visva-Bharati University", "city": "Santiniketan"}, {"name": "Visvesvaraya National Institute of Technology", "city": "Nagpur"}, {"name": "Visvesvaraya Technological University", "city": "Belagavi"}, {"name": "West Bengal University of Technology", "city": "Kolkata"}, {"name": "Yashwantrao Chavan Maharashtra Open University", "city": "Nashik"}];
@@ -233,6 +248,7 @@ return new Promise((resolve,reject)=>{
 const r=indexedDB.open(DB_NAME,DB_VERSION);
 r.onupgradeneeded=e=>{const d=e.target.result;
 if(!d.objectStoreNames.contains("papers"))d.createObjectStore("papers",{keyPath:"id",autoIncrement:true});
+if(!d.objectStoreNames.contains("notes"))d.createObjectStore("notes",{keyPath:"id",autoIncrement:true});
 if(!d.objectStoreNames.contains("ads"))d.createObjectStore("ads",{keyPath:"id",autoIncrement:true});if(!d.objectStoreNames.contains("jobs"))d.createObjectStore("jobs",{keyPath:"id",autoIncrement:true});if(!d.objectStoreNames.contains("requests"))d.createObjectStore("requests",{keyPath:"id",autoIncrement:true});if(!d.objectStoreNames.contains("submissions"))d.createObjectStore("submissions",{keyPath:"id",autoIncrement:true});if(!d.objectStoreNames.contains("analyticsEvents"))d.createObjectStore("analyticsEvents",{keyPath:"id",autoIncrement:true});if(!d.objectStoreNames.contains("analytics"))d.createObjectStore("analytics",{keyPath:"id"});
 };
 r.onsuccess=e=>{db=e.target.result;resolve(db)};r.onerror=e=>reject(e);
@@ -263,10 +279,11 @@ function touchAdminSession(){if(sessionStorage.getItem("mphAdmin")==="1")session
 function enforceAdminSession(){if(sessionStorage.getItem("mphAdmin")!=="1")return;const last=Number(sessionStorage.getItem("mphAdminLastActivity")||0);if(!last||Date.now()-last>MPH_SECURITY.sessionMs){mphAudit("admin-session-expired","30m inactivity");logoutAdmin();return}touchAdminSession()}
 document.addEventListener("click",touchAdminSession,true);document.addEventListener("keydown",touchAdminSession,true);setInterval(enforceAdminSession,30000);
 function togglePassword(){const p=document.getElementById("password");const b=document.querySelector(".eye-btn");if(p.type==="password"){p.type="text";b.textContent="🙈";b.setAttribute("aria-label","Hide password")}else{p.type="password";b.textContent="👁️";b.setAttribute("aria-label","Show password")}}
-function showAdmin(){touchAdminSession();document.getElementById("loginPage").style.display="none";document.getElementById("adminPage").style.display="block";initInstitutes();loadCourses();loadYears();renderPapers();renderAds();renderJobs();renderRequests();renderSubmissions();renderAnalytics();renderAdminIntelligence()}
+function showAdmin(){touchAdminSession();document.getElementById("loginPage").style.display="none";document.getElementById("adminPage").style.display="block";initInstitutes();loadCourses();loadYears();renderPapers();renderNotes();renderAds();renderJobs();renderRequests();renderSubmissions();renderAnalytics();renderAdminIntelligence()}
 async function renderAnalytics(){
  try{
   const papers=await getAll("papers");
+  const notes=await getAll("notes");
   const requests=await getAll("requests");
   const submissions=await getAll("submissions");
   const ads=await getAll("ads");
@@ -277,7 +294,7 @@ async function renderAnalytics(){
   const now=new Date(), month=now.getMonth(), year=now.getFullYear();
   const newThisMonth=papers.filter(p=>{const d=new Date(Number(p.created||p.uploadedAt||0));return d.getMonth()===month&&d.getFullYear()===year}).length;
   const jsonSize=(obj)=>{try{return JSON.stringify(obj).length*2}catch(e){return 0}};
-  const bytes=papers.reduce((n,p)=>n+jsonSize(p),0)+requests.reduce((n,x)=>n+jsonSize(x),0)+submissions.reduce((n,x)=>n+jsonSize(x),0)+ads.reduce((n,x)=>n+jsonSize(x),0)+jobs.reduce((n,x)=>n+jsonSize(x),0);
+  const bytes=papers.reduce((n,p)=>n+jsonSize(p),0)+notes.reduce((n,x)=>n+jsonSize(x),0)+requests.reduce((n,x)=>n+jsonSize(x),0)+submissions.reduce((n,x)=>n+jsonSize(x),0)+ads.reduce((n,x)=>n+jsonSize(x),0)+jobs.reduce((n,x)=>n+jsonSize(x),0);
   const storage=bytes<1024*1024?(bytes/1024).toFixed(1)+" KB":(bytes/1024/1024).toFixed(2)+" MB";
   document.getElementById("totalPapersStat").textContent=papers.length;
   document.getElementById("paperDownloadsStat").textContent=local.paperDownloads||await getMetric("paperDownloads");
@@ -293,88 +310,67 @@ function logoutAdmin(){sessionStorage.removeItem("mphAdmin");location.reload()}
 
 async function renderAdminIntelligence(){
  try{
-  const events=await getAll("analyticsEvents"),papers=await getAll("papers"),requests=await getAll("requests");
+  const events=await getAll("analyticsEvents");
+  const papers=await getAll("papers");
+  const requests=await getAll("requests");
   const safe=(v)=>String(v||"").trim();
   const counts=(arr,keyFn)=>{const m=new Map();for(const x of arr){const k=safe(keyFn(x));if(k)m.set(k,(m.get(k)||0)+1)}return [...m.entries()].sort((a,b)=>b[1]-a[1]);};
-  const searches=events.filter(e=>e.type==="paperSearch"),missingSearches=events.filter(e=>e.type==="missingPaperSearch"),downloads=events.filter(e=>e.type==="paperDownload");
-  const courseCounts=counts(searches,e=>e.course),subjectCounts=counts(downloads,e=>e.subject);
-  const mc=document.getElementById("intelMostSearchedCourse"),mcd=document.getElementById("intelMostSearchedCourseDetail");if(mc)mc.textContent=courseCounts[0]?.[0]||"—";if(mcd)mcd.textContent=courseCounts[0]?`${courseCounts[0][1]} recorded search activit${courseCounts[0][1]===1?'y':'ies'}.`:"No course search activity recorded yet.";
-  const ms=document.getElementById("intelMostDownloadedSubject"),msd=document.getElementById("intelMostDownloadedSubjectDetail");if(ms)ms.textContent=subjectCounts[0]?.[0]||"—";if(msd)msd.textContent=subjectCounts[0]?`${subjectCounts[0][1]} recorded download${subjectCounts[0][1]===1?'':'s'}.`:"No subject download activity recorded yet.";
-  const demandByKey=new Map();
-  missingSearches.forEach(e=>{const key=[safe(e.university),safe(e.course),safe(e.semester),safe(e.subject),safe(e.year)].join(" • ");if(!key.replace(/ • /g,''))return;const x=demandByKey.get(key)||{count:0,course:e.course,semester:e.semester,subject:e.subject,year:e.year};x.count++;demandByKey.set(key,x);});
-  const topDemand=[...demandByKey.values()].sort((a,b)=>b.count-a.count).slice(0,7),topBox=document.getElementById("studentDemandTopList");
-  if(topBox)topBox.innerHTML=topDemand.length?topDemand.map(x=>`<div class="intelligence-row"><strong>${esc(`${safe(x.course)} • Sem ${safe(x.semester)} • ${safe(x.subject)} • ${safe(x.year)}`)}</strong><span>🔥 ${x.count} searches${x.count>=5?' • HIGH DEMAND':''}</span></div>`).join(''):'<div class="intelligence-muted">No missing-paper search demand recorded yet.</div>';
+  const searches=events.filter(e=>e.type==="paperSearch");
+  const downloads=events.filter(e=>e.type==="paperDownload");
+  const courseCounts=counts(searches,e=>e.course);
+  const subjectCounts=counts(downloads,e=>e.subject);
+  const mc=document.getElementById("intelMostSearchedCourse"),mcd=document.getElementById("intelMostSearchedCourseDetail");
+  if(mc)mc.textContent=courseCounts[0]?.[0]||"—";
+  if(mcd)mcd.textContent=courseCounts[0]?`${courseCounts[0][1]} recorded search activit${courseCounts[0][1]===1?'y':'ies'}.`:"No course search activity recorded yet.";
+  const ms=document.getElementById("intelMostDownloadedSubject"),msd=document.getElementById("intelMostDownloadedSubjectDetail");
+  if(ms)ms.textContent=subjectCounts[0]?.[0]||"—";
+  if(msd)msd.textContent=subjectCounts[0]?`${subjectCounts[0][1]} recorded download${subjectCounts[0][1]===1?'':'s'}.`:"No subject download activity recorded yet.";
   const pending=requests.filter(r=>!['completed','published'].includes(safe(r.status).toLowerCase()));
   const mi=document.getElementById("intelMissingCount");if(mi)mi.textContent=pending.length;
   const ml=document.getElementById("intelMissingList");if(ml){const top=counts(pending,r=>`${safe(r.course)} • ${safe(r.subject)}`).slice(0,5);ml.innerHTML=top.length?top.map(([k,n])=>`<div class="intelligence-row"><strong>${esc(k)}</strong><span>${n} request${n===1?'':'s'}</span></div>`).join(''):'<div class="intelligence-muted">No pending paper requests.</div>';}
-  const refs=counts(events.filter(e=>e.type==="pageView"),e=>{try{return e.referrer?new URL(e.referrer).host:"Direct visit"}catch(_){return e.referrer||"Direct visit"}}),rl=document.getElementById("intelReferrerList");if(rl)rl.innerHTML=refs.slice(0,7).map(([k,n])=>`<div class="intelligence-row"><strong>${esc(k||"Direct visit")}</strong><span>${n} visit${n===1?'':'s'}</span></div>`).join('')||'<div class="intelligence-muted">No referring-page data yet.</div>';
-  const demandMap=new Map(),add=(key,score)=>{if(key)demandMap.set(key,(demandMap.get(key)||0)+score)};
-  searches.forEach(e=>add(`${safe(e.course)} • ${safe(e.subject)}`,1));missingSearches.forEach(e=>add(`${safe(e.course)} • ${safe(e.subject)} • ${safe(e.year)}`,2));downloads.forEach(e=>add(`${safe(e.course)} • ${safe(e.subject)}${safe(e.paper)?` • ${safe(e.paper)}`:''}`,3));pending.forEach(e=>add(`${safe(e.course)} • ${safe(e.subject)}`,5));
-  const demand=[...demandMap.entries()].sort((a,b)=>b[1]-a[1]).slice(0,10),dl=document.getElementById("intelDemandList");if(dl)dl.innerHTML=demand.length?demand.map(([k,v])=>`<div class="intelligence-row"><strong>${esc(k)}</strong><span>Demand score ${v}</span></div>`).join(''):'<div class="intelligence-muted">Waiting for search/download/request activity.</div>';
-  const autoGenerated=pending.filter(r=>r.autoGenerated).length;const autoBadge=document.getElementById("intelMissingCount");if(autoBadge&&pending.length)autoBadge.title=`${autoGenerated} automatic demand request${autoGenerated===1?'':'s'}`;void papers;
+  const refs=counts(events.filter(e=>e.type==="pageView"),e=>{try{return e.referrer?new URL(e.referrer).host:"Direct visit"}catch(_){return e.referrer||"Direct visit"}});
+  const rl=document.getElementById("intelReferrerList");if(rl)rl.innerHTML=refs.slice(0,7).map(([k,n])=>`<div class="intelligence-row"><strong>${esc(k||"Direct visit")}</strong><span>${n} visit${n===1?'':'s'}</span></div>`).join('')||'<div class="intelligence-muted">No referring-page data yet.</div>';
+  const demandMap=new Map();
+  const add=(key,score)=>{if(!key)return;demandMap.set(key,(demandMap.get(key)||0)+score)};
+  searches.forEach(e=>add(`${safe(e.course)} • ${safe(e.subject)}`,1));
+  downloads.forEach(e=>add(`${safe(e.course)} • ${safe(e.subject)}${safe(e.paper)?` • ${safe(e.paper)}`:''}`,3));
+  pending.forEach(e=>add(`${safe(e.course)} • ${safe(e.subject)}`,5));
+  const demand=[...demandMap.entries()].sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const dl=document.getElementById("intelDemandList");if(dl)dl.innerHTML=demand.length?demand.map(([k,v])=>`<div class="intelligence-row"><strong>${esc(k)}</strong><span>Demand score ${v}</span></div>`).join(''):'<div class="intelligence-muted">Waiting for search/download/request activity.</div>';
+  // Keep papers referenced so future scoring can incorporate inventory/missing coverage without changing the UI.
+  void papers;
  }catch(e){console.error("Intelligence dashboard error",e)}
 }
-
 function initInstitutes(){
  const y=document.getElementById("year");if(y){for(let i=new Date().getFullYear();i>=2000;i--)y.innerHTML+=`<option>${i}</option>`;}
+ populateAdminInstituteSelect("university");
+ populateAdminInstituteSelect("noteInstitute");
  loadCourses();
- setupSearchDropdowns();
+ loadNoteCourses();
+ loadYears();
+ loadNoteYears();
 }
-function getCustomCourses(){try{return JSON.parse(localStorage.getItem("MPH_CUSTOM_COURSES")||"{}")}catch(e){return {}}}
-function saveCustomCourses(d){localStorage.setItem("MPH_CUSTOM_COURSES",JSON.stringify(d))}
 function getInstituteCourses(name){
  const key=instituteNames.find(x=>x.toLowerCase()===String(name||"").trim().toLowerCase());
- const base=key && courseData[key] ? courseData[key] : Object.keys(courseCatalog);
- const custom=getCustomCourses()[key]||[];
- return [...new Set([...base,...custom.map(x=>x.name||x)])];
+ return key && courseData[key] ? courseData[key] : Object.keys(courseCatalog);
 }
-function updateAddCourseButton(){
- const u=document.getElementById("university")?.value.trim()||"", b=document.getElementById("addCourseBtn");
- if(!b)return;
- const selected=instituteNames.some(x=>x.toLowerCase()===u.toLowerCase());
- b.classList.toggle("show",selected);
-}
-function addNewCourse(){
- const u=document.getElementById("university")?.value.trim()||"";
- if(!instituteNames.some(x=>x.toLowerCase()===u.toLowerCase())){alert("Please select an Institute from the list first.");return}
- const name=prompt("Enter new course name:"); if(!name||!name.trim())return;
- const clean=name.trim(); const n=parseInt(prompt("How many semesters does this course have?","8"),10);
- if(!n||n<1||n>20){alert("Please enter a valid semester count (1–20).");return}
- const key=instituteNames.find(x=>x.toLowerCase()===u.toLowerCase()); const d=getCustomCourses(); d[key]=d[key]||[];
- if(d[key].some(x=>(x.name||x).toLowerCase()===clean.toLowerCase())){alert("This course already exists for this Institute.");return}
- d[key].push({name:clean,semesters:n}); saveCustomCourses(d);
- courseCatalog[clean]=courseCatalog[clean]||{semesters:n}; courseData[key]=[...(courseData[key]||[]),clean];
- document.getElementById("course").value=clean; document.getElementById("courseDropdown")?.classList.remove("open"); loadSemesters();
- alert("✅ Course added successfully for "+key+".");
-}
-
-function searchInstitutes(){
- const input=document.getElementById("university"),box=document.getElementById("instituteDropdown");
- const q=input.value.trim().toLowerCase();
- const filtered=instituteNames.filter(x=>!q||x.toLowerCase().startsWith(q)).sort((a,b)=>a.localeCompare(b));
- renderSearchDropdown(box,filtered,(value)=>{input.value=value;box.classList.remove("open");updateAddCourseButton();loadCourses();});
- updateAddCourseButton();
- updateAddSubjectButton();
- loadCourses();
+function searchInstitutes(){ loadCourses(); }
+function populateAdminInstituteSelect(id){
+ const el=document.getElementById(id); if(!el)return;
+ const current=el.value;
+ const list=[...new Set(instituteNames)].sort((a,b)=>a.localeCompare(b));
+ el.innerHTML='<option value="">Select Institute</option>'+list.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+ if(current && list.includes(current)) el.value=current;
 }
 function loadCourses(){
- updateAddCourseButton();
- const u=document.getElementById("university").value.trim();
- const c=document.getElementById("course");
- const box=document.getElementById("courseDropdown");
- const courses=getInstituteCourses(u);
- const q=c.value.trim().toLowerCase();
- const filtered=[...new Set(courses)].filter(x=>!q||x.toLowerCase().startsWith(q)).sort((a,b)=>a.localeCompare(b));
- if(box && document.activeElement===c) renderSearchDropdown(box,filtered,(value)=>{c.value=value;box.classList.remove("open");loadSemesters();});
+ const u=document.getElementById("university")?.value||"", c=document.getElementById("course"); if(!c)return;
+ const current=c.value; const courses=[...getInstituteCourses(u),...adminCustomCourses(u)];
+ const list=[...new Set(courses)].sort((a,b)=>a.localeCompare(b));
+ c.innerHTML='<option value="">Select Course</option>'+list.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+ if(current && list.includes(current)) c.value=current;
  loadSemesters();
 }
-function searchCourses(){
- const c=document.getElementById("course"),box=document.getElementById("courseDropdown");
- const q=c.value.trim().toLowerCase();
- const filtered=[...new Set(getInstituteCourses(document.getElementById("university").value))].filter(x=>!q||x.toLowerCase().startsWith(q)).sort((a,b)=>a.localeCompare(b));
- renderSearchDropdown(box,filtered,(value)=>{c.value=value;box.classList.remove("open");loadSemesters();});
- loadSemesters();
-}
+function searchCourses(){ loadCourses(); }
 function renderSearchDropdown(box,items,onSelect){
  if(!box)return;
  box.innerHTML=items.slice(0,100).map(x=>`<button type="button" class="search-option">${esc(x)}</button>`).join("");
@@ -393,11 +389,10 @@ function setupSearchDropdowns(){
  });
 }
 function loadSemesters(){const c=document.getElementById("course").value,sem=document.getElementById("semester");sem.innerHTML='<option value="">Select Semester</option>';const n=courseCatalog[c]?.semesters||0;for(let i=1;i<=n;i++)sem.innerHTML+=`<option value="${i}">Semester ${i}</option>`;document.getElementById("subject").innerHTML='<option value="">Select Subject</option>';}
-function getCustomSubjects(){try{return JSON.parse(localStorage.getItem("MPH_CUSTOM_SUBJECTS")||"{}")}catch(e){return {}}}
-function saveCustomSubjects(d){localStorage.setItem("MPH_CUSTOM_SUBJECTS",JSON.stringify(d))}
-function updateAddSubjectButton(){const u=document.getElementById("university")?.value.trim()||"",c=document.getElementById("course")?.value.trim()||"",sem=document.getElementById("semester")?.value||"",b=document.getElementById("addSubjectBtn");if(!b)return;b.style.display=(u&&c&&sem)?"inline-flex":"none"}
-function addNewSubject(){const u=document.getElementById("university")?.value.trim()||"",c=document.getElementById("course")?.value.trim()||"",sem=document.getElementById("semester")?.value||"";if(!u||!c||!sem){alert("Please select Institute, Course and Semester first.");return}const name=prompt("Enter new subject name:");if(!name||!name.trim())return;const clean=name.trim(),key=u+"||"+c+"||"+sem,d=getCustomSubjects();d[key]=d[key]||[];const existing=[...(semesterData[c]?.[sem]||[]),...(d[key]||[])];if(existing.some(x=>String(x).toLowerCase()===clean.toLowerCase())){alert("This subject already exists for this semester.");return}d[key].push(clean);saveCustomSubjects(d);loadSubjects();document.getElementById("subject").value=clean;alert("✅ Subject added successfully for Semester "+sem+".")}
-function loadSubjects(){const c=document.getElementById("course").value,sem=document.getElementById("semester").value,s=document.getElementById("subject");s.innerHTML='<option value="">Select Subject</option>';let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);const d=getCustomSubjects(),key=(document.getElementById("university")?.value.trim()||"")+"||"+c+"||"+sem;list=[...new Set([...list,...(d[key]||[])])];if(!c)list=[...new Set(Object.values(subjectData).flat())];[...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>s.innerHTML+=`<option>${x}</option>`);updateAddSubjectButton();}
+function loadSubjects(){const c=document.getElementById("course").value,sem=document.getElementById("semester").value,s=document.getElementById("subject");s.innerHTML='<option value="">Select Subject</option>';const list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);[...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>s.innerHTML+=`<option>${x}</option>`)}
+function loadYears(){
+const y=document.getElementById("year");y.innerHTML='<option value="">Select Year</option>';for(let i=2001;i<=2099;i++)y.innerHTML+=`<option>${i}</option>`;
+}
 function fileToDataURL(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})}
 
 async function extractPdfQuestions(fileData){
@@ -427,6 +422,75 @@ rows.innerHTML=a.length?a.map((p,i)=>`<tr><td>${i+1}</td><td>${esc(p.university)
 }
 async function openPaper(id){const p=(await getAll("papers")).find(x=>x.id===id);if(!p)return;const a=document.createElement("a");a.href=p.fileData;a.target="_blank";a.click()}
 async function deletePaper(id){if(confirm("Delete this paper?")){await remove("papers",id);renderPapers()}}
+
+async function extractPdfTextAndPages(fileData){
+ try{
+  if(!window.pdfjsLib) return {pages:0,text:""};
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const raw=atob(String(fileData).split(',')[1]||'');
+  const bytes=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);
+  const pdf=await window.pdfjsLib.getDocument({data:bytes}).promise;let text='';
+  for(let n=1;n<=pdf.numPages;n++){const page=await pdf.getPage(n),c=await page.getTextContent();text+=' '+c.items.map(x=>x.str).join(' ')}
+  return {pages:pdf.numPages||0,text:text.replace(/\s+/g,' ').trim()};
+ }catch(_){return {pages:0,text:""};}
+}
+function adminStudyCustom(){try{return JSON.parse(localStorage.getItem("MPH_STUDY_CUSTOM_CATALOG_V1")||"{}")}catch(e){return {courses:{},semesters:{},subjects:{}}}}
+function adminSaveStudyCustom(d){try{localStorage.setItem("MPH_STUDY_CUSTOM_CATALOG_V1",JSON.stringify(d))}catch(e){}}
+function adminCustomCourses(inst){const d=adminStudyCustom();return (d.courses&&d.courses[inst])||[]}
+function adminAddCourseFor(inst,currentId,loader){if(!inst){alert("Please select Institute first.");return}const name=prompt("Enter new course name:");if(!name||!name.trim())return;const clean=name.trim(),d=adminStudyCustom();d.courses=d.courses||{};d.courses[inst]=Array.isArray(d.courses[inst])?d.courses[inst]:[];const base=(typeof getInstituteCourses==='function'?getInstituteCourses(inst):[]);if(d.courses[inst].some(x=>String(x).toLowerCase()===clean.toLowerCase())||base.some(x=>String(x).toLowerCase()===clean.toLowerCase())){alert("This course already exists for this institute.");return}let count=parseInt(prompt("How many semesters does this course have?","8"),10);if(!Number.isFinite(count)||count<1)count=8;d.courses[inst].push(clean);d.semesters=d.semesters||{};d.semesters[clean]=count;adminSaveStudyCustom(d);loader();const el=document.getElementById(currentId);if(el)el.value=clean;if(currentId==='course'&&typeof loadSemesters==='function')loadSemesters();if(currentId==='noteCourse'&&typeof loadNoteSemesters==='function')loadNoteSemesters();alert("✅ Course added successfully.")}
+function adminAddPaperCourse(){adminAddCourseFor(document.getElementById("university")?.value.trim()||"","course",()=>{if(typeof searchCourses==='function')searchCourses()})}
+function adminAddNoteCourse(){adminAddCourseFor(document.getElementById("noteInstitute")?.value.trim()||"","noteCourse",()=>{if(typeof loadNoteCourses==='function')loadNoteCourses()})}
+function adminAddSubjectFor(inst,c,sem,currentId,loader){if(!inst||!c||!sem){alert("Please select Institute, Course and Semester first.");return}const name=prompt("Enter new subject name:");if(!name||!name.trim())return;const clean=name.trim(),d=adminStudyCustom();d.subjects=d.subjects||{};const key=inst+"||"+c+"||"+sem;d.subjects[key]=Array.isArray(d.subjects[key])?d.subjects[key]:[];const base=semesterData[c]?.[sem]||[];if(d.subjects[key].some(x=>String(x).toLowerCase()===clean.toLowerCase())||base.some(x=>String(x).toLowerCase()===clean.toLowerCase())){alert("This subject already exists for this semester.");return}d.subjects[key].push(clean);adminSaveStudyCustom(d);loader();const el=document.getElementById(currentId);if(el)el.value=clean;alert("✅ Subject added successfully.")}
+function adminAddPaperSubject(){adminAddSubjectFor(document.getElementById("university")?.value.trim()||"",document.getElementById("course")?.value.trim()||"",document.getElementById("semester")?.value||"","subject",()=>loadSubjects())}
+function adminAddNoteSubject(){adminAddSubjectFor(document.getElementById("noteInstitute")?.value.trim()||"",document.getElementById("noteCourse")?.value.trim()||"",document.getElementById("noteSemester")?.value||"","noteSubject",()=>loadNoteSubjects())}
+
+function searchNoteInstitutes(){ loadNoteCourses(); }
+function loadNoteCourses(){
+ const c=document.getElementById('noteCourse'); if(!c)return;
+ const inst=document.getElementById('noteInstitute')?.value||'';
+ const current=c.value; const courses=[...getInstituteCourses(inst),...adminCustomCourses(inst)];
+ const list=[...new Set(courses)].sort((a,b)=>a.localeCompare(b));
+ c.innerHTML='<option value="">Select Course</option>'+list.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+ if(current && list.includes(current)) c.value=current;
+ loadNoteSemesters();
+}
+function searchNoteCourses(){ loadNoteCourses(); }
+function loadNoteSemesters(){
+ const c=document.getElementById('noteCourse')?.value||'',s=document.getElementById('noteSemester');if(!s)return;
+ const d=adminStudyCustom();const n=Number(courseCatalog[c]?.semesters||d.semesters?.[c]||0);s.innerHTML='<option value="">Select Semester</option>';for(let i=1;i<=n;i++)s.innerHTML+=`<option value="${i}">Semester ${i}</option>`;loadNoteSubjects();
+}
+function loadNoteSubjects(){
+ const c=document.getElementById('noteCourse')?.value||'',sem=document.getElementById('noteSemester')?.value||'',s=document.getElementById('noteSubject');if(!s)return;
+ let list=sem?(semesterData[c]?.[sem]||[]):[];const d=adminStudyCustom(),key=(document.getElementById("noteInstitute")?.value||"")+"||"+c+"||"+sem;if(d.subjects&&Array.isArray(d.subjects[key]))list=[...list,...d.subjects[key]];s.innerHTML='<option value="">Select Subject</option>'+[...new Set(list)].sort((x,y)=>x.localeCompare(y)).map(x=>`<option>${esc(x)}</option>`).join('');
+}
+function loadNoteYears(){ const y=document.getElementById('noteYear');if(!y)return;y.innerHTML='<option value="">Select Year</option>';for(let i=2001;i<=2099;i++)y.innerHTML+=`<option>${i}</option>`; }
+async function uploadNote(){
+ const institute=document.getElementById('noteInstitute')?.value.trim()||'';
+ const course=document.getElementById('noteCourse')?.value.trim()||'';
+ const semester=document.getElementById('noteSemester')?.value||'';
+ const subject=document.getElementById('noteSubject')?.value||'';
+ const year=document.getElementById('noteYear')?.value||'';
+ const title=document.getElementById('noteTitle')?.value.trim()||'';
+ const description=document.getElementById('noteDescription')?.value.trim()||'';
+ const file=document.getElementById('noteFile')?.files?.[0];
+ if(!institute||!course||!semester||!subject||!year||!title||!file)return alert('Please fill all note fields and select a PDF.');
+ try{
+  await securityPrecheck(file,'pdf');
+  const fileData=await fileToDataURL(file);const meta=await extractPdfTextAndPages(fileData);const existing=await getAll('notes');
+  const dup=existing.find(n=>String(n.institute)===institute&&String(n.course)===course&&String(n.semester)===String(semester)&&String(n.subject)===subject&&String(n.title)===title);
+  if(dup)return alert('⚠️ A note with the same title already exists for this selection.');
+  await add('notes',{institute,course,semester,subject,year,title,description,fileName:file.name,fileData,pages:meta.pages,text:meta.text,created:Date.now(),verified:true,visitorCount:0});
+  document.getElementById('noteFile').value='';document.getElementById('noteTitle').value='';document.getElementById('noteDescription').value='';
+  await renderNotes();alert('✅ Notes uploaded successfully.'+(meta.pages?'\n\n'+meta.pages+' pages detected.':''));
+ }catch(e){alert('Upload failed: '+e.message)}
+}
+async function renderNotes(){
+ const rows=document.getElementById('notesTableBody');if(!rows||!db)return;const notes=await getAll('notes');notes.sort((x,y)=>(y.created||0)-(x.created||0));
+ rows.innerHTML=notes.length?notes.map((n,i)=>`<tr><td>${i+1}</td><td>${esc(n.title||'')}</td><td>${esc(n.institute||'')}</td><td>${esc(n.course||'')}</td><td>Sem ${esc(n.semester||'')}</td><td>${esc(n.subject||'')}</td><td>${esc(n.year||'')}</td><td>${n.pages||0}</td><td><button class="info-btn" onclick="openNote(${n.id})">Open PDF</button></td><td><button class="danger-btn" onclick="deleteNote(${n.id})">Delete</button></td></tr>`).join(''):'<tr><td colspan="10" class="empty">No preparation notes uploaded yet.</td></tr>';
+}
+async function openNote(id){const n=(await getAll('notes')).find(x=>x.id===id);if(!n)return;const a=document.createElement('a');a.href=n.fileData;a.target='_blank';a.click();}
+async function deleteNote(id){if(!confirm('Delete these preparation notes?'))return;await remove('notes',id);renderNotes();}
+loadNoteYears();
 
 function changeExamSelectMode(){document.getElementById("individualExamSection").style.display=document.getElementById("individualExam").checked?"block":"none"}
 function changeEditExamMode(){document.getElementById("editIndividualExamSection").style.display=document.getElementById("editIndividualExam").checked?"block":"none"}
@@ -472,12 +536,12 @@ async function deleteJob(id){if(confirm("Delete this job post?")){await remove("
 function adStatus(a){const today=new Date().toISOString().slice(0,10);if(a.views>=a.maxViews)return["Complete","disabled"];if(today<a.start)return["Waiting","waiting"];if(today>a.end)return["Expired","expired"];return["Active","active"]}
 async function renderAds(){
 const rows=document.getElementById("adsTableBody");if(!db)return;const a=await getAll("ads");
-rows.innerHTML=a.length?a.map((x,i)=>{const [st,cl]=adStatus(x);const impressions=Number(x.impressions||0),clicks=Number(x.clicks||0),maxImpressions=Number(x.maxImpressions||x.maxViews||0),remaining=Math.max(0,maxImpressions-impressions),remainingImpressions=remaining,maxClicks=Number(x.maxClicks||0),remainingClicks=Math.max(0,maxClicks-clicks);return `<tr><td>${i+1}</td><td>${esc(x.title)}</td><td>${esc(x.exam)}</td><td>${x.type}</td><td>${x.placement==='popup'?'Page Popup (3 min)':'Before Download (20 sec)'}</td><td><strong>${impressions}</strong></td><td><strong>${clicks}</strong></td><td>${maxImpressions}</td><td><strong>${remainingImpressions}</strong></td><td>${maxClicks}</td><td><strong>${remainingClicks}</strong></td><td>${x.start}</td><td>${x.end}</td><td><span class="status ${cl}">${st}</span></td><td><button class="info-btn" onclick="showAdDetails(${x.id})">Details</button> <button class="edit-btn" onclick="editAd(${x.id})">Edit</button> <button class="danger-btn" onclick="deleteAd(${x.id})">Delete</button></td></tr>`}).join(""):'<tr><td colspan="15" class="empty">No advertisements published yet.</td></tr>';
+rows.innerHTML=a.length?a.map((x,i)=>{const [st,cl]=adStatus(x);const impressions=Number(x.impressions||0),clicks=Number(x.clicks||0),maxImpressions=Number(x.maxImpressions||x.maxViews||0),remaining=Math.max(0,maxImpressions-impressions),remainingImpressions=remaining,maxClicks=Number(x.maxClicks||0),remainingClicks=Math.max(0,maxClicks-clicks);return `<tr><td>${i+1}</td><td>${esc(x.title)}</td><td>${esc(x.exam)}</td><td>${x.type}</td><td>${x.placement==='popup'?'Page Popup (2 min)':'Before Download (30 sec)'}</td><td><strong>${impressions}</strong></td><td><strong>${clicks}</strong></td><td>${maxImpressions}</td><td><strong>${remainingImpressions}</strong></td><td>${maxClicks}</td><td><strong>${remainingClicks}</strong></td><td>${x.start}</td><td>${x.end}</td><td><span class="status ${cl}">${st}</span></td><td><button class="info-btn" onclick="showAdDetails(${x.id})">Details</button> <button class="edit-btn" onclick="editAd(${x.id})">Edit</button> <button class="danger-btn" onclick="deleteAd(${x.id})">Delete</button></td></tr>`}).join(""):'<tr><td colspan="15" class="empty">No advertisements published yet.</td></tr>';
 }
 async function showAdDetails(id){
 const a=(await getAll("ads")).find(x=>x.id===id);if(!a)return;
 const impressions=Number(a.impressions||0),clicks=Number(a.clicks||0),ctr=impressions?((clicks/impressions)*100).toFixed(2):"0.00",remaining=Math.max(0,Number(a.maxViews||0)-Number(a.views||0));
-const placement=a.placement==="popup"?"📺 Page Popup — Every 3 Minutes":"📥 Before PDF Download — 20 Seconds";
+const placement=a.placement==="popup"?"📺 Page Popup — Every 2 Minutes":"📥 Before PDF Download — 30 Seconds";
 const status=adStatus(a)[0];
 const box=document.getElementById("adDetailsContent");
 box.innerHTML=`<div class="stats-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px"><div class="stat-box"><strong>${impressions}</strong><span>👁️ Ad Impressions</span></div><div class="stat-box"><strong>${clicks}</strong><span>🖱️ Ad Clicks</span></div><div class="stat-box"><strong>${ctr}%</strong><span>📈 CTR</span></div><div class="stat-box"><strong>${remaining}</strong><span>Remaining Views</span></div><div class="stat-box"><strong>${Number(a.maxClicks||0)}</strong><span>Maximum Clicks</span></div><div class="stat-box"><strong>${Math.max(0,Number(a.maxClicks||0)-clicks)}</strong><span>Remaining Clicks</span></div></div><div style="line-height:1.8"><p><strong>Advertisement:</strong> ${esc(a.title||"")}</p><p><strong>Placement:</strong> ${placement}</p><p><strong>Type:</strong> ${esc(a.type||"")}</p><p><strong>Exam:</strong> ${esc(a.exam||"ALL")}</p><p><strong>Maximum Views:</strong> ${Number(a.maxViews||0)}</p><p><strong>Views Used:</strong> ${Number(a.views||0)}</p><p><strong>Start Date:</strong> ${esc(a.start||"")}</p><p><strong>End Date:</strong> ${esc(a.end||"")}</p><p><strong>Exam Date:</strong> ${esc(a.examDate||"")}</p><p><strong>File:</strong> ${esc(a.fileName||"")}</p><p><strong>Link:</strong> ${a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener">Open Ad Link</a>`:"No link"}</p><p><strong>Status:</strong> ${esc(status)}</p></div>`;
