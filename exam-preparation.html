@@ -183,6 +183,15 @@ function calculateBestStreak(dates,iso){
 .dashboard-analysis-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;margin-top:12px}.dashboard-analysis-card,.dashboard-weak-card,.dashboard-achievements-card{background:#fff;color:#0f172a;border-radius:14px;padding:15px;border:1px solid #e2e8f0}.dashboard-analysis-card h4,.dashboard-weak-card h4,.dashboard-achievements-card h4{font-size:15px;margin-bottom:8px}.dashboard-analysis-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}.dashboard-period{border:1px solid #cbd5e1;border-radius:10px;padding:9px;background:#f8fafc}.dashboard-period strong{display:block;font-size:18px;margin-top:2px}.dashboard-period span{font-size:11px;color:#64748b}.dashboard-analysis-line{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #eef2f7;font-size:12px}.dashboard-analysis-line:last-child{border-bottom:0}.dashboard-weak-list{display:flex;gap:8px;flex-wrap:wrap}.weak-topic-item{border:1px solid #cbd5e1;border-radius:10px;background:#f8fafc;min-width:38px;min-height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:900;color:#1d4ed8;padding:7px 10px}.weak-topic-item .weak-topic-name{display:none;font-size:12px;font-weight:800;color:#0f172a}.weak-topic-item.open{background:#eff6ff;border-color:#93c5fd;min-width:120px;justify-content:flex-start}.weak-topic-item.open .weak-topic-number{display:none}.weak-topic-item.open .weak-topic-name{display:block}.weak-topic-empty{font-size:12px;color:#64748b}.dashboard-achievement-points{display:flex;align-items:center;gap:12px}.dashboard-achievement-points strong{font-size:30px}.achievement-badge{font-weight:900;padding:7px 10px;border-radius:999px;background:#f1f5f9}.achievement-list{display:grid;gap:7px;margin-top:10px}.achievement-item{padding:8px 10px;border-radius:9px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px}.dashboard-data-note{margin-top:8px;font-size:11px;color:#64748b}.dashboard-analysis-card,.dashboard-weak-card,.dashboard-achievements-card{box-shadow:0 6px 18px rgba(15,23,42,.04)}
 
 </style>
+
+<style>
+.study-select-add{display:flex;gap:8px;align-items:stretch;width:100%}
+.study-select-add select{flex:1;min-width:0}
+.study-add-btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid #cbd5e1;background:#fff;border-radius:10px;padding:10px 12px;font-weight:700;cursor:pointer;white-space:nowrap;min-width:125px}
+.study-add-btn:hover{background:#f1f5f9}
+@media(max-width:650px){.study-select-add{flex-direction:column}.study-add-btn{width:100%;min-width:0}}
+</style>
+
 </head>
 <body>
 <header><div class="container nav"><a class="brand" href="index.html">MainPaper <span>Hub</span></a><button class="menu" onclick="document.querySelector('.links').classList.toggle('open')">☰</button><nav class="links"><a href="index.html">🏠 Home</a><a href="index.html#papers">📄 Question Papers</a><a href="exam-preparation.html">📝 Exam Preparation</a><a href="jobs.html">💼 Jobs</a></nav></div></header>
@@ -297,17 +306,75 @@ function calculateBestStreak(dates,iso){
 </section>
 <main><div class="container">
 <div class="section-head"><h2>Everything You Need to Prepare</h2><p>Build a simple, focused preparation routine without getting overwhelmed.</p></div>
-<section class="tools" id="materials"><div class="panel" style="grid-column:1/-1"><h3>📚 Find Your Notes for Preparation</h3><p>Select your Institute / University, Course, Semester and Subject to find matching preparation notes and resources.</p><div class="prep-form"><div><label for="prepInstitute">🏫 Institute / University</label><select id="prepInstitute" onchange="prepLoadCourses()"><option value="">Select Institute / University</option></select></div><div><label for="prepCourse">🎓 Course</label><div class="prep-select-add"><select id="prepCourse" onchange="prepLoadSemesters()"><option value="">Select Course</option></select><button type="button" class="prep-add-btn" id="prepAddCourseBtn" onclick="prepAddCourse()" style="display:none">➕ Add Course</button></div></div><div><label for="prepSemester">📅 Semester</label><select id="prepSemester" onchange="prepLoadSubjects()"><option value="">Select Semester</option></select></div><div><label for="prepSubject">📖 Subject</label><div class="prep-select-add"><select id="prepSubject"><option value="">Select Subject</option></select><button type="button" class="prep-add-btn" id="prepAddSubjectBtn" onclick="prepAddSubject()" style="display:none">➕ Add Subject</button></div></div><button class="prep-search" onclick="searchPreparation()">🔎 Search Notes</button></div><div id="prepResults" class="prep-results"><div class="prep-empty">Select your Institute, Course, Semester and Subject, then click <strong>Search Notes</strong>.</div></div></div></section>
+<section class="tools" id="materials"><div class="panel" style="grid-column:1/-1"><h3>📚 Find Your Notes for Preparation</h3><p>Select your Institute / University, Course, Semester and Subject to find matching preparation notes and resources.</p><div class="prep-form"><div><label for="prepInstitute">🏫 Institute / University</label><select id="prepInstitute" onchange="prepLoadCourses()"><option value="">Select Institute / University</option></select></div><div><label for="prepCourse">🎓 Course</label><div class="prep-select-add"><select id="prepCourse" onchange="prepLoadSemesters()"><option value="">Select Course</option></select><button type="button" class="prep-add-btn" id="prepAddCourseBtn" onclick="prepAddCourse()">➕ Add Course</button></div></div><div><label for="prepSemester">📅 Semester</label><select id="prepSemester" onchange="prepLoadSubjects()"><option value="">Select Semester</option></select></div><div><label for="prepSubject">📖 Subject</label><div class="prep-select-add"><select id="prepSubject"><option value="">Select Subject</option></select><button type="button" class="prep-add-btn" id="prepAddSubjectBtn" onclick="prepAddSubject()">➕ Add Subject</button></div></div><button class="prep-search" onclick="searchPreparation()">🔎 Search Notes</button></div><div id="prepResults" class="prep-results"><div class="prep-empty">Select your Institute, Course, Semester and Subject, then click <strong>Search Notes</strong>.</div></div></div></section>
 
-
+<section class="tools" id="uploadPreparationNotes">
+  <div class="panel" style="grid-column:1/-1">
+    <h3>📤 Upload Notes for Preparation</h3>
+    <p>Students can submit preparation notes here. The <strong>Institute, Course, Semester, Subject and Year</strong> dropdowns use the same preparation catalog/options as <strong>Find Your Notes for Preparation</strong>. Notes will be visible there only after MainPaper Hub admin approval.</p>
+    <div class="prep-form">
+      <div>
+        <label for="studentNoteInstitute">🏫 Institute Name</label>
+        <select id="studentNoteInstitute" onchange="studentNoteLoadCourses()">
+          <option value="">Select Institute / University</option>
+        </select>
+      </div>
+      <div>
+        <label for="studentNoteCourse">🎓 Course</label>
+        <div class="prep-select-add">
+        <select id="studentNoteCourse" onchange="studentNoteLoadSemesters()">
+          <option value="">Select Course</option>
+        </select>
+        <button type="button" class="prep-add-btn" id="studentNoteAddCourseBtn" onclick="studentNoteAddCourse()">➕ Add Course</button>
+        </div>
+      </div>
+      <div>
+        <label for="studentNoteSemester">📅 Semester</label>
+        <select id="studentNoteSemester" onchange="studentNoteLoadSubjects()">
+          <option value="">Select Semester</option>
+        </select>
+      </div>
+      <div>
+        <label for="studentNoteSubject">📖 Subject</label>
+        <div class="prep-select-add">
+        <select id="studentNoteSubject">
+          <option value="">Select Subject</option>
+        </select>
+        <button type="button" class="prep-add-btn" id="studentNoteAddSubjectBtn" onclick="studentNoteAddSubject()">➕ Add Subject</button>
+        </div>
+      </div>
+      <div>
+        <label for="studentNoteYear">📅 Year</label>
+        <select id="studentNoteYear"></select>
+      </div>
+      <div>
+        <label for="studentNoteTitle">📝 Notes Title</label>
+        <input id="studentNoteTitle" type="text" maxlength="150" placeholder="Example: DBMS Complete Notes">
+      </div>
+      <div class="full">
+        <label for="studentNoteDescription">📄 Description</label>
+        <input id="studentNoteDescription" type="text" maxlength="300" placeholder="Short description of your notes">
+      </div>
+      <div class="full">
+        <label for="studentNoteFile">📎 Notes PDF</label>
+        <input id="studentNoteFile" type="file" accept="application/pdf">
+      </div>
+      <button class="prep-search" type="button" onclick="submitStudentPreparationNote()">📤 Submit Notes for Admin Approval</button>
+    </div>
+    <div id="studentNoteUploadStatus" class="prep-empty" style="margin-top:12px">
+      Submitted notes are sent to the Admin Panel and remain pending until an administrator reviews and approves them.
+    </div>
+  </div>
+</section>
 
 <section class="formula-bank" id="formulaBank">
   <div class="section-head"><h2>🧮 Formula Bank</h2><p>Select a course, semester and subject to find formulas, formula names, SI units and the quantities used in each formula.</p></div>
   <div class="formula-bank-panel">
     <div class="formula-filter-grid">
-      <div class="formula-filter"><label for="formulaCourse">🎓 Course</label><select id="formulaCourse" onchange="formulaLoadSemesters()"><option value="">Select Course</option></select></div>
+      <div class="formula-filter"><label for="formulaInstitute">🏫 Institute / University</label><select id="formulaInstitute" onchange="formulaLoadCourses()"><option value="">Select Institute / University</option></select></div>
+      <div class="formula-filter"><label for="formulaCourse">🎓 Course</label><div class="study-select-add"><select id="formulaCourse" onchange="formulaLoadSemesters()"><option value="">Select Course</option></select><button type="button" class="study-add-btn" id="formulaCourseAddBtn" onclick="formulaAddCourse()">➕ Add Course</button></div></div>
       <div class="formula-filter"><label for="formulaSemester">📅 Semester</label><select id="formulaSemester" onchange="formulaLoadSubjects()"><option value="">Select Semester</option></select></div>
-      <div class="formula-filter"><label for="formulaSubject">📖 Subject</label><select id="formulaSubject"><option value="">Select Subject</option></select></div>
+      <div class="formula-filter"><label for="formulaSubject">📖 Subject</label><div class="study-select-add"><select id="formulaSubject"><option value="">Select Subject</option></select><button type="button" class="study-add-btn" id="formulaSubjectAddBtn" onclick="formulaAddSubject()">➕ Add Subject</button></div></div>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px">
       <button type="button" class="formula-search" style="margin-top:0" onclick="searchFormulaBank()">🔎 Search Formulas</button>
@@ -322,9 +389,9 @@ function calculateBestStreak(dates,iso){
   <div class="practice-builder-panel">
     <div class="practice-filter-grid">
       <div class="practice-filter"><label for="practiceInstitute">🏫 Institute / University</label><select id="practiceInstitute" onchange="practiceLoadCourses()"><option value="">Select Institute / University</option></select></div>
-      <div class="practice-filter"><label for="practiceCourse">🎓 Course</label><select id="practiceCourse" onchange="practiceLoadSemesters()"><option value="">Select Course</option></select></div>
+      <div class="practice-filter"><label for="practiceCourse">🎓 Course</label><div class="study-select-add"><select id="practiceCourse" onchange="practiceLoadSemesters()"><option value="">Select Course</option></select><button type="button" class="study-add-btn" id="practiceCourseAddBtn" onclick="practiceAddCourse()">➕ Add Course</button></div></div>
       <div class="practice-filter"><label for="practiceSemester">📅 Semester</label><select id="practiceSemester" onchange="practiceLoadSubjects()"><option value="">Select Semester</option></select></div>
-      <div class="practice-filter"><label for="practiceSubject">📖 Subject</label><select id="practiceSubject"><option value="">Select Subject</option></select></div>
+      <div class="practice-filter"><label for="practiceSubject">📖 Subject</label><div class="study-select-add"><select id="practiceSubject"><option value="">Select Subject</option></select><button type="button" class="study-add-btn" id="practiceSubjectAddBtn" onclick="practiceAddSubject()">➕ Add Subject</button></div></div>
     </div>
     <div class="practice-actions"><button type="button" class="practice-primary" onclick="searchPracticeNotes()">🔎 Search Notes</button><button type="button" class="practice-secondary" onclick="resetPracticeBuilder()">Reset</button></div>
     <div id="practiceNoteResults" class="practice-results"><div class="note-empty">Select Institute, Course, Semester and Subject, then click <strong>Search Notes</strong>. Then select notes, choose pages, and click <strong>Make Paper</strong>.</div></div>
@@ -341,9 +408,9 @@ function calculateBestStreak(dates,iso){
   <div class="section-head"><h2>🧠 Smart Question Bank</h2><p>Filter questions by Easy, Normal, Hard, Repeated or New, generate a random paper, avoid questions you already solved, and track difficulty progress.</p></div>
   <div class="smart-bank-panel">
     <div class="smart-bank-filters">
-      <div class="smart-bank-filter"><label for="smartCourse">🎓 Course</label><select id="smartCourse" onchange="smartLoadSemesters()"><option value="">Select Course</option></select></div>
+      <div class="smart-bank-filter"><label for="smartCourse">🎓 Course</label><div class="study-select-add"><select id="smartCourse" onchange="smartLoadSemesters()"><option value="">Select Course</option></select><button type="button" class="study-add-btn" id="smartCourseAddBtn" onclick="smartAddCourse()">➕ Add Course</button></div></div>
       <div class="smart-bank-filter"><label for="smartSemester">📅 Semester</label><select id="smartSemester" onchange="smartLoadSubjects()"><option value="">Select Semester</option></select></div>
-      <div class="smart-bank-filter"><label for="smartSubject">📖 Subject</label><select id="smartSubject"><option value="">Select Subject</option></select></div>
+      <div class="smart-bank-filter"><label for="smartSubject">📖 Subject</label><div class="study-select-add"><select id="smartSubject"><option value="">Select Subject</option></select><button type="button" class="study-add-btn" id="smartSubjectAddBtn" onclick="smartAddSubject()">➕ Add Subject</button></div></div>
       <div class="smart-bank-filter"><label for="smartType">🏷️ Question Type</label><select id="smartType"><option value="all">All Questions</option><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option><option value="repeated">Repeated</option><option value="new">New</option></select></div>
     </div>
     <div class="smart-bank-actions">
@@ -477,14 +544,14 @@ const subjectData=Object.fromEntries(Object.entries(courseCatalog).map(([c,v])=>
 function prepEsc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;", "'":"&#039;"}[m]))}
 function prepFill(id,items,placeholder){const el=document.getElementById(id);if(!el)return;el.innerHTML='<option value="">'+placeholder+'</option>'+items.map(x=>`<option value="${prepEsc(x)}">${prepEsc(x)}</option>`).join('')}
 function prepLoadInstitutes(){const items=[...instituteData].sort((a,b)=>(a.name+' '+a.city).localeCompare(b.name+' '+b.city));const el=document.getElementById('prepInstitute');el.innerHTML='<option value="">Select Institute / University</option>'+items.map(x=>`<option value="${prepEsc(x.name)}">${prepEsc(x.name)} — ${prepEsc(x.city)}</option>`).join('');prepLoadCourses()}
-function prepCustomData(){try{return JSON.parse(localStorage.getItem("MPH_PREP_CUSTOM_DATA")||"{}")||{}}catch(e){return {}}}
-function prepSaveCustomData(d){localStorage.setItem("MPH_PREP_CUSTOM_DATA",JSON.stringify(d))}
-function prepGetCourses(inst){const d=prepCustomData(),custom=(d.courses&&d.courses[inst])||[];const base=inst&&courseData[inst]?[...new Set(courseData[inst])].filter(c=>courseCatalog[c]):Object.keys(courseCatalog).sort((a,b)=>a.localeCompare(b));return [...new Set([...base,...custom.map(x=>x.name)])]}
-function prepLoadCourses(){const inst=document.getElementById('prepInstitute')?.value||'';prepFill('prepCourse',prepGetCourses(inst).sort((a,b)=>a.localeCompare(b)),'Select Course');const b=document.getElementById('prepAddCourseBtn');if(b)b.style.display=inst?'inline-flex':'none';prepLoadSemesters()}
-function prepLoadSemesters(){const inst=document.getElementById('prepInstitute')?.value||'',c=document.getElementById('prepCourse')?.value||'',s=document.getElementById('prepSemester');if(!s)return;s.innerHTML='<option value="">Select Semester</option>';const d=prepCustomData(),custom=((d.courses&&d.courses[inst])||[]).find(x=>x.name===c);const n=custom?.semesters||courseCatalog[c]?.semesters||0;for(let i=1;i<=n;i++)s.innerHTML+=`<option value="${i}">Semester ${i}</option>`;prepLoadSubjects()}
-function prepLoadSubjects(){const inst=document.getElementById('prepInstitute')?.value||'',c=document.getElementById('prepCourse')?.value||'',sem=document.getElementById('prepSemester')?.value||'',s=document.getElementById('prepSubject');if(!s)return;s.innerHTML='<option value="">Select Subject</option>';let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);const d=prepCustomData(),custom=((d.subjects||{})[inst+'||'+c+'||'+sem]||[]);list=[...new Set([...list,...custom])];if(!c)list=[...new Set(Object.values(subjectData).flat())];[...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>s.innerHTML+=`<option value="${prepEsc(x)}">${prepEsc(x)}</option>`);const b=document.getElementById('prepAddSubjectBtn');if(b)b.style.display=(inst&&c&&sem)?'inline-flex':'none'}
-function prepAddCourse(){const inst=document.getElementById('prepInstitute')?.value||'';if(!inst){alert('Please select Institute first.');return}const name=prompt('Enter new course name:');if(!name||!name.trim())return;const clean=name.trim();const n=parseInt(prompt('How many semesters does this course have?','8'),10);if(!n||n<1||n>20){alert('Please enter a valid semester count (1–20).');return}const d=prepCustomData();d.courses=d.courses||{};d.courses[inst]=d.courses[inst]||[];if(d.courses[inst].some(x=>x.name.toLowerCase()===clean.toLowerCase())){alert('This course already exists.');return}d.courses[inst].push({name:clean,semesters:n});prepSaveCustomData(d);prepLoadCourses();document.getElementById('prepCourse').value=clean;prepLoadSemesters();alert('✅ Course added successfully for '+inst+'.')}
-function prepAddSubject(){const inst=document.getElementById('prepInstitute')?.value||'',c=document.getElementById('prepCourse')?.value||'',sem=document.getElementById('prepSemester')?.value||'';if(!inst||!c||!sem){alert('Please select Institute, Course and Semester first.');return}const name=prompt('Enter new subject name:');if(!name||!name.trim())return;const clean=name.trim(),key=inst+'||'+c+'||'+sem,d=prepCustomData();d.subjects=d.subjects||{};d.subjects[key]=d.subjects[key]||[];if(d.subjects[key].some(x=>x.toLowerCase()===clean.toLowerCase())||(semesterData[c]?.[sem]||[]).some(x=>x.toLowerCase()===clean.toLowerCase())){alert('This subject already exists for this semester.');return}d.subjects[key].push(clean);prepSaveCustomData(d);prepLoadSubjects();document.getElementById('prepSubject').value=clean;alert('✅ Subject added successfully for Semester '+sem+'.')}
+function prepGetCourses(inst){return inst&&courseData[inst]?[...new Set(courseData[inst])].filter(c=>courseCatalog[c]):Object.keys(courseCatalog).sort((a,b)=>a.localeCompare(b))}
+function prepCustomCatalog(){try{return JSON.parse(localStorage.getItem("MPH_STUDY_CUSTOM_CATALOG_V1")||"{}")}catch(e){return {courses:{},subjects:{}}}}
+function prepSaveCustomCatalog(d){try{localStorage.setItem("MPH_STUDY_CUSTOM_CATALOG_V1",JSON.stringify(d))}catch(e){}}
+function prepAddCourse(){const inst=document.getElementById("prepInstitute")?.value||"";if(!inst){alert("Please select Institute first.");return}const name=prompt("Enter new course name:");if(!name||!name.trim())return;const clean=name.trim(),d=prepCustomCatalog();d.courses=d.courses||{};d.courses[inst]=Array.isArray(d.courses[inst])?d.courses[inst]:[];if(d.courses[inst].some(x=>String(x).toLowerCase()===clean.toLowerCase())||prepGetCourses(inst).some(x=>String(x).toLowerCase()===clean.toLowerCase())){alert("This course already exists for this institute.");return}d.courses[inst].push(clean);prepSaveCustomCatalog(d);prepLoadCourses();document.getElementById("prepCourse").value=clean;prepLoadSemesters();alert("✅ Course added successfully.")}
+function prepAddSubject(){const inst=document.getElementById("prepInstitute")?.value||"",c=document.getElementById("prepCourse")?.value||"",sem=document.getElementById("prepSemester")?.value||"";if(!inst||!c||!sem){alert("Please select Institute, Course and Semester first.");return}const name=prompt("Enter new subject name:");if(!name||!name.trim())return;const clean=name.trim(),d=prepCustomCatalog();d.subjects=d.subjects||{};const key=inst+"||"+c+"||"+sem;d.subjects[key]=Array.isArray(d.subjects[key])?d.subjects[key]:[];const base=semesterData[c]?.[sem]||[];if(d.subjects[key].some(x=>String(x).toLowerCase()===clean.toLowerCase())||base.some(x=>String(x).toLowerCase()===clean.toLowerCase())){alert("This subject already exists for this semester.");return}d.subjects[key].push(clean);prepSaveCustomCatalog(d);prepLoadSubjects();document.getElementById("prepSubject").value=clean;alert("✅ Subject added successfully.")}
+function prepLoadCourses(){const inst=document.getElementById('prepInstitute')?.value||'';const d=prepCustomCatalog();const custom=(d.courses&&d.courses[inst])||[];const courses=[...new Set([...prepGetCourses(inst),...custom])].sort((a,b)=>a.localeCompare(b));prepFill('prepCourse',courses,'Select Course');prepLoadSemesters()}
+function prepLoadSemesters(){const c=document.getElementById('prepCourse')?.value||'';const s=document.getElementById('prepSemester');if(!s)return;s.innerHTML='<option value="">Select Semester</option>';const n=courseCatalog[c]?.semesters||0;for(let i=1;i<=n;i++)s.innerHTML+=`<option value="${i}">Semester ${i}</option>`;prepLoadSubjects()}
+function prepLoadSubjects(){const inst=document.getElementById('prepInstitute')?.value||'',c=document.getElementById('prepCourse')?.value||'',sem=document.getElementById('prepSemester')?.value||'',s=document.getElementById('prepSubject');if(!s)return;s.innerHTML='<option value="">Select Subject</option>';let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);if(!c)list=[...new Set(Object.values(subjectData).flat())];const d=prepCustomCatalog(),key=inst+'||'+c+'||'+sem;if(sem&&d.subjects&&Array.isArray(d.subjects[key]))list=[...list,...d.subjects[key]];[...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>s.innerHTML+=`<option value="${prepEsc(x)}">${prepEsc(x)}</option>`)}
 function searchPreparation(){const institute=document.getElementById('prepInstitute').value,course=document.getElementById('prepCourse').value,semester=document.getElementById('prepSemester').value,subject=document.getElementById('prepSubject').value,r=document.getElementById('prepResults');if(!institute||!course||!semester||!subject){r.innerHTML='<div class="prep-empty">Please select Institute / University, Course, Semester and Subject before searching.</div>';return}const cards=[['📚 Preparation Notes','Subject-wise notes and revision material for your selected course and semester.','notes'],['🔥 Important Topics','Focus on the topics that deserve priority during preparation.','topic'],['❓ Important Questions','Practice important questions related to your selected subject.','questions'],['🔁 Previous Year Papers','Open previous-year papers for the selected course and subject.','papers'],['🧠 Practice MCQs','Build confidence with topic-based multiple-choice practice.','mcq'],['📝 Mock Tests','Test your preparation with timed practice.','mock']];r.innerHTML=`<div style="margin-bottom:14px"><strong>🔎 Notes for your selection</strong><div class="chips"><span class="chip">${prepEsc(institute)}</span><span class="chip">${prepEsc(course)}</span><span class="chip">Semester ${prepEsc(semester)}</span><span class="chip">${prepEsc(subject)}</span></div></div><div class="prep-result-grid">${cards.map(c=>`<article class="prep-card"><h4>${c[0]}</h4><p>${c[1]}</p><span class="prep-tag">Available</span>${c[2]==='notes'?`<button class="read-online" type="button" onclick="openPdfReader('', ${JSON.stringify(subject)})">📖 Read Online</button>`:''}</article>`).join('')}</div>`}
 prepLoadInstitutes();
 document.getElementById('studentNotepad')?.addEventListener('input',saveNotepad);
@@ -1162,8 +1229,8 @@ function formulaRenderCards(items){
 }
 async function searchFormulaBank(){
  markStudyActivity();
- const course=document.getElementById('formulaCourse')?.value, sem=document.getElementById('formulaSemester')?.value, subject=document.getElementById('formulaSubject')?.value, out=document.getElementById('formulaResults'); if(!out)return;
- if(!course||!sem||!subject){out.innerHTML='<div class="formula-empty">Please select <strong>Course</strong>, <strong>Semester</strong> and <strong>Subject</strong> first.</div>';return;}
+ const institute=document.getElementById('formulaInstitute')?.value, course=document.getElementById('formulaCourse')?.value, sem=document.getElementById('formulaSemester')?.value, subject=document.getElementById('formulaSubject')?.value, out=document.getElementById('formulaResults'); if(!out)return;
+ if(!institute||!course||!sem||!subject){out.innerHTML='<div class="formula-empty">Please select <strong>Course</strong>, <strong>Semester</strong> and <strong>Subject</strong> first.</div>';return;}
  const status=document.getElementById('formulaCompareStatus');
  if(status){status.className='formula-compare-status';status.textContent='🔄 Checking Formula Bank against all matching uploaded notes before showing results…';}
  // Always compare first, then render the final Formula Bank so missing note formulas are included.
@@ -1264,6 +1331,9 @@ function practiceLoadSubjects(){
   const c=document.getElementById('practiceCourse')?.value||'',sem=document.getElementById('practiceSemester')?.value||'',s=document.getElementById('practiceSubject');
   if(!s)return;
   let list=sem?(courseCatalog?.[c]?.subjects?.[sem]||[]):[];
+  let customSubjects={}; try{customSubjects=JSON.parse(localStorage.getItem("MPH_STUDENT_NOTE_CUSTOM_SUBJECTS_V1")||"{}")}catch(e){}
+  const key=(document.getElementById("studentNoteInstitute")?.value||"")+"||"+c+"||"+sem;
+  list=[...list,...(customSubjects[key]||[])];
   s.innerHTML='<option value="">Select Subject</option>'+[...new Set(list)].sort((a,b)=>a.localeCompare(b)).map(x=>`<option value="${practiceEsc(x)}">${practiceEsc(x)}</option>`).join('');
 }
 function loadPracticeNotes(){
@@ -2073,7 +2143,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 #mphSharedAdMedia{max-height:62vh;overflow:hidden;border-radius:10px}
 #mphSharedAdMedia img,#mphSharedAdMedia video{max-width:100%;max-height:62vh;border-radius:10px;display:block;margin:auto}
 #mphSharedAdTimer{font-weight:700;margin-top:10px}
-.prep-select-add{display:flex;gap:8px;align-items:stretch}.prep-select-add select{flex:1;min-width:0}.prep-add-btn{border:1px solid #cbd5e1;background:#fff;border-radius:10px;padding:0 11px;font-weight:700;cursor:pointer;white-space:nowrap}.prep-add-btn:disabled{opacity:.45;cursor:not-allowed}.prep-add-btn:hover:not(:disabled){background:#f1f5f9}
 </style>
 <div id="mphSharedAdOverlay" aria-label="Advertisement">
   <div id="mphSharedAdBox">
@@ -2110,5 +2179,297 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
+
+<script>
+/* Formula Bank uses the same dropdown lists as "Find Your Notes for Preparation". */
+function formulaLoadInstitutes(){
+  const target=document.getElementById('formulaInstitute');
+  const source=document.getElementById('prepInstitute');
+  if(!target) return;
+  if(source && source.options.length){
+    target.innerHTML=source.innerHTML;
+  } else {
+    target.innerHTML='<option value="">Select Institute / University</option>';
+  }
+  const c=document.getElementById('formulaCourse');
+  const s=document.getElementById('formulaSemester');
+  const sub=document.getElementById('formulaSubject');
+  if(c)c.innerHTML='<option value="">Select Course</option>';
+  if(s)s.innerHTML='<option value="">Select Semester</option>';
+  if(sub)sub.innerHTML='<option value="">Select Subject</option>';
+}
+
+function formulaLoadCourses(){
+  const inst=document.getElementById('formulaInstitute')?.value||'';
+  const prepInst=document.getElementById('prepInstitute');
+  if(prepInst) prepInst.value=inst;
+  if(typeof prepLoadCourses==='function') prepLoadCourses();
+  const target=document.getElementById('formulaCourse');
+  const source=document.getElementById('prepCourse');
+  if(target){
+    target.innerHTML=source && source.options.length ? source.innerHTML : '<option value="">Select Course</option>';
+    target.value='';
+  }
+  const s=document.getElementById('formulaSemester');
+  const sub=document.getElementById('formulaSubject');
+  if(s)s.innerHTML='<option value="">Select Semester</option>';
+  if(sub)sub.innerHTML='<option value="">Select Subject</option>';
+}
+
+function formulaLoadSemesters(){
+  const course=document.getElementById('formulaCourse')?.value||'';
+  const prepCourse=document.getElementById('prepCourse');
+  if(prepCourse) prepCourse.value=course;
+  if(typeof prepLoadSemesters==='function') prepLoadSemesters();
+  const target=document.getElementById('formulaSemester');
+  const source=document.getElementById('prepSemester');
+  if(target){
+    target.innerHTML=source && source.options.length ? source.innerHTML : '<option value="">Select Semester</option>';
+    target.value='';
+  }
+  const sub=document.getElementById('formulaSubject');
+  if(sub)sub.innerHTML='<option value="">Select Subject</option>';
+}
+
+function formulaLoadSubjects(){
+  const sem=document.getElementById('formulaSemester')?.value||'';
+  const prepSem=document.getElementById('prepSemester');
+  if(prepSem) prepSem.value=sem;
+  if(typeof prepLoadSubjects==='function') prepLoadSubjects();
+  const target=document.getElementById('formulaSubject');
+  const source=document.getElementById('prepSubject');
+  if(target){
+    target.innerHTML=source && source.options.length ? source.innerHTML : '<option value="">Select Subject</option>';
+    target.value='';
+  }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  formulaLoadInstitutes();
+});
+</script>
+
+
+<script>
+/* Add Course / Add Subject for Formula Bank, Practice Papers and Smart Question Bank.
+   Custom entries are stored locally in this browser. */
+const MPH_STUDY_CUSTOM_KEY='MPH_STUDY_CUSTOM_CATALOG_V1';
+
+function studyCustomCatalog(){
+  try{return JSON.parse(localStorage.getItem(MPH_STUDY_CUSTOM_KEY)||'{"courses":[],"subjects":{}}')}
+  catch(e){return {courses:[],subjects:{}}}
+}
+function saveStudyCustomCatalog(x){localStorage.setItem(MPH_STUDY_CUSTOM_KEY,JSON.stringify(x));}
+
+function studyAddOption(selectId,value){
+  const s=document.getElementById(selectId); if(!s||!value)return;
+  if(![...s.options].some(o=>o.value===value)){
+    const o=document.createElement('option');o.value=value;o.textContent=value;s.appendChild(o);
+  }
+  s.value=value;
+}
+
+function refreshStudyCourseSelect(id){
+  const s=document.getElementById(id); if(!s)return;
+  const cat=studyCustomCatalog();
+  const exists=[...s.options].map(o=>o.value);
+  cat.courses.forEach(c=>{if(!exists.includes(c)){const o=document.createElement('option');o.value=c;o.textContent=c;s.appendChild(o);}});
+}
+
+function formulaAddCourse(){
+  const name=prompt('Enter new course name:');
+  if(!name||!name.trim())return;
+  const v=name.trim(),cat=studyCustomCatalog();
+  if(!cat.courses.includes(v))cat.courses.push(v);
+  saveStudyCustomCatalog(cat);
+  refreshStudyCourseSelect('formulaCourse'); studyAddOption('formulaCourse',v);
+}
+function formulaAddSubject(){
+  const name=prompt('Enter new subject name:');
+  if(!name||!name.trim())return;
+  const v=name.trim(),cat=studyCustomCatalog();
+  const course=document.getElementById('formulaCourse')?.value||'General';
+  cat.subjects[course]=cat.subjects[course]||[];
+  if(!cat.subjects[course].includes(v))cat.subjects[course].push(v);
+  saveStudyCustomCatalog(cat);
+  studyAddOption('formulaSubject',v);
+}
+
+function practiceAddCourse(){
+  const name=prompt('Enter new course name:');
+  if(!name||!name.trim())return;
+  const v=name.trim(),cat=studyCustomCatalog();
+  if(!cat.courses.includes(v))cat.courses.push(v);
+  saveStudyCustomCatalog(cat);
+  refreshStudyCourseSelect('practiceCourse'); studyAddOption('practiceCourse',v);
+}
+function practiceAddSubject(){
+  const name=prompt('Enter new subject name:');
+  if(!name||!name.trim())return;
+  const v=name.trim(),cat=studyCustomCatalog();
+  const course=document.getElementById('practiceCourse')?.value||'General';
+  cat.subjects[course]=cat.subjects[course]||[];
+  if(!cat.subjects[course].includes(v))cat.subjects[course].push(v);
+  saveStudyCustomCatalog(cat);
+  studyAddOption('practiceSubject',v);
+}
+
+function smartAddCourse(){
+  const name=prompt('Enter new course name:');
+  if(!name||!name.trim())return;
+  const v=name.trim(),cat=studyCustomCatalog();
+  if(!cat.courses.includes(v))cat.courses.push(v);
+  saveStudyCustomCatalog(cat);
+  refreshStudyCourseSelect('smartCourse'); studyAddOption('smartCourse',v);
+}
+function smartAddSubject(){
+  const name=prompt('Enter new subject name:');
+  if(!name||!name.trim())return;
+  const v=name.trim(),cat=studyCustomCatalog();
+  const course=document.getElementById('smartCourse')?.value||'General';
+  cat.subjects[course]=cat.subjects[course]||[];
+  if(!cat.subjects[course].includes(v))cat.subjects[course].push(v);
+  saveStudyCustomCatalog(cat);
+  studyAddOption('smartSubject',v);
+}
+
+function applyStudyCustomOptions(){
+  ['formulaCourse','practiceCourse','smartCourse'].forEach(refreshStudyCourseSelect);
+  const cat=studyCustomCatalog();
+  [['formulaSubject','formulaCourse'],['practiceSubject','practiceCourse'],['smartSubject','smartCourse']].forEach(([sid,cid])=>{
+    const s=document.getElementById(sid),c=document.getElementById(cid)?.value;
+    if(!s)return;
+    (cat.subjects[c]||[]).forEach(v=>studyAddOption(sid,v));
+  });
+}
+document.addEventListener('DOMContentLoaded',()=>setTimeout(applyStudyCustomOptions,50));
+</script>
+
 </body></html>
-<script>window.addEventListener('storage',()=>{if(typeof refreshStudentDashboard==='function')refreshStudentDashboard();});</script>
+<script>window.addEventListener('storage',()=>{if(typeof refreshStudentDashboard==='function')refreshStudentDashboard();});
+/* Student Preparation Notes — admin approval workflow */
+const MPH_STUDENT_NOTE_SUBMISSIONS = "MPH_STUDENT_NOTE_SUBMISSIONS_V1";
+
+function studentNoteAddCourse(){
+  const inst=document.getElementById("studentNoteInstitute")?.value||"";
+  if(!inst){alert("Please select Institute first.");return;}
+  const name=prompt("Enter new course name:");
+  if(!name||!name.trim())return;
+  const clean=name.trim();
+  const key="MPH_STUDENT_NOTE_CUSTOM_COURSES_V1";
+  let data={}; try{data=JSON.parse(localStorage.getItem(key)||"{}")}catch(e){}
+  data[inst]=Array.isArray(data[inst])?data[inst]:[];
+  if(data[inst].some(x=>String(x).toLowerCase()===clean.toLowerCase())){alert("This course already exists for this institute.");return;}
+  data[inst].push(clean); localStorage.setItem(key,JSON.stringify(data));
+  studentNoteLoadCourses(); document.getElementById("studentNoteCourse").value=clean;
+  alert("✅ Course added successfully.");
+}
+function studentNoteAddSubject(){
+  const inst=document.getElementById("studentNoteInstitute")?.value||"",c=document.getElementById("studentNoteCourse")?.value||"",sem=document.getElementById("studentNoteSemester")?.value||"";
+  if(!inst||!c||!sem){alert("Please select Institute, Course and Semester first.");return;}
+  const name=prompt("Enter new subject name:");
+  if(!name||!name.trim())return;
+  const clean=name.trim(),key="MPH_STUDENT_NOTE_CUSTOM_SUBJECTS_V1";
+  let data={}; try{data=JSON.parse(localStorage.getItem(key)||"{}")}catch(e){}
+  const k=inst+"||"+c+"||"+sem; data[k]=Array.isArray(data[k])?data[k]:[];
+  const base=(semesterData[c]?.[sem]||[]).map(x=>String(x).toLowerCase());
+  if(data[k].some(x=>String(x).toLowerCase()===clean.toLowerCase())||base.includes(clean.toLowerCase())){alert("This subject already exists for this semester.");return;}
+  data[k].push(clean); localStorage.setItem(key,JSON.stringify(data));
+  studentNoteLoadSubjects(); document.getElementById("studentNoteSubject").value=clean;
+  alert("✅ Subject added successfully.");
+}
+
+function studentNoteLoadInstitutes(){
+  const s=document.getElementById("studentNoteInstitute"); if(!s)return;
+  const items=[...instituteData].sort((a,b)=>(a.name+' '+a.city).localeCompare(b.name+' '+b.city));
+  s.innerHTML='<option value="">Select Institute / University</option>'+items.map(x=>`<option value="${prepEsc(x.name)}">${prepEsc(x.name)} — ${prepEsc(x.city)}</option>`).join('');
+  studentNoteLoadCourses();
+}
+function studentNoteLoadCourses(){
+  const c=document.getElementById("studentNoteCourse"),sem=document.getElementById("studentNoteSemester"),sub=document.getElementById("studentNoteSubject"); if(!c)return;
+  const inst=document.getElementById("studentNoteInstitute")?.value||"";
+  const courses=typeof prepGetCourses==='function' ? prepGetCourses(inst) : Object.keys(courseCatalog||{});
+  let customCourses={}; try{customCourses=JSON.parse(localStorage.getItem("MPH_STUDENT_NOTE_CUSTOM_COURSES_V1")||"{}")}catch(e){}
+  const extra=customCourses[inst]||[];
+  courses.push(...extra);
+  const uniqueCourses=[...new Set(courses)];
+  c.innerHTML='<option value="">Select Course</option>'+uniqueCourses.sort((a,b)=>String(a).localeCompare(String(b))).map(x=>`<option value="${prepEsc(x)}">${prepEsc(x)}</option>`).join('');
+  if(sem)sem.innerHTML='<option value="">Select Semester</option>';
+  if(sub)sub.innerHTML='<option value="">Select Subject</option>';
+}
+function studentNoteLoadSemesters(){
+  const c=document.getElementById("studentNoteCourse")?.value||"",s=document.getElementById("studentNoteSemester"),sub=document.getElementById("studentNoteSubject"); if(!s)return;
+  const count=Number(courseCatalog[c]?.semesters||0);
+  s.innerHTML='<option value="">Select Semester</option>';
+  for(let i=1;i<=count;i++)s.innerHTML+=`<option value="${i}">Semester ${i}</option>`;
+  if(sub)sub.innerHTML='<option value="">Select Subject</option>';
+}
+function studentNoteLoadSubjects(){
+  const c=document.getElementById("studentNoteCourse")?.value||"",sem=document.getElementById("studentNoteSemester")?.value||"",s=document.getElementById("studentNoteSubject"); if(!s)return;
+  const list=semesterData[c]?.[sem]||[];
+  let customSubjects={}; try{customSubjects=JSON.parse(localStorage.getItem("MPH_STUDENT_NOTE_CUSTOM_SUBJECTS_V1")||"{}")}catch(e){}
+  const key=(document.getElementById("studentNoteInstitute")?.value||"")+"||"+c+"||"+sem;
+  list=[...list,...(customSubjects[key]||[])];
+  s.innerHTML='<option value="">Select Subject</option>'+[...new Set(list)].sort((a,b)=>String(a).localeCompare(String(b))).map(x=>`<option value="${prepEsc(x)}">${prepEsc(x)}</option>`).join('');
+}
+function studentNoteLoadYears(){
+  const s=document.getElementById("studentNoteYear"); if(!s)return; s.innerHTML='<option value="">Select Year</option>'; for(let y=2001;y<=2099;y++)s.innerHTML+=`<option value="${y}">${y}</option>`;
+}
+async function submitStudentPreparationNote(){
+  const institute=document.getElementById("studentNoteInstitute")?.value||"";
+  const course=document.getElementById("studentNoteCourse")?.value||"";
+  const semester=document.getElementById("studentNoteSemester")?.value||"";
+  const subject=document.getElementById("studentNoteSubject")?.value||"";
+  const year=document.getElementById("studentNoteYear")?.value||"";
+  const title=document.getElementById("studentNoteTitle")?.value.trim()||"";
+  const description=document.getElementById("studentNoteDescription")?.value.trim()||"";
+  const file=document.getElementById("studentNoteFile")?.files?.[0];
+  const status=document.getElementById("studentNoteUploadStatus");
+  const fail=(msg)=>{if(status)status.innerHTML=`<div style="color:#b91c1c;font-weight:700">${prepEsc(msg)}</div>`;};
+
+  if(!institute||!course||!semester||!subject||!year||!title||!file)
+    return fail("Please complete all fields and select a PDF.");
+  if(file.type!=="application/pdf" && !/\.pdf$/i.test(file.name))
+    return fail("Only PDF notes are allowed.");
+  if(file.size>15*1024*1024)
+    return fail("PDF must be 15 MB or smaller.");
+
+  try{
+    if(typeof securityPrecheck==="function") await securityPrecheck(file,"pdf");
+    const fileData=await fileToDataURL(file);
+    const meta=typeof extractPdfTextAndPages==="function"
+      ? await extractPdfTextAndPages(fileData)
+      : {pages:0,text:""};
+
+    const existing=await getAll("submissions");
+    const duplicate=existing.find(x =>
+      x.noteSubmission &&
+      x.status==="Pending" &&
+      String(x.institute)===institute &&
+      String(x.course)===course &&
+      String(x.semester)===String(semester) &&
+      String(x.subject)===subject &&
+      String(x.title)===title
+    );
+    if(duplicate) return fail("A pending note with the same title already exists for this selection.");
+
+    await add("submissions",{
+      noteSubmission:true,
+      submissionType:"preparation-note",
+      institute,course,semester,subject,year,title,description,
+      fileName:file.name,fileData,pages:meta.pages||0,text:meta.text||"",
+      submittedAt:Date.now(),created:Date.now(),status:"Pending",
+      submittedBy:"Student",verified:false
+    });
+
+    document.getElementById("studentNoteTitle").value="";
+    document.getElementById("studentNoteDescription").value="";
+    document.getElementById("studentNoteFile").value="";
+    if(status)status.innerHTML='<div style="color:#166534;font-weight:700">✅ Notes submitted successfully. The submission is now waiting for admin approval.</div>';
+  }catch(e){
+    if(status)status.innerHTML=`<div style="color:#b91c1c;font-weight:700">${prepEsc("Upload failed: "+(e?.message||e))}</div>`;
+  }
+}
+studentNoteLoadInstitutes();
+studentNoteLoadYears();
+</script>
