@@ -75,9 +75,8 @@ footer{margin-top:30px;background:#111827;color:#cbd5e1;padding:35px 20px}.foote
 @media(max-width:600px){.hero-contact{gap:15px;flex-direction:column;font-size:.92rem;}}
 .hero-tagline{margin:10px 0 18px;font-size:1.5rem;line-height:1.35;font-weight:700;}
 @media(max-width:600px){.hero-tagline{font-size:1.15rem;}}
-.my-leaderboard-row{background:rgba(37,99,235,.08)!important;outline:2px solid rgba(37,99,235,.18);outline-offset:-2px}.you-badge{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:#2563eb;color:#fff;font-size:11px;font-weight:800}
-.course-add-wrap{display:flex;gap:8px;align-items:stretch}.course-add-wrap input{flex:1;min-width:0}.add-course-btn{display:none;align-items:center;justify-content:center;border:1px solid #cbd5e1;background:#fff;border-radius:10px;padding:0 12px;font-weight:700;cursor:pointer;white-space:nowrap}.add-course-btn.show{display:inline-flex}.add-course-btn:hover{background:#f1f5f9}
-</style>
+.my-leaderboard-row{background:rgba(37,99,235,.08)!important;outline:2px solid rgba(37,99,235,.18);outline-offset:-2px}.you-badge{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:#2563eb;color:#fff;font-size:11px;font-weight:800}.paper-form-stack{display:flex;flex-direction:column;gap:12px;margin-top:16px}.paper-form-row{display:flex;flex-direction:column;gap:7px}.paper-form-row label{font-weight:700;color:#334155}.paper-search-input{width:100%;padding:11px 13px;border:1px solid #cbd5e1;border-radius:10px;background:#fff}.paper-form-row select,.paper-form-row input:not([type="file"]){width:100%;padding:11px 13px;border:1px solid #cbd5e1;border-radius:10px;background:#fff}.paper-select-add{display:flex;gap:8px;align-items:stretch}.paper-select-add select{flex:1;min-width:0}.paper-add-btn{border:1px solid #cbd5e1;background:#fff;border-radius:10px;padding:0 12px;font-weight:700;cursor:pointer;white-space:nowrap}.paper-add-btn:hover{background:#f1f5f9}@media(max-width:640px){.paper-select-add{flex-direction:column}.paper-add-btn{padding:11px 12px}}
+.search-select-wrap{position:relative}.search-select-wrap .paper-search-input{width:100%}.search-select-wrap .search-dropdown{position:absolute;top:100%;left:0;right:0;z-index:1000}.search-select-wrap .paper-add-btn{margin-top:8px}</style>
 <style>
 .search-dropdown{display:none;position:absolute;left:0;right:0;top:calc(100% + 4px);max-height:260px;overflow-y:auto;background:#fff;border:1px solid #cbd5e1;border-radius:10px;box-shadow:0 10px 25px rgba(15,23,42,.15);z-index:9999;padding:5px}.search-dropdown.open{display:block}.search-option{display:block;width:100%;text-align:left;border:0;background:#fff;padding:10px 12px;border-radius:7px;cursor:pointer;font:inherit}.search-option:hover{background:#f1f5f9}.form-group{position:relative}</style>
 
@@ -98,6 +97,29 @@ footer{margin-top:30px;background:#111827;color:#cbd5e1;padding:35px 20px}.foote
 .high-demand-request-badge{display:inline-block;margin-left:7px;padding:3px 7px;border-radius:999px;background:#fee2e2;color:#991b1b;font-size:.72rem;font-weight:800}</style><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <style id="repeatedQuestionStyle">.repeat-tools{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}.repeat-tools select,.repeat-tools input{flex:1;min-width:190px;padding:11px 13px;border:1px solid #cbd5e1;border-radius:10px;background:#fff}.repeat-timeline{margin-top:10px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}.repeat-year{display:inline-flex;padding:5px 9px;border-radius:999px;background:#eef2ff;font-size:12px;font-weight:700}.repeated-card{border-left:4px solid #7c3aed}@media(max-width:600px){.repeat-tools{display:grid}.repeat-tools select,.repeat-tools input{width:100%}}</style>
 <style id="adminPanelButtonStyle">.admin-panel-link{font-weight:800!important;border:1px solid rgba(255,255,255,.28);border-radius:8px;padding:8px 10px!important;background:rgba(255,255,255,.10)}.admin-panel-link:hover{background:rgba(255,255,255,.18)}@media(max-width:700px){.admin-panel-link{display:block;text-align:center}}</style>
+
+<style id="personalRepeatedEnhancementStyle">
+.select-add-search-wrap{display:flex;gap:8px;align-items:stretch;width:100%}
+.select-add-search-wrap .search-select-box{position:relative;flex:1;min-width:0}
+.select-add-search-wrap select{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;font:inherit}
+.select-add-search-wrap input{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;font:inherit;margin-bottom:7px}
+.inline-add-btn{border:1px solid #cbd5e1;background:#fff;color:#1e40af;border-radius:10px;padding:0 12px;font-weight:700;white-space:nowrap}
+.inline-add-btn:hover{background:#eff6ff}
+.custom-search-dropdown{display:none;position:absolute;left:0;right:0;top:calc(100% - 1px);max-height:220px;overflow-y:auto;background:#fff;border:1px solid #cbd5e1;border-radius:10px;box-shadow:0 10px 25px rgba(15,23,42,.15);z-index:10000;padding:5px}
+.custom-search-dropdown.open{display:block}
+.custom-search-option{display:block;width:100%;text-align:left;border:0;background:#fff;padding:9px 11px;border-radius:7px;cursor:pointer;font:inherit}
+.custom-search-option:hover{background:#f1f5f9}
+#personalAlerts .feature-grid,#repeatedQuestions .repeat-tools{display:grid;grid-template-columns:1fr;gap:12px}
+#personalAlerts .feature-grid>*,
+#repeatedQuestions .repeat-tools>*{width:100%;min-width:0}
+#personalAlerts .select-add-search-wrap,#repeatedQuestions .select-add-search-wrap{width:100%}
+.dark-mode .select-add-search-wrap select,.dark-mode .select-add-search-wrap input{background:#0f172a;color:#fff;border-color:#475569}
+.dark-mode .inline-add-btn{background:#334155;color:#fff;border-color:#475569}
+.dark-mode .custom-search-dropdown{background:#1e293b;border-color:#475569}
+.dark-mode .custom-search-option{background:#1e293b;color:#fff}
+.dark-mode .custom-search-option:hover{background:#334155}
+</style>
+
 </head>
 <body>
 
@@ -117,7 +139,8 @@ footer{margin-top:30px;background:#111827;color:#cbd5e1;padding:35px 20px}.foote
 <div class="hero-search"><input type="text" id="heroSearch" placeholder="Search paper, subject, course..." onkeydown="heroSearchKey(event)"><button class="search-btn" onclick="searchFromHero()">🔎 Search</button></div>
 </div></section>
 <section id="uploadSecurity" style="display:none !important" class="container" style="margin-top:28px" style="display:none !important"><div class="alert-card" style="border-left:5px solid #2563eb;background:linear-gradient(135deg,#eff6ff,#ffffff);box-shadow:0 8px 24px rgba(37,99,235,.10)"><h2 style="margin:0 0 8px">🛡️ Security & Backup System</h2><p><strong>Production Security</strong> — MainPaper Hub ਵਿੱਚ uploads, admin access, abuse protection ਅਤੇ backups ਲਈ security controls ਦੀ ਯੋਜਨਾ।</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><span class="badge">🔍 Malware Scan</span><span class="badge">🦠 Virus Detection</span><span class="badge">📄 File Validation</span><span class="badge">🧾 MIME & Size Check</span><span class="badge">🔒 Quarantine</span><span class="badge">🔐 Secure Admin Auth</span><span class="badge">🚦 Rate Limiting</span><span class="badge">💾 Daily Backup</span><span class="badge">☁️ Off-site Backup</span><span class="badge">🔐 Backup Encryption</span></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:16px"><div style="padding:14px;border:1px solid #dbeafe;border-radius:12px;background:#fff"><strong>💾 Backup System</strong><ul style="margin:8px 0 0 18px;line-height:1.65"><li>Automatic daily database backup</li><li>Uploaded PDF backup</li><li>Weekly full backup</li><li>Encrypted off-site copy</li><li>Backup verification & restore testing</li></ul></div><div style="padding:14px;border:1px solid #dbeafe;border-radius:12px;background:#fff"><strong>🔐 Access & Abuse Protection</strong><ul style="margin:8px 0 0 18px;line-height:1.65"><li>Secure admin authentication</li><li>Hashed passwords & secure sessions</li><li>Rate limiting</li><li>Failed-login monitoring</li><li>API authorization & suspicious-traffic logging</li></ul></div></div><small style="display:block;margin-top:12px;color:#64748b">Students can use the public website without login. Real antivirus scanning, server-side authentication, rate limiting and automatic cloud backups require the production backend/security infrastructure.</small></div></section>
-<section id="paperRequests" class="container" style="margin-top:35px"><div class="alert-card"><h3>📝 Request a Paper</h3><p>Can’t find a question paper? Request it here. Other students can see the request and submit the missing PDF, but <strong>only MainPaper Hub admin can publish it</strong>.</p><div class="alert-row"><input id="requestName" placeholder="Your name (optional)"><select id="requestUniversity" onchange="loadRequestCourses()"><option value="">Select Institute</option></select><select id="requestCourse" onchange="loadRequestSemesters()"><option value="">Select Course</option></select><select id="requestSemester" onchange="loadRequestSubjects()"><option value="">Select Semester</option></select><select id="requestSubject"><option value="">Select Subject</option></select><select id="requestYear"><option value="">Select Year</option></select><button class="primary-btn" onclick="submitPaperRequest()">📨 Submit Request</button></div><small id="requestStatus" style="display:block;margin-top:8px;color:#64748b"></small></div><div class="section-title" style="margin-top:28px"><h2>📋 Paper Requests</h2><p>Missing paper? Help another student by submitting the PDF. Every submitted paper goes to admin review before publishing.</p></div><div id="requestsGrid" class="paper-grid"></div><div class="no-results" id="noRequests" style="display:none"><div class="big">📝</div><h3>No Paper Requests Yet</h3><p>Be the first student to request a missing paper.</p></div><div class="alert-card" style="margin-top:28px"><h3>📤 Upload a Question Paper</h3><p>Have a previous-year paper that is not on MainPaper Hub? Upload it here. <strong>Your paper will become public only after MainPaper Hub admin reviews and approves it.</strong></p><div class="alert-row"><input id="studentUploadName" placeholder="Your name (optional)"><select id="studentUploadUniversity" onchange="loadUploadCourses()"><option value="">Select Institute</option></select><select id="studentUploadCourse" onchange="loadUploadSemesters()"><option value="">Select Course</option></select><select id="studentUploadSemester" onchange="loadUploadSubjects()"><option value="">Select Semester</option></select><select id="studentUploadSubject"><option value="">Select Subject</option></select><select id="studentUploadYear"><option value="">Select Year</option></select><input type="file" id="studentUploadFile" accept="application/pdf" style="max-width:100%"><button class="primary-btn" onclick="submitStudentPaper()">📤 Submit Paper for Approval</button></div><small style="display:block;margin-top:8px;color:#64748b">Only PDF files are accepted. Approved papers will be published within 24 hours.</small></div><input type="file" id="requestPaperFile" accept="application/pdf" style="display:none" onchange="submitRequestedPaper(this)"></section>
+<section id="paperRequests" class="container" style="margin-top:35px"><div class="alert-card"><h3>📝 Request a Paper</h3><p>Can’t find a question paper? Request it here. Other students can see the request and submit the missing PDF, but <strong>only MainPaper Hub admin can publish it</strong>.</p><div class="paper-form-stack"><div class="paper-form-row"><label>Your Name</label><input id="requestName" placeholder="Your name (optional)"></div><div class="paper-form-row"><label>🔎 Institute</label><div class="search-select-wrap"><input id="requestUniversity" class="paper-search-input" placeholder="🔎 Type institute name..." autocomplete="off" oninput="requestSearchInstitutes()"><div id="requestInstituteDropdown" class="search-dropdown"></div></div></div><div class="paper-form-row"><label>🔎 Course</label><div class="search-select-wrap"><input id="requestCourse" class="paper-search-input" placeholder="🔎 Type course / B.Tech branch..." autocomplete="off" oninput="requestSearchCourses()"><div id="requestCourseDropdown" class="search-dropdown"></div><button type="button" class="paper-add-btn" onclick="addRequestUploadCourse('request')">➕ Add Course</button></div></div><div class="paper-form-row"><label>Semester</label><select id="requestSemester" onchange="requestLoadSubjects()"><option value="">All Semesters</option></select></div><div class="paper-form-row"><label>Subject</label><div class="paper-select-add"><select id="requestSubject"><option value="">All Subjects</option></select><button type="button" class="paper-add-btn" onclick="addRequestUploadSubject('request')">➕ Add Subject</button></div></div><div class="paper-form-row"><label>Year</label><select id="requestYear"></select></div><div class="paper-form-row"><button class="primary-btn" onclick="submitPaperRequest()">📨 Submit Request</button></div></div><small id="requestStatus" style="display:block;margin-top:8px;color:#64748b"></small></div><div class="section-title" style="margin-top:28px"><h2>📋 Paper Requests</h2><p>Missing paper? Help another student by submitting the PDF. Every submitted paper goes to admin review before publishing.</p></div><div id="requestsGrid" class="paper-grid"></div><div class="no-results" id="noRequests" style="display:none"><div class="big">📝</div><h3>No Paper Requests Yet</h3><p>Be the first student to request a missing paper.</p></div><div class="alert-card" style="margin-top:28px"><h3>📤 Upload a Question Paper</h3><p>Have a previous-year paper that is not on MainPaper Hub? Upload it here. <strong>Your paper will become public only after MainPaper Hub admin reviews and approves it.</strong></p><div class="paper-form-stack"><div class="paper-form-row"><label>Your Name</label><input id="studentUploadName" placeholder="Your name (optional)"></div><div class="paper-form-row"><label>🔎 Institute</label><div class="search-select-wrap"><input id="studentUploadUniversity" class="paper-search-input" placeholder="🔎 Type institute name..." autocomplete="off" oninput="uploadSearchInstitutes()"><div id="studentUploadInstituteDropdown" class="search-dropdown"></div></div></div><div class="paper-form-row"><label>🔎 Course</label><div class="search-select-wrap"><input id="studentUploadCourse" class="paper-search-input" placeholder="🔎 Type course / B.Tech branch..." autocomplete="off" oninput="uploadSearchCourses()"><div id="studentUploadCourseDropdown" class="search-dropdown"></div><button type="button" class="paper-add-btn" onclick="addRequestUploadCourse('upload')">➕ Add Course</button></div></div><div class="paper-form-row"><label>Semester</label><select id="studentUploadSemester" onchange="uploadLoadSubjects()"><option value="">All Semesters</option></select></div><div class="paper-form-row"><label>Subject</label><div class="paper-select-add"><select id="studentUploadSubject"><option value="">All Subjects</option></select><button type="button" class="paper-add-btn" onclick="addRequestUploadSubject('upload')">➕ Add Subject</button></div></div><div class="paper-form-row"><label>Year</label><select id="studentUploadYear"></select></div><div class="paper-form-row"><label>PDF File</label><input type="file" id="studentUploadFile" accept="application/pdf" style="max-width:100%"></div><div class="paper-form-row"><button class="primary-btn" onclick="submitStudentPaper()">📤 Submit Paper for Approval</button></div></div><small style="display:block;margin-top:8px;color:#64748b">Only PDF files are accepted. Approved papers will be published within 24 hours.</small></div><input type="file" id="requestPaperFile" accept="application/pdf" style="display:none" onchange="submitRequestedPaper(this)"></section>
+
 <section class="container contrib-wrap" id="contributorLeaderboard" style="margin-top:35px"><div class="contrib-card"><h2>🥇 Contributor Leaderboard</h2><p>Top contributors and monthly ranking.</p><div style="overflow:auto"><table class="leaderboard-table"><thead><tr><th>Rank</th><th>Contributor</th><th>Badge</th><th>Points</th><th>Approved</th><th>Avg. Rating</th><th>Monthly</th></tr></thead><tbody id="leaderboardBody"><tr><td colspan="7" class="student-empty">No approved student contributions yet.</td></tr></tbody></table></div></div></section>
 
 
@@ -136,8 +159,8 @@ footer{margin-top:30px;background:#111827;color:#cbd5e1;padding:35px 20px}.foote
 <div class="filter-card">
 <div class="filter-grid">
 <div class="form-group"><label>Institute</label><input id="university" placeholder="🔎 Type institute name..." oninput="searchInstitutes()"><div id="instituteDropdown" class="search-dropdown"></div></div>
-<div class="form-group"><label>Course</label><div class="course-add-wrap"><input id="course" placeholder="🔎 Type course / B.Tech branch..." oninput="searchCourses()"><button type="button" id="addCourseBtn" class="add-course-btn" onclick="addNewCourse()">➕ Add Course</button></div><div id="courseDropdown" class="search-dropdown"></div></div><div class="form-group"><label>Semester</label><select id="semester" onchange="loadSubjects()"><option value="">All Semesters</option></select></div>
-<div class="form-group"><label>Subject</label><div class="subject-add-wrap"><select id="subject" onchange="updateAddSubjectButton()"><option value="">All Subjects</option></select><button type="button" id="addSubjectBtn" class="add-course-btn" onclick="addNewSubject()" style="display:none">➕ Add Subject</button></div></div>
+<div class="form-group"><label>Course</label><input id="course" placeholder="🔎 Type course / B.Tech branch..." oninput="searchCourses()"><div id="courseDropdown" class="search-dropdown"></div></div><div class="form-group"><label>Semester</label><select id="semester" onchange="loadSubjects()"><option value="">All Semesters</option></select></div>
+<div class="form-group"><label>Subject</label><select id="subject"><option value="">All Subjects</option></select></div>
 <div class="form-group"><label>Year</label><select id="year"><option value="">All Years</option></select></div>
 <div class="form-group" style="grid-column:1/-1"><label>Keyword</label><input type="text" id="searchInput" placeholder="Search by paper name, exam, subject..." oninput="filterPapers()"></div>
 </div><div class="filter-actions"><button class="primary-btn" onclick="filterPapers(true)">🔎 Search Papers</button><button class="secondary-btn" onclick="resetFilters()">↻ Reset</button></div></div>
@@ -149,9 +172,45 @@ footer{margin-top:30px;background:#111827;color:#cbd5e1;padding:35px 20px}.foote
 
 
 <section class="container"><div class="alert-card"><h3>🔔 New Paper Alerts</h3><p>Get a reminder when new papers are added on this device.</p><div class="alert-row"><input id="alertEmail" type="email" placeholder="Enter email (optional)"><button class="primary-btn" onclick="togglePaperAlerts()" id="alertBtn">🔔 Turn On Alerts</button><button class="save-btn" onclick="shareWebsite()">📤 Share MainPaper Hub</button></div><small id="alertStatus" style="display:block;margin-top:8px;color:#64748b"></small><small style="display:block;margin-top:5px;color:#64748b">Tip: Allow browser notifications to receive alerts while the site is open.</small></div></section>
-<section class="container feature-panel" id="personalAlerts" style="margin-top:35px"><h2>🔔 Personalized Paper Alerts</h2><p>Select your Institute and Course. New matching papers can trigger an alert on this device.</p><div class="feature-grid"><select id="alertInstitute" onchange="loadAlertCourses()"><option value="">Select Institute</option></select><select id="alertCourse"><option value="">Select Course</option></select><button class="primary-btn" onclick="savePersonalAlert()">🔔 Save Alert</button></div><small id="personalAlertStatus" style="display:block;margin-top:9px;color:#64748b"></small></section>
+<section class="container feature-panel" id="personalAlerts" style="margin-top:35px">
+<h2>🔔 Personalized Paper Alerts</h2>
+<p>Search your Institute, select a Course, and add a Course when needed. New matching papers can trigger an alert on this device.</p>
+<div class="feature-grid">
+  <div class="select-add-search-wrap">
+    <div class="search-select-box">
+      <input id="alertInstituteSearch" type="search" placeholder="🔎 Search Institute..." autocomplete="off" oninput="searchPersonalInstitute()">
+      <div id="alertInstituteDropdown" class="custom-search-dropdown"></div>
+      <select id="alertInstitute" onchange="loadAlertCourses()"></select>
+    </div>
+  </div>
+  <div class="select-add-search-wrap">
+    <div class="search-select-box">
+      <input id="alertCourseSearch" type="search" placeholder="🔎 Search Course..." autocomplete="off" oninput="searchPersonalCourse()">
+      <div id="alertCourseDropdown" class="custom-search-dropdown"></div>
+      <select id="alertCourse" onchange="syncPersonalCourseSearch()"></select>
+    </div>
+    <button type="button" class="inline-add-btn" onclick="addPersonalCourse()">➕ Add Course</button>
+  </div>
+  <button class="primary-btn" onclick="savePersonalAlert()">🔔 Save Alert</button>
+</div>
+<small id="personalAlertStatus" style="display:block;margin-top:9px;color:#64748b"></small>
+</section>
 <section class="container feature-panel" id="popularPapers" style="margin-top:35px"><h2>🔥 Most Downloaded Papers</h2><p>Popular papers based on download activity on this device.</p><div id="popularPapersGrid" class="popular-grid"></div><div id="popularMoreWrap" style="display:none;text-align:center;margin:18px 0"><button class="search-btn" id="popularMoreBtn" onclick="toggleMorePopularPapers()">➕ More Papers</button></div></section>
-<section class="container feature-panel" id="repeatedQuestions" style="margin-top:35px"><h2>🔥 Most Repeated Questions</h2><p>Compare all uploaded papers for the selected course and subject and find questions that repeat across years.</p><div class="repeat-tools"><select id="repeatedCourseFilter" onchange="updateRepeatedSubjectFilter();repeatedSearchExecuted=false;renderRepeatedQuestionResults()"><option value="">Select Course</option></select><select id="repeatedSubjectFilter" onchange="repeatedSearchExecuted=false;renderRepeatedQuestionResults()"><option value="">Select Subject</option></select><input id="repeatedQuestionSearch" type="search" placeholder="Search repeated questions..." oninput="if(repeatedSearchExecuted)renderRepeatedQuestionResults()"><button class="primary-btn" onclick="searchAndCompareRepeatedQuestions()">🔍 Search & Compare</button><button class="save-btn" onclick="resetRepeatedQuestionFilters()">Reset</button></div><div id="repeatedCompareSummary" class="popular-meta" style="margin:12px 0"></div><div id="repeatedQuestionChart" class="repeat-chart" style="display:none"></div><div id="repeatedQuestionsGrid" class="popular-grid"><div class="student-empty">Select a course and subject, then click Search & Compare.</div></div></section>
+<section class="container feature-panel" id="repeatedQuestions" style="margin-top:35px"><h2>🔥 Most Repeated Questions</h2><p>Search a Course, select a Subject, and add Course or Subject when needed.</p><div class="repeat-tools">
+  <div class="select-add-search-wrap">
+    <div class="search-select-box">
+      <input id="repeatedCourseSearch" type="search" placeholder="🔎 Search Course..." autocomplete="off" oninput="searchRepeatedCourse()">
+      <div id="repeatedCourseDropdown" class="custom-search-dropdown"></div>
+      <select id="repeatedCourseFilter" onchange="updateRepeatedSubjectFilter();syncRepeatedCourseSearch();repeatedSearchExecuted=false;renderRepeatedQuestionResults()">
+      </select>
+    </div>
+    <button type="button" class="inline-add-btn" onclick="addRepeatedCourse()">➕ Add Course</button>
+  </div>
+  <div class="select-add-search-wrap">
+    <select id="repeatedSubjectFilter" onchange="repeatedSearchExecuted=true;renderRepeatedQuestionResults()"></select>
+    <button type="button" class="inline-add-btn" onclick="addRepeatedSubject()">➕ Add Subject</button>
+  </div>
+</div><div id="repeatedCompareSummary" class="popular-meta" style="margin:12px 0"></div><div id="repeatedQuestionChart" class="repeat-chart" style="display:none"></div><div id="repeatedQuestionsGrid" class="popular-grid"><div class="student-empty">Select a course and subject to view repeated questions.</div></div></section>
 <section class="container" id="studentAccount" style="margin-top:35px"><div class="student-tools"><h2>👤 Student Account & Bookmarks</h2><p>Save papers, see recently viewed papers, download history and keep your favourite university and course on this device.</p><div class="student-profile"><input id="studentName" placeholder="Enter your name"><button class="primary-btn" onclick="saveStudentProfile()">Save Profile</button><button class="save-btn" onclick="clearStudentData()">Clear My Data</button></div><div class="student-tabs"><button class="student-tab active" data-panel="savedPanel" onclick="showStudentPanel('savedPanel',this)">❤️ Saved Papers</button><button class="student-tab" data-panel="recentPanel" onclick="showStudentPanel('recentPanel',this)">📌 Recently Viewed</button><button class="student-tab" data-panel="historyPanel" onclick="showStudentPanel('historyPanel',this)">📥 Download History</button><button class="student-tab" data-panel="favPanel" onclick="showStudentPanel('favPanel',this)">⭐ Favourites</button></div><div id="savedPanel" class="student-panel active"><div id="savedList" class="student-list"></div></div><div id="recentPanel" class="student-panel"><div id="recentList" class="student-list"></div></div><div id="historyPanel" class="student-panel"><div id="historyList" class="student-list"></div></div><div id="favPanel" class="student-panel"><div id="favList" class="student-list"></div></div></div></section><section class="container contrib-wrap" id="studentContributionSystem"><div class="contrib-card"><h2>🏆 Student Contribution System</h2><p>Upload useful papers, get rewarded after admin approval, and build your contributor reputation.</p><div class="contrib-grid" id="myContributionStats"><div class="contrib-stat">🏅 My Points<strong>0</strong></div><div class="contrib-stat">📄 Approved Papers<strong>0</strong></div><div class="contrib-stat">⭐ Average Rating<strong>—</strong></div><div class="contrib-stat">🎖️ Badge<strong>Bronze</strong></div></div><p class="contrib-note">Example: <strong>+10 points per approved paper</strong>. Average rating is recalculated after every new rating.</p></div></section>
 
 
@@ -227,7 +286,79 @@ courseCatalog["LLB"]={"semesters":6,"subjects":{"1":["Constitutional Law-I","Con
 courseCatalog["LLM"]={"semesters":4,"subjects":{"1":["Constitutional Law","Jurisprudence","Legal Research Methodology","Specialization-I"],"2":["Comparative Law","International Law","Legal Theory","Specialization-II"],"3":["Dissertation-I","Seminar","Specialization-III"],"4":["Dissertation-II","Viva Voce"]}};
 courseCatalog["BA LLB"]={"semesters":10,"subjects":{"1":["English","Legal Language","Political Science","Sociology"],"2":["Economics","History","Law of Torts","Political Theory"],"3":["Constitutional Law-I","Contract Law-I","Family Law-I","Property Law"],"4":["Constitutional Law-II","Contract Law-II","Criminal Law-I","Family Law-II"],"5":["Company Law","Criminal Law-II","Property Law-II","Public International Law"],"6":["Administrative Law","Environmental Law","Labour Law","Tax Law"],"7":["Drafting","Evidence Law","Intellectual Property Law","Professional Ethics"],"8":["Civil Procedure","Criminal Procedure","Moot Court","Seminar"],"9":["Alternative Dispute Resolution","Cyber Law","Internship","Specialization"],"10":["Dissertation","Project","Viva Voce"]}};
 courseCatalog["BBA LLB"]={"semesters":10,"subjects":{"1":["Business Communication","Business Economics","Legal Language","Principles of Management"],"2":["Financial Accounting","Law of Torts","Political Science","Quantitative Techniques"],"3":["Constitutional Law-I","Contract Law-I","Marketing Management","Organizational Behaviour"],"4":["Company Law","Constitutional Law-II","Contract Law-II","Human Resource Management"],"5":["Criminal Law-I","Family Law-I","Financial Management","Operations Management"],"6":["Criminal Law-II","Family Law-II","Public International Law","Strategic Management"],"7":["Administrative Law","Entrepreneurship","Environmental Law","Tax Law"],"8":["Evidence Law","Intellectual Property Law","Moot Court","Professional Ethics"],"9":["Civil Procedure","Internship","Project Management","Specialization"],"10":["Dissertation","Project","Viva Voce"]}};
-const subjectData=Object.fromEntries(Object.entries(courseCatalog).map(([c,v])=>[c,[...new Set(Object.values(v.subjects).flat())].sort((a,b)=>a.localeCompare(b))]));
+/* === Institute-wise academic catalogue upgrade === */
+(function(){
+  const addCourse=(name,semesters,subjects)=>{courseCatalog[name]={semesters,subjects};};
+  const common4={
+    1:['Research Methodology','Core-I','Core-II','Elective-I'],
+    2:['Core-III','Core-IV','Elective-II','Seminar'],
+    3:['Advanced Core-I','Advanced Core-II','Elective-III','Research Seminar'],
+    4:['Dissertation','Project','Viva Voce','Elective-IV']
+  };
+  const common8={
+    1:['Engineering Mathematics-I','Engineering Physics','Engineering Chemistry','Programming for Problem Solving','Basic Electrical Engineering'],
+    2:['Engineering Mathematics-II','Engineering Mechanics','Environmental Science','Professional Communication','Workshop Practice'],
+    3:['Data Structures','Discrete Mathematics','Probability and Statistics','Digital Logic / Core-I','Laboratory-I'],
+    4:['Core-II','Core-III','Computer / Numerical Methods','Laboratory-II','Professional Communication'],
+    5:['Core-IV','Core-V','Elective-I','Laboratory-III','Professional Skills'],
+    6:['Core-VI','Core-VII','Elective-II','Laboratory-IV','Industrial / Project Work'],
+    7:['Professional Elective-I','Open Elective','Project-I','Industrial Training / Internship','Seminar'],
+    8:['Professional Elective-II','Open Elective-II','Major Project','Project Viva','Seminar']
+  };
+  const p=[...Object.entries(common8)].map(([k,v])=>[k,[...v]]);
+  const put8=(name,extra={})=>addCourse(name,8,Object.fromEntries(p.map(([k,v])=>[k,[...v,...(extra[k]||[])]])));
+  const put4=(name,extra={})=>addCourse(name,4,Object.fromEntries(Object.entries(common4).map(([k,v])=>[k,[...v,...(extra[k]||[])]])));
+
+  /* Punjabi University, Patiala — broad current programme catalogue.
+     Semester subjects are arranged as a practical PYQ-search taxonomy; exact paper titles can vary by session/ordinance. */
+  const puCourses=[
+    'B.Tech Computer Science and Engineering','B.Tech Civil Engineering','B.Tech Electronics and Communication Engineering','B.Tech Electronics and Computer Engineering','B.Tech Mechanical Engineering',
+    'B.Sc Computer Science','B.Sc Mathematics','B.Sc Medical','B.Sc Non-Medical','B.Sc Physics','B.Sc Chemistry','B.Sc Statistics','B.Sc (Hons) Mathematics','B.Sc (Hons) Artificial Intelligence and Data Science',
+    'BCA','BBA','B.Com (Hons)','B.Ed','Bachelor of Hotel Management','Bachelor of Tourism & Travel Management','B.Pharmacy','Bachelor of Physiotherapy','LL.B.','B.A. LL.B.',
+    'M.A. English','M.A. Punjabi','M.A. History','M.A. Political Science','M.A. Economics','M.A. Psychology','M.A. Sociology','M.A. Public Administration','M.A. Education','M.A. Hindi','M.A. Philosophy','M.A. Sanskrit','M.A. Urdu','M.A. Journalism and Mass Communication','M.A. Defence and Strategic Studies','M.A. Social Work',
+    'M.Sc. Chemistry','M.Sc. Physics','M.Sc. Mathematics','M.Sc. Statistics','M.Sc. Computer Science','M.Sc. Environmental Science','M.Sc. Forensic Science','M.Sc. Biotechnology','M.Com','M.Ed','MBA','MCA',
+    'M.Tech Computer Science and Engineering','M.Tech Electronics and Communication Engineering','M.Tech Mechanical Engineering','M.Tech Civil Engineering (Transportation)','M.Tech Civil Engineering (Structural)','M.Tech Artificial Intelligence and Data Science','LL.M.'
+  ];
+  const puKey=(String((typeof instituteData!=='undefined'&&instituteData.find(x=>x.name==='Punjabi University')?.name)||'Punjabi University'));
+  courseData[puKey]=puCourses;
+  put8('B.Tech Computer Science and Engineering',{3:['Object Oriented Programming','Database Management Systems'],4:['Computer Networks','Operating Systems'],5:['Software Engineering','Artificial Intelligence'],6:['Cloud Computing','Cyber Security']});
+  put8('B.Tech Civil Engineering',{3:['Engineering Geology','Surveying-I','Strength of Materials-I'],4:['Structural Analysis-I','Concrete Technology','Surveying-II'],5:['Geotechnical Engineering-I','Transportation Engineering','Environmental Engineering'],6:['Design of RCC Structures','Water Resources Engineering','Geotechnical Engineering-II']});
+  put8('B.Tech Electronics and Communication Engineering',{3:['Electronic Devices','Network Analysis','Signals and Systems'],4:['Digital Electronics','Microprocessors','Communication Systems'],5:['Analog Communication','Digital Communication','Control Systems'],6:['VLSI Design','Embedded Systems','Electromagnetics']});
+  put8('B.Tech Electronics and Computer Engineering',{3:['Electronic Devices','Data Structures','Digital Logic'],4:['Computer Organization','Microprocessors','Operating Systems'],5:['Computer Networks','Database Systems','Signals and Systems'],6:['Embedded Systems','Software Engineering','VLSI']});
+  put8('B.Tech Mechanical Engineering',{3:['Engineering Thermodynamics','Manufacturing Processes','Mechanics of Materials'],4:['Fluid Mechanics','Machine Design-I','Manufacturing Technology'],5:['Heat Transfer','Machine Design-II','Theory of Machines'],6:['Industrial Engineering','CAD/CAM','Refrigeration and Air Conditioning']});
+  put8('BCA',{3:['Data Structures','Database Management Systems'],4:['Computer Networks','Operating Systems'],5:['Software Engineering','Web Technologies'],6:['Artificial Intelligence','Project']});
+  put8('BBA',{3:['Financial Management','Marketing Management','Human Resource Management'],4:['Business Research Methods','Operations Management','Entrepreneurship'],5:['Strategic Management','Business Analytics','Elective'],6:['Project / Internship','Elective','Viva Voce']});
+  put8('B.Ed',{3:['Pedagogy-I','Assessment for Learning','Inclusive Education'],4:['Pedagogy-II','Educational Technology','School Internship'],5:['Knowledge and Curriculum','Guidance and Counselling','Elective'],6:['Teacher Internship','Action Research','Viva Voce']});
+  ['B.Sc Computer Science','B.Sc Mathematics','B.Sc Medical','B.Sc Non-Medical','B.Sc Physics','B.Sc Chemistry','B.Sc Statistics'].forEach(c=>put8(c));
+  ['B.Com (Hons)','B.Pharmacy','Bachelor of Hotel Management','Bachelor of Tourism & Travel Management','Bachelor of Physiotherapy','LL.B.','B.A. LL.B.'].forEach(c=>put8(c));
+  ['M.A. English','M.A. Punjabi','M.A. History','M.A. Political Science','M.A. Economics','M.A. Psychology','M.A. Sociology','M.A. Public Administration','M.A. Education','M.A. Hindi','M.A. Philosophy','M.A. Sanskrit','M.A. Urdu','M.A. Journalism and Mass Communication','M.A. Defence and Strategic Studies','M.A. Social Work'].forEach(c=>put4(c));
+  ['M.Sc. Chemistry','M.Sc. Physics','M.Sc. Mathematics','M.Sc. Statistics','M.Sc. Computer Science','M.Sc. Environmental Science','M.Sc. Forensic Science','M.Sc. Biotechnology','M.Com','M.Ed','MBA','MCA','M.Tech Computer Science and Engineering','M.Tech Electronics and Communication Engineering','M.Tech Mechanical Engineering','M.Tech Civil Engineering (Transportation)','M.Tech Civil Engineering (Structural)','M.Tech Artificial Intelligence and Data Science','LL.M.'].forEach(c=>put4(c));
+  ['B.Sc (Hons) Mathematics','B.Sc (Hons) Artificial Intelligence and Data Science'].forEach(c=>put8(c));
+
+  /* IIT group: apply the IIT academic taxonomy to every IIT in the institute list.
+     Individual IIT curricula differ, so "Other" remains available for institute-specific papers. */
+  const iitCourses=[
+    'B.Tech Artificial Intelligence and Data Science','B.Tech Chemical Engineering','B.Tech Civil Engineering','B.Tech Computer Science and Engineering','B.Tech Electrical Engineering','B.Tech Engineering Physics','B.Tech Mathematics and Computing','B.Tech Mechanical Engineering','B.Tech Metallurgical and Materials Engineering','B.Tech Digital Agriculture','B.Tech Electronics / IC Design and Technology',
+    'M.Tech Artificial Intelligence','M.Tech Biomedical Engineering','M.Tech Chemical Engineering','M.Tech Civil Engineering','M.Tech Computer Science and Engineering','M.Tech Electrical Engineering','M.Tech Mechanical Engineering','M.Tech Autonomous Systems and Drone Technology','M.Sc Chemistry','M.Sc Data Science and Management','M.Sc Mathematics','M.Sc Physics','B.Sc.-B.Ed.'
+  ];
+  const iitExtra={
+    'B.Tech Artificial Intelligence and Data Science':{3:['Data Structures','Probability and Statistics','Discrete Mathematics'],4:['Database Systems','Computer Organization','Data Analytics'],5:['Artificial Intelligence','Machine Learning','Computer Networks'],6:['Deep Learning','Cloud Computing','Data Mining']},
+    'B.Tech Chemical Engineering':{3:['Chemical Process Calculations','Fluid Mechanics','Thermodynamics-I'],4:['Heat Transfer','Mass Transfer-I','Chemical Reaction Engineering-I'],5:['Mass Transfer-II','Process Control','Chemical Reaction Engineering-II'],6:['Process Design','Environmental Engineering','Process Equipment Design']},
+    'B.Tech Civil Engineering':{3:['Building Materials','Engineering Geology','Fluid Mechanics-I','Strength of Materials-I','Surveying-I'],4:['Concrete Technology','Structural Analysis-I','Surveying-II','Transportation Engineering-I'],5:['Geotechnical Engineering-I','Hydrology','Structural Analysis-II','Transportation Engineering-II'],6:['RCC Design','Construction Management','Water Resources Engineering']},
+    'B.Tech Computer Science and Engineering':{3:['Data Structures','Discrete Mathematics','Digital Logic','Object Oriented Programming'],4:['Computer Organization','Database Management Systems','Operating Systems','Algorithms'],5:['Computer Networks','Artificial Intelligence','Machine Learning','Software Engineering'],6:['Cloud Computing','Cyber Security','Distributed Systems','Computer Graphics']},
+    'B.Tech Electrical Engineering':{3:['Circuit Theory','Electronic Devices','Signals and Systems','Electromagnetic Fields'],4:['Digital Electronics','Electrical Machines-I','Power Systems-I','Control Systems'],5:['Electrical Machines-II','Power Electronics','Microprocessors','Communication Systems'],6:['Power Electronics','Power System Protection','High Voltage Engineering','Renewable Energy']},
+    'B.Tech Engineering Physics':{3:['Classical Mechanics','Electromagnetism','Quantum Physics-I','Mathematical Physics'],4:['Quantum Physics-II','Thermodynamics','Optics','Electronics'],5:['Solid State Physics','Nuclear Physics','Statistical Mechanics','Computational Physics'],6:['Advanced Quantum Mechanics','Semiconductor Physics','Photonics','Laboratory']},
+    'B.Tech Mathematics and Computing':{3:['Linear Algebra','Probability and Statistics','Data Structures','Discrete Mathematics'],4:['Numerical Methods','Algorithms','Optimization','Differential Equations'],5:['Machine Learning','Operations Research','Complex Analysis','Computational Methods'],6:['Data Science','Financial Mathematics','Stochastic Processes','Optimization']},
+    'B.Tech Mechanical Engineering':{3:['Engineering Thermodynamics','Fluid Mechanics','Manufacturing Processes','Mechanics of Materials'],4:['Heat Transfer','Theory of Machines','Machine Design-I','Manufacturing Technology'],5:['Machine Design-II','Control Systems','CAD/CAM','Industrial Engineering'],6:['Robotics','Refrigeration and Air Conditioning','Finite Element Methods','Production Systems']},
+    'B.Tech Metallurgical and Materials Engineering':{3:['Metallurgical Thermodynamics and Kinetics','Transport Phenomena','Materials Characterization','Physical Metallurgy Lab'],4:['Extractive Metallurgy','Phase Transformations and Heat Treatment','Materials Processing Lab'],5:['Iron and Steel Making','Mechanical Behaviour and Testing','Materials Processing'],6:['Corrosion and its Prevention','Electronic Magnetic and Optical Materials','Modelling and Simulation','Polymers and Composites']}
+  };
+  iitCourses.forEach(c=>{if(!courseCatalog[c])put8(c,iitExtra[c]||{});});
+  ['M.Tech Artificial Intelligence','M.Tech Biomedical Engineering','M.Tech Chemical Engineering','M.Tech Civil Engineering','M.Tech Computer Science and Engineering','M.Tech Electrical Engineering','M.Tech Mechanical Engineering','M.Tech Autonomous Systems and Drone Technology','M.Sc Chemistry','M.Sc Data Science and Management','M.Sc Mathematics','M.Sc Physics','B.Sc.-B.Ed.'].forEach(c=>{if(!courseCatalog[c])put4(c);});
+  if(typeof instituteData!=='undefined') instituteData.filter(x=>/^Indian Institute of Technology /i.test(x.name)).forEach(x=>courseData[x.name]=iitCourses.slice());
+})();
+const subjectData=Object.fromEntries(Object.entries(courseCatalog).map(([c,v])=>[c,[...new Set([...Object.values(v.subjects).flat(),"Other"])].sort((a,b)=>a.localeCompare(b))]));
+
+
 const semesterData=Object.fromEntries(Object.entries(courseCatalog).map(([c,v])=>[c,v.subjects]));
 const semesterOptions=["1","2","3","4","5","6","7","8","9","10"];
 
@@ -251,45 +382,18 @@ function initInstitutes(){
  setupSearchDropdowns();
  initRequestUploadSelectors();
 }
-function getCustomCourses(){try{return JSON.parse(localStorage.getItem("MPH_CUSTOM_COURSES")||"{}")}catch(e){return {}}}
-function saveCustomCourses(d){localStorage.setItem("MPH_CUSTOM_COURSES",JSON.stringify(d))}
 function getInstituteCourses(name){
  const key=instituteNames.find(x=>x.toLowerCase()===String(name||"").trim().toLowerCase());
- const base=key && courseData[key] ? courseData[key] : Object.keys(courseCatalog);
- const custom=getCustomCourses()[key]||[];
- return [...new Set([...base,...custom.map(x=>x.name||x)])];
+ return key && courseData[key] ? courseData[key] : Object.keys(courseCatalog);
 }
-function updateAddCourseButton(){
- const u=document.getElementById("university")?.value.trim()||"", b=document.getElementById("addCourseBtn");
- if(!b)return;
- const selected=instituteNames.some(x=>x.toLowerCase()===u.toLowerCase());
- b.classList.toggle("show",selected);
-}
-function addNewCourse(){
- const u=document.getElementById("university")?.value.trim()||"";
- if(!instituteNames.some(x=>x.toLowerCase()===u.toLowerCase())){alert("Please select an Institute from the list first.");return}
- const name=prompt("Enter new course name:"); if(!name||!name.trim())return;
- const clean=name.trim(); const n=parseInt(prompt("How many semesters does this course have?","8"),10);
- if(!n||n<1||n>20){alert("Please enter a valid semester count (1–20).");return}
- const key=instituteNames.find(x=>x.toLowerCase()===u.toLowerCase()); const d=getCustomCourses(); d[key]=d[key]||[];
- if(d[key].some(x=>(x.name||x).toLowerCase()===clean.toLowerCase())){alert("This course already exists for this Institute.");return}
- d[key].push({name:clean,semesters:n}); saveCustomCourses(d);
- courseCatalog[clean]=courseCatalog[clean]||{semesters:n}; courseData[key]=[...(courseData[key]||[]),clean];
- document.getElementById("course").value=clean; document.getElementById("courseDropdown")?.classList.remove("open"); loadSemesters();
- alert("✅ Course added successfully for "+key+".");
-}
-
 function searchInstitutes(){
  const input=document.getElementById("university"),box=document.getElementById("instituteDropdown");
  const q=input.value.trim().toLowerCase();
  const filtered=instituteNames.filter(x=>!q||x.toLowerCase().startsWith(q)).sort((a,b)=>a.localeCompare(b));
- renderSearchDropdown(box,filtered,(value)=>{input.value=value;box.classList.remove("open");updateAddCourseButton();loadCourses();});
- updateAddCourseButton();
- updateAddSubjectButton();
+ renderSearchDropdown(box,filtered,(value)=>{input.value=value;box.classList.remove("open");loadCourses();});
  loadCourses();
 }
 function loadCourses(){
- updateAddCourseButton();
  const u=document.getElementById("university").value.trim();
  const c=document.getElementById("course");
  const box=document.getElementById("courseDropdown");
@@ -324,11 +428,49 @@ function setupSearchDropdowns(){
  });
 }
 function loadSemesters(){const c=document.getElementById("course").value,s=document.getElementById("semester");s.innerHTML='<option value="">All Semesters</option>';const n=courseCatalog[c]?.semesters||0;for(let i=1;i<=n;i++)s.innerHTML+=`<option value="${i}">Semester ${i}</option>`;document.getElementById("subject").innerHTML='<option value="">All Subjects</option>';filterPapers()}
-function getCustomSubjects(){try{return JSON.parse(localStorage.getItem("MPH_CUSTOM_SUBJECTS")||"{}")}catch(e){return {}}}
-function saveCustomSubjects(d){localStorage.setItem("MPH_CUSTOM_SUBJECTS",JSON.stringify(d))}
-function updateAddSubjectButton(){const u=document.getElementById("university")?.value.trim()||"",c=document.getElementById("course")?.value.trim()||"",sem=document.getElementById("semester")?.value||"",b=document.getElementById("addSubjectBtn");if(!b)return;b.style.display=(u&&c&&sem)?"inline-flex":"none"}
-function addNewSubject(){const u=document.getElementById("university")?.value.trim()||"",c=document.getElementById("course")?.value.trim()||"",sem=document.getElementById("semester")?.value||"";if(!u||!c||!sem){alert("Please select Institute, Course and Semester first.");return}const name=prompt("Enter new subject name:");if(!name||!name.trim())return;const clean=name.trim(),key=u+"||"+c+"||"+sem,d=getCustomSubjects();d[key]=d[key]||[];const existing=[...(semesterData[c]?.[sem]||[]),...(d[key]||[])];if(existing.some(x=>String(x).toLowerCase()===clean.toLowerCase())){alert("This subject already exists for this semester.");return}d[key].push(clean);saveCustomSubjects(d);loadSubjects();document.getElementById("subject").value=clean;alert("✅ Subject added successfully for Semester "+sem+".")}
-function loadSubjects(){const c=document.getElementById("course").value,sem=document.getElementById("semester").value,s=document.getElementById("subject");s.innerHTML='<option value="">All Subjects</option>';let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);const d=getCustomSubjects(),key=(document.getElementById("university")?.value.trim()||"")+"||"+c+"||"+sem;list=[...new Set([...list,...(d[key]||[])])];if(!c)list=[...new Set(Object.values(subjectData).flat())];[...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>s.innerHTML+=`<option>${x}</option>`);updateAddSubjectButton();filterPapers()}
+function loadSubjects(){const c=document.getElementById("course").value,sem=document.getElementById("semester").value,s=document.getElementById("subject");s.innerHTML='<option value="">All Subjects</option>';let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);if(!list.includes('Other'))list=[...list,'Other'];if(!c)list=[...new Set(Object.values(subjectData).flat())];[...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>s.innerHTML+=`<option>${x}</option>`);filterPapers()}
+function populateYearSelect(selectId){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Year</option>';for(let y=2001;y<=2099;y++)s.innerHTML+=`<option value="${y}">${y}</option>`}
+function populateInstituteSelect(selectId){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Institute</option>';[...instituteData].sort((a,b)=>(a.name+' '+a.city).localeCompare(b.name+' '+b.city)).forEach(x=>{s.innerHTML+=`<option value="${esc(x.name)}">${esc(x.name)} — ${esc(x.city)}</option>`})}
+function getCoursesForSelect(institute){return institute&&courseData[institute]?[...new Set(courseData[institute])].filter(c=>courseCatalog[c]):Object.keys(courseCatalog).sort((a,b)=>a.localeCompare(b))}
+function fillCourseSelect(selectId,institute){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Course</option>';getCoursesForSelect(institute).sort((a,b)=>a.localeCompare(b)).forEach(c=>{s.innerHTML+=`<option value="${esc(c)}">${esc(c)}</option>`})}
+function fillSemesterSelect(selectId,course){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Semester</option>';const n=courseCatalog[course]?.semesters||0;for(let i=1;i<=n;i++)s.innerHTML+=`<option value="${i}">Semester ${i}</option>`}
+function fillSubjectSelect(selectId,course,semester){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Subject</option>';const list=semester?[...(semesterData[course]?.[semester]||[]),'Other']:['Other'];[...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>{s.innerHTML+=`<option value="${esc(x)}">${esc(x)}</option>`})}
+function requestUploadCustomData(){try{return JSON.parse(localStorage.getItem('MPH_REQUEST_UPLOAD_CUSTOM_DATA')||'{}')||{}}catch(e){return {}}}
+function saveRequestUploadCustomData(d){localStorage.setItem('MPH_REQUEST_UPLOAD_CUSTOM_DATA',JSON.stringify(d))}
+function requestUploadInstituteOptions(){const tmp=document.createElement('select');populateInstituteSelect(tmp.id='__tmp_inst');return [...tmp.options].map(o=>o.value).filter(Boolean)}
+function fillRequestUploadSelect(id,items,placeholder=''){const el=document.getElementById(id);if(!el)return;el.innerHTML=placeholder?`<option value="">${placeholder}</option>`:'';[...new Set(items.filter(Boolean))].sort((a,b)=>a.localeCompare(b)).forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;el.appendChild(o)})}
+function requestUploadCoursesForInstitute(inst){const d=requestUploadCustomData(),extra=((d.courses||{})[inst]||[]).map(x=>x.name);return [...new Set([...(getInstituteCourses(inst)||[]),...extra])].filter(Boolean).sort((a,b)=>a.localeCompare(b))}
+function requestRenderDropdown(boxId,items,onSelect){const box=document.getElementById(boxId);if(!box)return;box.innerHTML=items.slice(0,100).map(x=>`<button type="button" class="search-option">${esc(x)}</button>`).join('');[...box.querySelectorAll('.search-option')].forEach((el,i)=>el.addEventListener('mousedown',e=>{e.preventDefault();onSelect(items.slice(0,100)[i])}));box.classList.toggle('open',items.length>0)}
+function requestSearchInstitutes(){const input=document.getElementById('requestUniversity'),q=(input?.value||'').trim().toLowerCase();requestRenderDropdown('requestInstituteDropdown',instituteNames.filter(x=>!q||x.toLowerCase().startsWith(q)).sort((a,b)=>a.localeCompare(b)),v=>{input.value=v;document.getElementById('requestInstituteDropdown').classList.remove('open');requestLoadCourses()});requestLoadCourses()}
+function requestSearchCourses(){const input=document.getElementById('requestCourse'),inst=document.getElementById('requestUniversity')?.value||'',q=(input?.value||'').trim().toLowerCase();requestRenderDropdown('requestCourseDropdown',requestUploadCoursesForInstitute(inst).filter(x=>!q||x.toLowerCase().startsWith(q)),v=>{input.value=v;document.getElementById('requestCourseDropdown').classList.remove('open');requestLoadSemesters()});requestLoadSemesters()}
+function requestLoadCourses(){const c=document.getElementById('requestCourse');if(c)c.value='';requestLoadSemesters()}
+function requestLoadSemesters(){const c=document.getElementById('requestCourse')?.value||'',s=document.getElementById('requestSemester');if(!s)return;s.innerHTML='<option value="">All Semesters</option>';const d=requestUploadCustomData(),inst=document.getElementById('requestUniversity')?.value||'',custom=((d.courses||{})[inst]||[]).find(x=>x.name===c),n=custom?.semesters||courseCatalog[c]?.semesters||0;for(let i=1;i<=n;i++)s.innerHTML+=`<option value="${i}">Semester ${i}</option>`;requestLoadSubjects()}
+function requestLoadSubjects(){const c=document.getElementById('requestCourse')?.value||'',sem=document.getElementById('requestSemester')?.value||'',inst=document.getElementById('requestUniversity')?.value||'',s=document.getElementById('requestSubject');if(!s)return;let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);const d=requestUploadCustomData();list=[...new Set([...list,...((d.subjects||{})[inst+'||'+c+'||'+sem]||[])])];s.innerHTML='<option value="">All Subjects</option>'+[...new Set(list)].sort((a,b)=>a.localeCompare(b)).map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
+function uploadSearchInstitutes(){const input=document.getElementById('studentUploadUniversity'),q=(input?.value||'').trim().toLowerCase();requestRenderDropdown('studentUploadInstituteDropdown',instituteNames.filter(x=>!q||x.toLowerCase().startsWith(q)).sort((a,b)=>a.localeCompare(b)),v=>{input.value=v;document.getElementById('studentUploadInstituteDropdown').classList.remove('open');uploadLoadCourses()});uploadLoadCourses()}
+function uploadSearchCourses(){const input=document.getElementById('studentUploadCourse'),inst=document.getElementById('studentUploadUniversity')?.value||'',q=(input?.value||'').trim().toLowerCase();requestRenderDropdown('studentUploadCourseDropdown',requestUploadCoursesForInstitute(inst).filter(x=>!q||x.toLowerCase().startsWith(q)),v=>{input.value=v;document.getElementById('studentUploadCourseDropdown').classList.remove('open');uploadLoadSemesters()});uploadLoadSemesters()}
+function uploadLoadCourses(){const c=document.getElementById('studentUploadCourse');if(c)c.value='';uploadLoadSemesters()}
+function uploadLoadSemesters(){const c=document.getElementById('studentUploadCourse')?.value||'',s=document.getElementById('studentUploadSemester');if(!s)return;s.innerHTML='<option value="">All Semesters</option>';const d=requestUploadCustomData(),inst=document.getElementById('studentUploadUniversity')?.value||'',custom=((d.courses||{})[inst]||[]).find(x=>x.name===c),n=custom?.semesters||courseCatalog[c]?.semesters||0;for(let i=1;i<=n;i++)s.innerHTML+=`<option value="${i}">Semester ${i}</option>`;uploadLoadSubjects()}
+function uploadLoadSubjects(){const c=document.getElementById('studentUploadCourse')?.value||'',sem=document.getElementById('studentUploadSemester')?.value||'',inst=document.getElementById('studentUploadUniversity')?.value||'',s=document.getElementById('studentUploadSubject');if(!s)return;let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);const d=requestUploadCustomData();list=[...new Set([...list,...((d.subjects||{})[inst+'||'+c+'||'+sem]||[])])];s.innerHTML='<option value="">All Subjects</option>'+[...new Set(list)].sort((a,b)=>a.localeCompare(b)).map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
+function addRequestUploadCourse(type){const prefix=type==='request'?'request':'studentUpload',inst=document.getElementById(prefix==='request'?'requestUniversity':'studentUploadUniversity')?.value||'';if(!inst){alert('Please select Institute first.');return}const name=prompt('Enter new course name:');if(!name||!name.trim())return;const n=parseInt(prompt('How many semesters does this course have?','8'),10);if(!n||n<1||n>20){alert('Please enter a valid semester count (1–20).');return}const d=requestUploadCustomData();d.courses=d.courses||{};d.courses[inst]=d.courses[inst]||[];if(d.courses[inst].some(x=>x.name.toLowerCase()===name.trim().toLowerCase())){alert('This course already exists.');return}d.courses[inst].push({name:name.trim(),semesters:n});saveRequestUploadCustomData(d);const el=document.getElementById(prefix+'Course');if(el){el.value=name.trim();}type==='request'?requestLoadSemesters():uploadLoadSemesters();alert('✅ Course added successfully.')}
+function addRequestUploadSubject(type){const prefix=type==='request'?'request':'studentUpload',inst=document.getElementById(prefix==='request'?'requestUniversity':'studentUploadUniversity')?.value||'',c=document.getElementById(prefix==='request'?'requestCourse':'studentUploadCourse')?.value||'',sem=document.getElementById(prefix==='request'?'requestSemester':'studentUploadSemester')?.value||'';if(!inst||!c||!sem){alert('Please select Institute, Course and Semester first.');return}const name=prompt('Enter new subject name:');if(!name||!name.trim())return;const clean=name.trim(),d=requestUploadCustomData(),key=inst+'||'+c+'||'+sem;d.subjects=d.subjects||{};d.subjects[key]=d.subjects[key]||[];if(d.subjects[key].some(x=>x.toLowerCase()===clean.toLowerCase())){alert('This subject already exists for this semester.');return}d.subjects[key].push(clean);saveRequestUploadCustomData(d);type==='request'?requestLoadSubjects():uploadLoadSubjects();document.getElementById(prefix+'Subject').value=clean;alert('✅ Subject added successfully.')}
+function initRequestUploadSelectors(){populateYearSelect('requestYear');populateYearSelect('studentUploadYear');populateYearSelect('year');const searchYear=document.getElementById('year');if(searchYear&&searchYear.options[0])searchYear.options[0].text='All Years';requestLoadCourses();uploadLoadCourses();document.addEventListener('click',e=>{['requestInstituteDropdown','requestCourseDropdown','studentUploadInstituteDropdown','studentUploadCourseDropdown'].forEach(id=>{const b=document.getElementById(id);if(b&&!b.parentElement.contains(e.target))b.classList.remove('open')})})}
+function selectCategory(c){
+  const course=document.getElementById("course");
+  const semester=document.getElementById("semester");
+  const subject=document.getElementById("subject");
+  const year=document.getElementById("year");
+  const search=document.getElementById("searchInput");
+  if(course) course.value=c;
+  if(semester) semester.value="";
+  if(subject) subject.innerHTML='<option value="">All Subjects</option>';
+  if(year) year.value="";
+  if(search) search.value="";
+  if(typeof loadSemesters==='function') loadSemesters();
+  if(semester) semester.value="";
+  if(subject) subject.innerHTML='<option value="">All Subjects</option>';
+  if(typeof filterPapers==='function') filterPapers();
+  document.getElementById("papers")?.scrollIntoView({behavior:"smooth",block:"start"});
+}
 function heroSearchKey(e){if(e.key==="Enter")searchFromHero()}
 function searchFromHero(){document.getElementById("searchInput").value=document.getElementById("heroSearch").value;document.getElementById("papers").scrollIntoView({behavior:"smooth"});filterPapers(true)}
 
@@ -683,7 +825,7 @@ function populateRepeatedQuestionFilters(){
 function getFilteredRepeatedQuestions(){
   const course=document.getElementById('repeatedCourseFilter')?.value||'';
   const subject=document.getElementById('repeatedSubjectFilter')?.value||'';
-  const query=(document.getElementById('repeatedQuestionSearch')?.value||'').trim().toLowerCase();
+  const query='';
   return repeatedQuestionCards.filter(c=>(!course||c.course===course)&&(!subject||c.subject===subject)&&(!query||c.q.toLowerCase().includes(query))).slice(0,50);
 }
 let repeatedSearchExecuted=false;
@@ -696,7 +838,7 @@ function renderRepeatedQuestionChart(list){
 }
 function renderRepeatedQuestionResults(){
   const box=document.getElementById('repeatedQuestionsGrid');if(!box)return;
-  if(!repeatedSearchExecuted){ box.innerHTML='<div class="student-empty">Select a course and subject, then click Search & Compare.</div>'; const summary=document.getElementById('repeatedCompareSummary'); if(summary)summary.textContent=''; const chart=document.getElementById('repeatedQuestionChart'); if(chart){chart.style.display='none';chart.innerHTML=''} return; }
+  if(!repeatedSearchExecuted){ box.innerHTML='<div class="student-empty">Select a course and subject to view repeated questions.</div>'; const summary=document.getElementById('repeatedCompareSummary'); if(summary)summary.textContent=''; const chart=document.getElementById('repeatedQuestionChart'); if(chart){chart.style.display='none';chart.innerHTML=''} return; }
   const list=getFilteredRepeatedQuestions();
   const course=document.getElementById('repeatedCourseFilter')?.value||'';
   const subject=document.getElementById('repeatedSubjectFilter')?.value||'';
@@ -718,7 +860,7 @@ async function searchAndCompareRepeatedQuestions(){
   renderRepeatedQuestionResults();
 }
 function updateRepeatedSubjectFilter(){const course=document.getElementById('repeatedCourseFilter')?.value||'',sel=document.getElementById('repeatedSubjectFilter');if(!sel)return;const old=sel.value;const subjects=getRepeatedQuestionSubjects(course);sel.innerHTML='<option value="">All Subjects</option>'+subjects.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');if(subjects.includes(old))sel.value=old;else sel.value='';}
-function resetRepeatedQuestionFilters(){repeatedSearchExecuted=false;const c=document.getElementById('repeatedCourseFilter'),s=document.getElementById('repeatedSubjectFilter'),q=document.getElementById('repeatedQuestionSearch'),sum=document.getElementById('repeatedCompareSummary'),chart=document.getElementById('repeatedQuestionChart');if(c)c.value='';if(s)s.value='';if(q)q.value='';if(sum)sum.textContent='';if(chart){chart.style.display='none';chart.innerHTML=''}updateRepeatedSubjectFilter();const box=document.getElementById('repeatedQuestionsGrid');if(box)box.innerHTML='<div class="student-empty">Select a course and subject, then click Search & Compare.</div>'}
+function resetRepeatedQuestionFilters(){repeatedSearchExecuted=false;const c=document.getElementById('repeatedCourseFilter'),s=document.getElementById('repeatedSubjectFilter'),q=document.getElementById('repeatedQuestionSearch'),sum=document.getElementById('repeatedCompareSummary'),chart=document.getElementById('repeatedQuestionChart');if(c)c.value='';if(s)s.value='';if(q)q.value='';if(sum)sum.textContent='';if(chart){chart.style.display='none';chart.innerHTML=''}updateRepeatedSubjectFilter();const box=document.getElementById('repeatedQuestionsGrid');if(box)box.innerHTML='<div class="student-empty">Select a course and subject to view repeated questions.</div>'}
 async function analyzeMissingPdfQuestions(){
   let changed=false;
   for(const p of papers){
@@ -818,5 +960,140 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   window.addEventListener('appinstalled',function(){bar.style.display='none'});
 })();
 </script>
+
+<script id="personalRepeatedEnhancementScript">
+(function(){
+  const KEY='MPH_PERSONAL_REPEAT_CUSTOM_DATA';
+  function getData(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){return {}}}
+  function saveData(d){localStorage.setItem(KEY,JSON.stringify(d))}
+  function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+  function coursesFor(inst){
+    const base=(typeof courseData!=='undefined'&&courseData[inst])?courseData[inst]:[];
+    const d=getData(), custom=((d.courses||{})[inst]||[]).map(x=>x.name||x);
+    return [...new Set([...base,...custom])].filter(Boolean).sort((a,b)=>a.localeCompare(b));
+  }
+  function allCourses(){
+    const set=new Set();
+    if(typeof courseCatalog!=='undefined') Object.keys(courseCatalog).forEach(x=>set.add(x));
+    if(typeof subjectData!=='undefined') Object.keys(subjectData).forEach(x=>set.add(x));
+    if(typeof courseData!=='undefined') Object.values(courseData).flat().forEach(x=>set.add(x));
+    const d=getData(); Object.values(d.courses||{}).flat().forEach(x=>set.add(x.name||x));
+    return [...set].filter(Boolean).sort((a,b)=>a.localeCompare(b));
+  }
+  function allInstitutes(){
+    if(typeof instituteData!=='undefined') return instituteData.map(x=>typeof x==='string'?x:x.name).filter(Boolean).sort((a,b)=>a.localeCompare(b));
+    return [];
+  }
+  function fillSelect(id, list, placeholder){
+    const s=document.getElementById(id); if(!s)return;
+    const old=s.value;
+    s.innerHTML='<option value="">'+placeholder+'</option>'+list.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join('');
+    if(list.includes(old))s.value=old;
+  }
+  function fillSelectNoPlaceholder(id,list){
+    const s=document.getElementById(id); if(!s)return;
+    const old=s.value;
+    s.innerHTML=list.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join('');
+    if(list.includes(old))s.value=old;
+  }
+  function dropdown(id, items, onPick){
+    const box=document.getElementById(id); if(!box)return;
+    box.innerHTML=items.length?items.slice(0,80).map(x=>'<button type="button" class="custom-search-option" data-v="'+esc(x)+'">'+esc(x)+'</button>').join('<br>'):'<div style="padding:10px;color:#64748b">No matching option</div>';
+    box.classList.add('open');
+    box.querySelectorAll('.custom-search-option').forEach(b=>b.onclick=()=>{onPick(b.dataset.v);box.classList.remove('open')});
+  }
+  window.searchPersonalInstitute=function(){
+    const q=(document.getElementById('alertInstituteSearch')?.value||'').toLowerCase();
+    dropdown('alertInstituteDropdown',allInstitutes().filter(x=>x.toLowerCase().includes(q)),v=>{
+      const s=document.getElementById('alertInstitute');s.value=v;document.getElementById('alertInstituteSearch').value=v;loadAlertCourses();
+    });
+  };
+  window.searchPersonalCourse=function(){
+    const inst=document.getElementById('alertInstitute')?.value||'';
+    const q=(document.getElementById('alertCourseSearch')?.value||'').toLowerCase();
+    dropdown('alertCourseDropdown',coursesFor(inst).filter(x=>x.toLowerCase().includes(q)),v=>{
+      const s=document.getElementById('alertCourse');s.value=v;document.getElementById('alertCourseSearch').value=v;
+    });
+  };
+  window.syncPersonalCourseSearch=function(){const s=document.getElementById('alertCourse'),i=document.getElementById('alertCourseSearch');if(s&&i)i.value=s.value};
+  window.loadAlertCourses=function(){
+    const inst=document.getElementById('alertInstitute')?.value||'';
+    fillSelectNoPlaceholder('alertCourse',coursesFor(inst));
+    const i=document.getElementById('alertCourseSearch');if(i)i.value='';
+    const d=document.getElementById('alertInstituteDropdown');if(d)d.classList.remove('open');
+  };
+  window.addPersonalCourse=function(){
+    const inst=document.getElementById('alertInstitute')?.value||'';
+    if(!inst){alert('Please select Institute first.');return}
+    const name=prompt('Enter new course name:'); if(!name||!name.trim())return;
+    const clean=name.trim(), d=getData(); d.courses=d.courses||{}; d.courses[inst]=d.courses[inst]||[];
+    if(d.courses[inst].some(x=>(x.name||x).toLowerCase()===clean.toLowerCase())){alert('This course already exists.');return}
+    d.courses[inst].push({name:clean}); saveData(d); loadAlertCourses();
+    document.getElementById('alertCourse').value=clean;document.getElementById('alertCourseSearch').value=clean;
+  };
+
+  window.searchRepeatedCourse=function(){
+    const q=(document.getElementById('repeatedCourseSearch')?.value||'').toLowerCase();
+    dropdown('repeatedCourseDropdown',allCourses().filter(x=>x.toLowerCase().includes(q)),v=>{
+      const s=document.getElementById('repeatedCourseFilter');s.value=v;document.getElementById('repeatedCourseSearch').value=v;updateRepeatedSubjectFilter();
+    });
+  };
+  function repeatedSubjects(){
+    const c=document.getElementById('repeatedCourseFilter')?.value||'';
+    let list=[];
+    if(typeof subjectData!=='undefined')list=(subjectData[c]||[]).slice();
+    if(typeof semesterData!=='undefined'&&semesterData[c])Object.values(semesterData[c]).flat().forEach(x=>list.push(x));
+    const d=getData(); ((d.subjects||{})[c]||[]).forEach(x=>list.push(x));
+    return [...new Set(list)].filter(Boolean).sort((a,b)=>a.localeCompare(b));
+  }
+  window.searchRepeatedSubject=function(){
+    const q=(document.getElementById('repeatedSubjectSearch')?.value||'').toLowerCase();
+    dropdown('repeatedSubjectDropdown',repeatedSubjects().filter(x=>x.toLowerCase().includes(q)),v=>{
+      const s=document.getElementById('repeatedSubjectFilter');s.value=v;document.getElementById('repeatedSubjectSearch').value=v;
+      repeatedSearchExecuted=false;renderRepeatedQuestionResults();
+    });
+  };
+  window.syncRepeatedCourseSearch=function(){const s=document.getElementById('repeatedCourseFilter'),i=document.getElementById('repeatedCourseSearch');if(s&&i)i.value=s.value};
+  window.syncRepeatedSubjectSearch=function(){const s=document.getElementById('repeatedSubjectFilter'),i=document.getElementById('repeatedSubjectSearch');if(s&&i)i.value=s.value};
+  window.updateRepeatedSubjectFilter=function(){
+    const c=document.getElementById('repeatedCourseFilter')?.value||'';
+    fillSelectNoPlaceholder('repeatedSubjectFilter',repeatedSubjects());
+    const i=document.getElementById('repeatedSubjectSearch');if(i)i.value='';
+  };
+  window.addRepeatedCourse=function(){
+    const name=prompt('Enter new course name:');if(!name||!name.trim())return;
+    const clean=name.trim(),d=getData();d.globalCourses=d.globalCourses||[];
+    if(d.globalCourses.some(x=>x.toLowerCase()===clean.toLowerCase())){alert('This course already exists.');return}
+    d.globalCourses.push(clean);saveData(d);
+    fillSelectNoPlaceholder('repeatedCourseFilter',[...allCourses(),clean].filter((x,i,a)=>a.indexOf(x)===i).sort((a,b)=>a.localeCompare(b)));
+    document.getElementById('repeatedCourseFilter').value=clean;updateRepeatedSubjectFilter();
+  };
+  window.addRepeatedSubject=function(){
+    const c=document.getElementById('repeatedCourseFilter')?.value||'';
+    if(!c){alert('Please select Course first.');return}
+    const name=prompt('Enter new subject name:');if(!name||!name.trim())return;
+    const clean=name.trim(),d=getData();d.subjects=d.subjects||{};d.subjects[c]=d.subjects[c]||[];
+    if(d.subjects[c].some(x=>x.toLowerCase()===clean.toLowerCase())){alert('This subject already exists.');return}
+    d.subjects[c].push(clean);saveData(d);updateRepeatedSubjectFilter();
+    document.getElementById('repeatedSubjectFilter').value=clean;document.getElementById('repeatedSubjectSearch').value=clean;
+  };
+
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('.search-select-box'))document.querySelectorAll('.custom-search-dropdown').forEach(x=>x.classList.remove('open'));
+  });
+  function init(){
+    try{
+      const inst=document.getElementById('alertInstitute');
+      if(inst&&typeof instituteData!=='undefined')fillSelectNoPlaceholder('alertInstitute',allInstitutes());
+      const rc=document.getElementById('repeatedCourseFilter');
+      if(rc)fillSelectNoPlaceholder('repeatedCourseFilter',allCourses());
+      if(typeof loadAlertCourses==='function' && inst && inst.value)loadAlertCourses();
+      const rs=document.getElementById('repeatedSubjectFilter');if(rs)fillSelectNoPlaceholder('repeatedSubjectFilter',repeatedSubjects());
+    }catch(e){}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(init,50));else setTimeout(init,50);
+})();
+</script>
+
 </body>
 </html>
