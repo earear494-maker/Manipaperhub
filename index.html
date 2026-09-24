@@ -159,8 +159,8 @@ footer{margin-top:30px;background:#111827;color:#cbd5e1;padding:35px 20px}.foote
 <div class="filter-card">
 <div class="filter-grid">
 <div class="form-group"><label>Institute</label><input id="university" placeholder="🔎 Type institute name..." oninput="searchInstitutes()"><div id="instituteDropdown" class="search-dropdown"></div></div>
-<div class="form-group"><label>Course</label><input id="course" placeholder="🔎 Type course / B.Tech branch..." oninput="searchCourses()"><div id="courseDropdown" class="search-dropdown"></div></div><div class="form-group"><label>Semester</label><select id="semester" onchange="loadSubjects()"><option value="">All Semesters</option></select></div>
-<div class="form-group"><label>Subject</label><select id="subject"><option value="">All Subjects</option></select></div>
+<div class="form-group"><label>Course</label><div class="course-add-wrap"><input id="course" placeholder="🔎 Type course / B.Tech branch..." oninput="searchCourses();updateAddSubjectButton()"><button type="button" id="addCourseBtn" class="add-course-btn" onclick="addNewCourse()">➕ Add Course</button></div><div id="courseDropdown" class="search-dropdown"></div></div><div class="form-group"><label>Semester</label><select id="semester" onchange="loadSubjects();updateAddSubjectButton()"><option value="">All Semesters</option></select></div>
+<div class="form-group"><label>Subject</label><div class="subject-add-wrap"><select id="subject" onchange="updateAddSubjectButton()"><option value="">All Subjects</option></select><button type="button" id="addSubjectBtn" class="add-course-btn" onclick="addNewSubject()">➕ Add Subject</button></div></div>
 <div class="form-group"><label>Year</label><select id="year"><option value="">All Years</option></select></div>
 <div class="form-group" style="grid-column:1/-1"><label>Keyword</label><input type="text" id="searchInput" placeholder="Search by paper name, exam, subject..." oninput="filterPapers()"></div>
 </div><div class="filter-actions"><button class="primary-btn" onclick="filterPapers(true)">🔎 Search Papers</button><button class="secondary-btn" onclick="resetFilters()">↻ Reset</button></div></div>
@@ -428,6 +428,13 @@ function setupSearchDropdowns(){
  });
 }
 function loadSemesters(){const c=document.getElementById("course").value,s=document.getElementById("semester");s.innerHTML='<option value="">All Semesters</option>';const n=courseCatalog[c]?.semesters||0;for(let i=1;i<=n;i++)s.innerHTML+=`<option value="${i}">Semester ${i}</option>`;document.getElementById("subject").innerHTML='<option value="">All Subjects</option>';filterPapers()}
+function updateAddSubjectButton(){
+  const btn=document.getElementById("addSubjectBtn");
+  const course=document.getElementById("course")?.value?.trim()||"";
+  const semester=document.getElementById("semester")?.value||"";
+  if(btn) btn.style.display=(course&&semester)?"inline-block":"none";
+}
+
 function loadSubjects(){const c=document.getElementById("course").value,sem=document.getElementById("semester").value,s=document.getElementById("subject");s.innerHTML='<option value="">All Subjects</option>';let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);if(!list.includes('Other'))list=[...list,'Other'];if(!c)list=[...new Set(Object.values(subjectData).flat())];[...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>s.innerHTML+=`<option>${x}</option>`);filterPapers()}
 function populateYearSelect(selectId){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Year</option>';for(let y=2001;y<=2099;y++)s.innerHTML+=`<option value="${y}">${y}</option>`}
 function populateInstituteSelect(selectId){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Institute</option>';[...instituteData].sort((a,b)=>(a.name+' '+a.city).localeCompare(b.name+' '+b.city)).forEach(x=>{s.innerHTML+=`<option value="${esc(x.name)}">${esc(x.name)} — ${esc(x.city)}</option>`})}
