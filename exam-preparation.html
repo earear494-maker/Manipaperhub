@@ -2405,12 +2405,18 @@ function studentNoteLoadSemesters(){
   if(sub)sub.innerHTML='<option value="">Select Subject</option>';
 }
 function studentNoteLoadSubjects(){
-  const c=document.getElementById("studentNoteCourse")?.value||"",sem=document.getElementById("studentNoteSemester")?.value||"",s=document.getElementById("studentNoteSubject"); if(!s)return;
-  const list=semesterData[c]?.[sem]||[];
-  let customSubjects={}; try{customSubjects=JSON.parse(localStorage.getItem("MPH_STUDENT_NOTE_CUSTOM_SUBJECTS_V1")||"{}")}catch(e){}
-  const key=(document.getElementById("studentNoteInstitute")?.value||"")+"||"+c+"||"+sem;
-  list=[...list,...(customSubjects[key]||[])];
-  s.innerHTML='<option value="">Select Subject</option>'+[...new Set(list)].sort((a,b)=>String(a).localeCompare(String(b))).map(x=>`<option value="${prepEsc(x)}">${prepEsc(x)}</option>`).join('');
+  const inst=document.getElementById("studentNoteInstitute")?.value||"",c=document.getElementById("studentNoteCourse")?.value||"",sem=document.getElementById("studentNoteSemester")?.value||"",s=document.getElementById("studentNoteSubject");
+  if(!s)return;
+  s.innerHTML='<option value="">Select Subject</option>';
+  let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);
+  if(!c)list=[...new Set(Object.values(subjectData).flat())];
+  const d=typeof prepCustomCatalog==='function'?prepCustomCatalog():{subjects:{}};
+  const key=inst+'||'+c+'||'+sem;
+  if(sem&&d.subjects&&Array.isArray(d.subjects[key]))list=[...list,...d.subjects[key]];
+  let customSubjects={};
+  try{customSubjects=JSON.parse(localStorage.getItem("MPH_STUDENT_NOTE_CUSTOM_SUBJECTS_V1")||"{}")}catch(e){}
+  if(sem&&Array.isArray(customSubjects[key]))list=[...list,...customSubjects[key]];
+  [...new Set(list.map(x=>String(x).trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b)).forEach(x=>s.innerHTML+=`<option value="${prepEsc(x)}">${prepEsc(x)}</option>`);
 }
 function studentNoteLoadYears(){
   const s=document.getElementById("studentNoteYear"); if(!s)return; s.innerHTML='<option value="">Select Year</option>'; for(let y=2001;y<=2099;y++)s.innerHTML+=`<option value="${y}">${y}</option>`;
