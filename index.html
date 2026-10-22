@@ -382,7 +382,45 @@ function initInstitutes(){
  setupSearchDropdowns();
  initRequestUploadSelectors();
 }
+function searchPaperCustomCourses(){try{return JSON.parse(localStorage.getItem("MPH_SEARCH_PAPER_CUSTOM_COURSES_V1")||"{}")||{}}catch(e){return {}}}
+function restoreSearchPaperCustomCourses(){
+ const saved=searchPaperCustomCourses();
+ Object.entries(saved).forEach(([inst,items])=>{
+   (items||[]).forEach(item=>{
+     if(!item||!item.name)return;
+     if(!courseCatalog[item.name])courseCatalog[item.name]={semesters:Number(item.semesters)||8,subjects:{}};
+     if(!courseData[inst])courseData[inst]=[];
+     if(!courseData[inst].includes(item.name))courseData[inst].push(item.name);
+   });
+ });
+}
+function addNewCourse(){
+ const instInput=document.getElementById("university");
+ const inst=(instInput?.value||"").trim();
+ if(!inst){alert("Please select Institute first.");return;}
+ const name=prompt("Enter new course name:");
+ if(!name||!name.trim())return;
+ const clean=name.trim();
+ const n=parseInt(prompt("How many semesters does this course have?","8"),10);
+ if(!Number.isInteger(n)||n<1||n>20){alert("Please enter a valid semester count (1–20).");return;}
+ const saved=searchPaperCustomCourses();
+ saved[inst]=saved[inst]||[];
+ const exists=(courseData[inst]||[]).some(x=>x.toLowerCase()===clean.toLowerCase()) || saved[inst].some(x=>x.name.toLowerCase()===clean.toLowerCase());
+ if(exists){alert("This course already exists for this institute.");return;}
+ saved[inst].push({name:clean,semesters:n});
+ try{localStorage.setItem("MPH_SEARCH_PAPER_CUSTOM_COURSES_V1",JSON.stringify(saved));}
+ catch(e){alert("Could not save course in this browser. Please check browser storage settings.");return;}
+ if(!courseCatalog[clean])courseCatalog[clean]={semesters:n,subjects:{}};
+ if(!courseData[inst])courseData[inst]=[];
+ courseData[inst].push(clean);
+ const input=document.getElementById("course");
+ if(input)input.value=clean;
+ const box=document.getElementById("courseDropdown");if(box)box.classList.remove("open");
+ loadSemesters();updateAddSubjectButton();
+ alert("✅ Course added successfully.");
+}
 function getInstituteCourses(name){
+ restoreSearchPaperCustomCourses();
  const key=instituteNames.find(x=>x.toLowerCase()===String(name||"").trim().toLowerCase());
  return key && courseData[key] ? courseData[key] : Object.keys(courseCatalog);
 }
@@ -435,7 +473,57 @@ function updateAddSubjectButton(){
   if(btn) btn.style.display=(course&&semester)?"inline-block":"none";
 }
 
-function loadSubjects(){const c=document.getElementById("course").value,sem=document.getElementById("semester").value,s=document.getElementById("subject");s.innerHTML='<option value="">All Subjects</option>';let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);if(!list.includes('Other'))list=[...list,'Other'];if(!c)list=[...new Set(Object.values(subjectData).flat())];[...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>s.innerHTML+=`<option>${x}</option>`);filterPapers()}
+function loadSubjects(){
+  const c=document.getElementById("course")?.value?.trim()||"";
+  const sem=document.getElementById("semester")?.value||"";
+  const inst=document.getElementById("university")?.value?.trim()||"";
+  const s=document.getElementById("subject");
+  if(!s)return;
+  const previous=s.value;
+  s.innerHTML='<option value="">All Subjects</option>';
+  let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);
+  if(!c)list=[...new Set(Object.values(subjectData).flat())];
+  if(!list.includes("Other"))list=[...list,"Other"];
+  try{
+    const saved=JSON.parse(localStorage.getItem("MPH_SEARCH_PAPER_CUSTOM_SUBJECTS_V1")||"{}");
+    const key=[inst,c,sem].join("||");
+    if(Array.isArray(saved[key]))list=[...list,...saved[key]];
+  }catch(err){console.warn("Could not load custom subjects",err)}
+  [...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>{
+    const option=document.createElement("option");
+    option.value=x;option.textContent=x;s.appendChild(option);
+  });
+  if([...s.options].some(o=>o.value===previous))s.value=previous;
+  filterPapers();
+}
+function addNewSubject(){
+  const inst=document.getElementById("university")?.value?.trim()||"";
+  const course=document.getElementById("course")?.value?.trim()||"";
+  const semester=document.getElementById("semester")?.value||"";
+  if(!course||!semester){
+    alert("Please enter/select a Course and select a Semester first.");
+    return;
+  }
+  const name=prompt("Enter new subject name:");
+  if(!name||!name.trim())return;
+  const clean=name.trim();
+  const key=[inst,course,semester].join("||");
+  let saved={};
+  try{saved=JSON.parse(localStorage.getItem("MPH_SEARCH_PAPER_CUSTOM_SUBJECTS_V1")||"{}")||{};}catch(err){saved={};}
+  saved[key]=Array.isArray(saved[key])?saved[key]:[];
+  const existing=[...(semesterData[course]?.[semester]||[]),...(subjectData[course]||[]),...saved[key]];
+  if(existing.some(x=>String(x).trim().toLowerCase()===clean.toLowerCase())){
+    alert("This subject already exists in the selected course/semester.");
+    return;
+  }
+  saved[key].push(clean);
+  try{localStorage.setItem("MPH_SEARCH_PAPER_CUSTOM_SUBJECTS_V1",JSON.stringify(saved));}
+  catch(err){alert("Could not save the subject in this browser. Please check browser storage settings.");return;}
+  loadSubjects();
+  const subjectSelect=document.getElementById("subject");
+  if(subjectSelect)subjectSelect.value=clean;
+  alert("✅ Subject added and shown in Search Question Papers.");
+}
 function populateYearSelect(selectId){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Year</option>';for(let y=2001;y<=2099;y++)s.innerHTML+=`<option value="${y}">${y}</option>`}
 function populateInstituteSelect(selectId){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Institute</option>';[...instituteData].sort((a,b)=>(a.name+' '+a.city).localeCompare(b.name+' '+b.city)).forEach(x=>{s.innerHTML+=`<option value="${esc(x.name)}">${esc(x.name)} — ${esc(x.city)}</option>`})}
 function getCoursesForSelect(institute){return institute&&courseData[institute]?[...new Set(courseData[institute])].filter(c=>courseCatalog[c]):Object.keys(courseCatalog).sort((a,b)=>a.localeCompare(b))}
