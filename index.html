@@ -1269,6 +1269,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
   <script>
+
+<script>
 const STORAGE_API = "https://camping-diary-invitations-carries.trycloudflare.com";
 
 async function loadApprovedPapers() {
@@ -1276,13 +1278,41 @@ async function loadApprovedPapers() {
     const response = await fetch(`${STORAGE_API}/api/papers`);
     if (!response.ok) throw new Error("API request failed");
 
-    const papers = await response.json();
-    console.log("Approved papers from storage:", papers);
+    const storagePapers = await response.json();
 
-    const paper = papers.find(p => p.title === "SA 3 Notes");
-    if (paper) {
-      console.log("SA 3 Notes is available:", paper);
+    if (!Array.isArray(window.papers)) {
+      console.error("Website papers list was not found.");
+      return;
     }
+
+    const existingIds = new Set(
+      window.papers.map(p => String(p.id))
+    );
+
+    const newPapers = storagePapers
+      .filter(p => !existingIds.has("storage-" + p.id))
+      .map(p => ({
+        id: "storage-" + p.id,
+        exam: p.title || "Question Paper",
+        university: p.institute || "",
+        course: p.course || "",
+        semester: p.semester || "",
+        subject: p.subject || "",
+        year: String(p.year || ""),
+        fileName: (p.title || "Question Paper") + ".pdf",
+        fileData: `${STORAGE_API}/api/papers/${p.id}/download`,
+        verified: true
+      }));
+
+    window.papers.push(...newPapers);
+
+    if (typeof renderPapers === "function") {
+      renderPapers(window.papers);
+    } else {
+      console.error("Search results display function was not found.");
+    }
+
+    console.log("Storage papers added:", newPapers);
   } catch (error) {
     console.error("Paper loading error:", error);
   }
@@ -1290,5 +1320,5 @@ async function loadApprovedPapers() {
 
 loadApprovedPapers();
 </script>
-  </body>
+</body>
 </html>
