@@ -161,7 +161,108 @@ footer{margin-top:30px;background:#111827;color:#cbd5e1;padding:35px 20px}.foote
 <div class="form-group"><label>Institute</label><input id="university" placeholder="🔎 Type institute name..." oninput="searchInstitutes()"><div id="instituteDropdown" class="search-dropdown"></div></div>
 <div class="form-group"><label>Course</label><div class="course-add-wrap"><input id="course" placeholder="🔎 Type course / B.Tech branch..." oninput="searchCourses();updateAddSubjectButton()"><button type="button" id="addCourseBtn" class="add-course-btn" onclick="addNewCourse()">➕ Add Course</button></div><div id="courseDropdown" class="search-dropdown"></div></div><div class="form-group"><label>Semester</label><select id="semester" onchange="loadSubjects();updateAddSubjectButton()"><option value="">All Semesters</option></select></div>
 <div class="form-group"><label>Subject</label><div class="subject-add-wrap"><select id="subject" onchange="updateAddSubjectButton()"><option value="">All Subjects</option></select><button type="button" id="addSubjectBtn" class="add-course-btn" onclick="addNewSubject()">➕ Add Subject</button></div></div>
-<div class="form-group"><label>Year</label><select id="year"><option value="">All Years</option></select></div>
+<div class="form-group"><label for="year">Year</label><select id="year" name="year"><option value="">All Years</option>
+<option value="2000">2000</option>
+<option value="2001">2001</option>
+<option value="2002">2002</option>
+<option value="2003">2003</option>
+<option value="2004">2004</option>
+<option value="2005">2005</option>
+<option value="2006">2006</option>
+<option value="2007">2007</option>
+<option value="2008">2008</option>
+<option value="2009">2009</option>
+<option value="2010">2010</option>
+<option value="2011">2011</option>
+<option value="2012">2012</option>
+<option value="2013">2013</option>
+<option value="2014">2014</option>
+<option value="2015">2015</option>
+<option value="2016">2016</option>
+<option value="2017">2017</option>
+<option value="2018">2018</option>
+<option value="2019">2019</option>
+<option value="2020">2020</option>
+<option value="2021">2021</option>
+<option value="2022">2022</option>
+<option value="2023">2023</option>
+<option value="2024">2024</option>
+<option value="2025">2025</option>
+<option value="2026">2026</option>
+<option value="2027">2027</option>
+<option value="2028">2028</option>
+<option value="2029">2029</option>
+<option value="2030">2030</option>
+<option value="2031">2031</option>
+<option value="2032">2032</option>
+<option value="2033">2033</option>
+<option value="2034">2034</option>
+<option value="2035">2035</option>
+<option value="2036">2036</option>
+<option value="2037">2037</option>
+<option value="2038">2038</option>
+<option value="2039">2039</option>
+<option value="2040">2040</option>
+<option value="2041">2041</option>
+<option value="2042">2042</option>
+<option value="2043">2043</option>
+<option value="2044">2044</option>
+<option value="2045">2045</option>
+<option value="2046">2046</option>
+<option value="2047">2047</option>
+<option value="2048">2048</option>
+<option value="2049">2049</option>
+<option value="2050">2050</option>
+<option value="2051">2051</option>
+<option value="2052">2052</option>
+<option value="2053">2053</option>
+<option value="2054">2054</option>
+<option value="2055">2055</option>
+<option value="2056">2056</option>
+<option value="2057">2057</option>
+<option value="2058">2058</option>
+<option value="2059">2059</option>
+<option value="2060">2060</option>
+<option value="2061">2061</option>
+<option value="2062">2062</option>
+<option value="2063">2063</option>
+<option value="2064">2064</option>
+<option value="2065">2065</option>
+<option value="2066">2066</option>
+<option value="2067">2067</option>
+<option value="2068">2068</option>
+<option value="2069">2069</option>
+<option value="2070">2070</option>
+<option value="2071">2071</option>
+<option value="2072">2072</option>
+<option value="2073">2073</option>
+<option value="2074">2074</option>
+<option value="2075">2075</option>
+<option value="2076">2076</option>
+<option value="2077">2077</option>
+<option value="2078">2078</option>
+<option value="2079">2079</option>
+<option value="2080">2080</option>
+<option value="2081">2081</option>
+<option value="2082">2082</option>
+<option value="2083">2083</option>
+<option value="2084">2084</option>
+<option value="2085">2085</option>
+<option value="2086">2086</option>
+<option value="2087">2087</option>
+<option value="2088">2088</option>
+<option value="2089">2089</option>
+<option value="2090">2090</option>
+<option value="2091">2091</option>
+<option value="2092">2092</option>
+<option value="2093">2093</option>
+<option value="2094">2094</option>
+<option value="2095">2095</option>
+<option value="2096">2096</option>
+<option value="2097">2097</option>
+<option value="2098">2098</option>
+<option value="2099">2099</option>
+</select></div>
 <div class="form-group" style="grid-column:1/-1"><label>Keyword</label><input type="text" id="searchInput" placeholder="Search by paper name, exam, subject..." oninput="filterPapers()"></div>
 </div><div class="filter-actions"><button class="primary-btn" onclick="filterPapers(true)">🔎 Search Papers</button><button class="secondary-btn" onclick="resetFilters()">↻ Reset</button></div></div>
 <div class="results-header"><h2>📚 Available Question Papers</h2><span class="result-count" id="resultCount">0 Papers</span></div><div id="papersMoreWrap" style="display:none;text-align:center;margin:18px 0"><button class="search-btn" id="papersMoreBtn" onclick="toggleMorePapers()">➕ More Papers</button></div>
@@ -377,50 +478,12 @@ async function renderJobs(){const box=document.getElementById("jobsGrid"),empty=
 function renderCourseDirectory(){const box=document.getElementById("courseDirectory");if(!box)return;const courses=Object.keys(courseCatalog).sort((a,b)=>a.localeCompare(b));box.innerHTML=courses.map(c=>{const inst=Object.entries(courseData).filter(([i,cs])=>cs.includes(c)).map(([i])=>{const x=instituteData.find(z=>z.name===i);return x?i+" — "+x.city:i}).sort((a,b)=>a.localeCompare(b));const m=courseCatalog[c].subjects;const sems=Object.keys(m).sort((a,b)=>Number(a)-Number(b));return `<div class="course-directory-card"><h3>${esc(c)}</h3><div class="course-meta">${courseCatalog[c].semesters?courseCatalog[c].semesters+" semesters":"Research / variable duration"}</div><div class="course-institutes"><strong>Institutes:</strong> ${inst.length?inst.map(esc).join(", "):"Not mapped yet"}</div>${sems.map(s=>`<div class="course-semester"><strong>Semester ${s}</strong><div>${m[s].map(esc).map(x=>`<span>${x}</span>`).join("")}</div></div>`).join("")}</div>`}).join("")}
 
 function initInstitutes(){
- const y=document.getElementById("year");if(y){for(let i=new Date().getFullYear();i>=2000;i--)y.innerHTML+=`<option>${i}</option>`;}
+ // Year options 2000–2099 are written directly in the HTML.
  loadCourses();
  setupSearchDropdowns();
  initRequestUploadSelectors();
 }
-function searchPaperCustomCourses(){try{return JSON.parse(localStorage.getItem("MPH_SEARCH_PAPER_CUSTOM_COURSES_V1")||"{}")||{}}catch(e){return {}}}
-function restoreSearchPaperCustomCourses(){
- const saved=searchPaperCustomCourses();
- Object.entries(saved).forEach(([inst,items])=>{
-   (items||[]).forEach(item=>{
-     if(!item||!item.name)return;
-     if(!courseCatalog[item.name])courseCatalog[item.name]={semesters:Number(item.semesters)||8,subjects:{}};
-     if(!courseData[inst])courseData[inst]=[];
-     if(!courseData[inst].includes(item.name))courseData[inst].push(item.name);
-   });
- });
-}
-function addNewCourse(){
- const instInput=document.getElementById("university");
- const inst=(instInput?.value||"").trim();
- if(!inst){alert("Please select Institute first.");return;}
- const name=prompt("Enter new course name:");
- if(!name||!name.trim())return;
- const clean=name.trim();
- const n=parseInt(prompt("How many semesters does this course have?","8"),10);
- if(!Number.isInteger(n)||n<1||n>20){alert("Please enter a valid semester count (1–20).");return;}
- const saved=searchPaperCustomCourses();
- saved[inst]=saved[inst]||[];
- const exists=(courseData[inst]||[]).some(x=>x.toLowerCase()===clean.toLowerCase()) || saved[inst].some(x=>x.name.toLowerCase()===clean.toLowerCase());
- if(exists){alert("This course already exists for this institute.");return;}
- saved[inst].push({name:clean,semesters:n});
- try{localStorage.setItem("MPH_SEARCH_PAPER_CUSTOM_COURSES_V1",JSON.stringify(saved));}
- catch(e){alert("Could not save course in this browser. Please check browser storage settings.");return;}
- if(!courseCatalog[clean])courseCatalog[clean]={semesters:n,subjects:{}};
- if(!courseData[inst])courseData[inst]=[];
- courseData[inst].push(clean);
- const input=document.getElementById("course");
- if(input)input.value=clean;
- const box=document.getElementById("courseDropdown");if(box)box.classList.remove("open");
- loadSemesters();updateAddSubjectButton();
- alert("✅ Course added successfully.");
-}
 function getInstituteCourses(name){
- restoreSearchPaperCustomCourses();
  const key=instituteNames.find(x=>x.toLowerCase()===String(name||"").trim().toLowerCase());
  return key && courseData[key] ? courseData[key] : Object.keys(courseCatalog);
 }
@@ -473,58 +536,8 @@ function updateAddSubjectButton(){
   if(btn) btn.style.display=(course&&semester)?"inline-block":"none";
 }
 
-function loadSubjects(){
-  const c=document.getElementById("course")?.value?.trim()||"";
-  const sem=document.getElementById("semester")?.value||"";
-  const inst=document.getElementById("university")?.value?.trim()||"";
-  const s=document.getElementById("subject");
-  if(!s)return;
-  const previous=s.value;
-  s.innerHTML='<option value="">All Subjects</option>';
-  let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);
-  if(!c)list=[...new Set(Object.values(subjectData).flat())];
-  if(!list.includes("Other"))list=[...list,"Other"];
-  try{
-    const saved=JSON.parse(localStorage.getItem("MPH_SEARCH_PAPER_CUSTOM_SUBJECTS_V1")||"{}");
-    const key=[inst,c,sem].join("||");
-    if(Array.isArray(saved[key]))list=[...list,...saved[key]];
-  }catch(err){console.warn("Could not load custom subjects",err)}
-  [...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>{
-    const option=document.createElement("option");
-    option.value=x;option.textContent=x;s.appendChild(option);
-  });
-  if([...s.options].some(o=>o.value===previous))s.value=previous;
-  filterPapers();
-}
-function addNewSubject(){
-  const inst=document.getElementById("university")?.value?.trim()||"";
-  const course=document.getElementById("course")?.value?.trim()||"";
-  const semester=document.getElementById("semester")?.value||"";
-  if(!course||!semester){
-    alert("Please enter/select a Course and select a Semester first.");
-    return;
-  }
-  const name=prompt("Enter new subject name:");
-  if(!name||!name.trim())return;
-  const clean=name.trim();
-  const key=[inst,course,semester].join("||");
-  let saved={};
-  try{saved=JSON.parse(localStorage.getItem("MPH_SEARCH_PAPER_CUSTOM_SUBJECTS_V1")||"{}")||{};}catch(err){saved={};}
-  saved[key]=Array.isArray(saved[key])?saved[key]:[];
-  const existing=[...(semesterData[course]?.[semester]||[]),...(subjectData[course]||[]),...saved[key]];
-  if(existing.some(x=>String(x).trim().toLowerCase()===clean.toLowerCase())){
-    alert("This subject already exists in the selected course/semester.");
-    return;
-  }
-  saved[key].push(clean);
-  try{localStorage.setItem("MPH_SEARCH_PAPER_CUSTOM_SUBJECTS_V1",JSON.stringify(saved));}
-  catch(err){alert("Could not save the subject in this browser. Please check browser storage settings.");return;}
-  loadSubjects();
-  const subjectSelect=document.getElementById("subject");
-  if(subjectSelect)subjectSelect.value=clean;
-  alert("✅ Subject added and shown in Search Question Papers.");
-}
-function populateYearSelect(selectId){const s=document.getElementById(selectId);if(!s)return;const firstText=(selectId==='year')?'All Years':'Select Year';s.innerHTML=`<option value="">${firstText}</option>`;for(let y=2000;y<=2099;y++)s.innerHTML+=`<option value="${y}">${y}</option>`}
+function loadSubjects(){const c=document.getElementById("course").value,sem=document.getElementById("semester").value,s=document.getElementById("subject");s.innerHTML='<option value="">All Subjects</option>';let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);if(!list.includes('Other'))list=[...list,'Other'];if(!c)list=[...new Set(Object.values(subjectData).flat())];[...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>s.innerHTML+=`<option>${x}</option>`);filterPapers()}
+function populateYearSelect(selectId){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Year</option>';for(let y=2001;y<=2099;y++)s.innerHTML+=`<option value="${y}">${y}</option>`}
 function populateInstituteSelect(selectId){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Institute</option>';[...instituteData].sort((a,b)=>(a.name+' '+a.city).localeCompare(b.name+' '+b.city)).forEach(x=>{s.innerHTML+=`<option value="${esc(x.name)}">${esc(x.name)} — ${esc(x.city)}</option>`})}
 function getCoursesForSelect(institute){return institute&&courseData[institute]?[...new Set(courseData[institute])].filter(c=>courseCatalog[c]):Object.keys(courseCatalog).sort((a,b)=>a.localeCompare(b))}
 function fillCourseSelect(selectId,institute){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Course</option>';getCoursesForSelect(institute).sort((a,b)=>a.localeCompare(b)).forEach(c=>{s.innerHTML+=`<option value="${esc(c)}">${esc(c)}</option>`})}
