@@ -524,7 +524,7 @@ function addNewSubject(){
   if(subjectSelect)subjectSelect.value=clean;
   alert("✅ Subject added and shown in Search Question Papers.");
 }
-function populateYearSelect(selectId){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Year</option>';for(let y=2001;y<=2099;y++)s.innerHTML+=`<option value="${y}">${y}</option>`}
+function populateYearSelect(selectId){const s=document.getElementById(selectId);if(!s)return;const firstText=(selectId==='year')?'All Years':'Select Year';s.innerHTML=`<option value="">${firstText}</option>`;for(let y=2000;y<=2099;y++)s.innerHTML+=`<option value="${y}">${y}</option>`}
 function populateInstituteSelect(selectId){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Institute</option>';[...instituteData].sort((a,b)=>(a.name+' '+a.city).localeCompare(b.name+' '+b.city)).forEach(x=>{s.innerHTML+=`<option value="${esc(x.name)}">${esc(x.name)} — ${esc(x.city)}</option>`})}
 function getCoursesForSelect(institute){return institute&&courseData[institute]?[...new Set(courseData[institute])].filter(c=>courseCatalog[c]):Object.keys(courseCatalog).sort((a,b)=>a.localeCompare(b))}
 function fillCourseSelect(selectId,institute){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Course</option>';getCoursesForSelect(institute).sort((a,b)=>a.localeCompare(b)).forEach(c=>{s.innerHTML+=`<option value="${esc(c)}">${esc(c)}</option>`})}
