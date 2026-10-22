@@ -1270,4 +1270,26 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </script>
 
 </body>
+  <script>
+const STORAGE_API = "https://camping-diary-invitations-carries.trycloudflare.com";
+
+async function loadApprovedPapers() {
+  try {
+    const response = await fetch(`${STORAGE_API}/api/papers`);
+    if (!response.ok) throw new Error("API request failed");
+
+    const papers = await response.json();
+    console.log("Approved papers from storage:", papers);
+
+    const paper = papers.find(p => p.title === "SA 3 Notes");
+    if (paper) {
+      console.log("SA 3 Notes is available:", paper);
+    }
+  } catch (error) {
+    console.error("Paper loading error:", error);
+  }
+}
+
+loadApprovedPapers();
+</script>
 </html>
