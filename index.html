@@ -485,7 +485,8 @@ function initInstitutes(){
 }
 function getInstituteCourses(name){
  const key=instituteNames.find(x=>x.toLowerCase()===String(name||"").trim().toLowerCase());
- return key && courseData[key] ? courseData[key] : Object.keys(courseCatalog);
+ const base=key && courseData[key] ? courseData[key].slice() : Object.keys(courseCatalog);
+ try{const d=requestUploadCustomData();const extra=((d.courses||{})[key||name]||[]).map(x=>typeof x==='string'?x:x.name).filter(Boolean);return [...new Set([...base,...extra])].sort((a,b)=>a.localeCompare(b));}catch(e){return [...new Set(base)].sort((a,b)=>a.localeCompare(b))}
 }
 function searchInstitutes(){
  const input=document.getElementById("university"),box=document.getElementById("instituteDropdown");
@@ -528,7 +529,9 @@ function setupSearchDropdowns(){
    if(!c.contains(e.target))document.getElementById("courseDropdown")?.classList.remove("open");
  });
 }
-function loadSemesters(){const c=document.getElementById("course").value,s=document.getElementById("semester");s.innerHTML='<option value="">All Semesters</option>';const n=courseCatalog[c]?.semesters||0;for(let i=1;i<=n;i++)s.innerHTML+=`<option value="${i}">Semester ${i}</option>`;document.getElementById("subject").innerHTML='<option value="">All Subjects</option>';filterPapers()}
+function loadSemesters(){const c=document.getElementById("course").value,s=document.getElementById("semester"),inst=document.getElementById("university")?.value||"";s.innerHTML='<option value="">All Semesters</option>';let n=courseCatalog[c]?.semesters||0;try{const d=requestUploadCustomData();const item=((d.courses||{})[inst]||[]).find(x=>(typeof x==='string'?x:x.name)===c);if(item)n=item.semesters||n}catch(e){}for(let i=1;i<=n;i++)s.innerHTML+=`<option value="${i}">Semester ${i}</option>`;document.getElementById("subject").innerHTML='<option value="">All Subjects</option>';updateAddSubjectButton();filterPapers()}
+function addNewCourse(){const inst=document.getElementById('university')?.value?.trim()||'';if(!inst){alert('Please select or type an Institute first.');return}const name=prompt('Enter new course name:');if(!name||!name.trim())return;const clean=name.trim();const n=parseInt(prompt('How many semesters does this course have?','8'),10);if(!Number.isInteger(n)||n<1||n>20){alert('Please enter a valid semester count (1–20).');return}const d=requestUploadCustomData();d.courses=d.courses||{};d.courses[inst]=d.courses[inst]||[];if(d.courses[inst].some(x=>(typeof x==='string'?x:x.name).toLowerCase()===clean.toLowerCase())){alert('This course already exists for this institute.');return}d.courses[inst].push({name:clean,semesters:n});saveRequestUploadCustomData(d);const c=document.getElementById('course');c.value=clean;loadSemesters();alert('Course added successfully.');}
+function addNewSubject(){const inst=document.getElementById('university')?.value?.trim()||'',c=document.getElementById('course')?.value?.trim()||'',sem=document.getElementById('semester')?.value||'';if(!inst||!c||!sem){alert('Please select Institute, Course and Semester first.');return}const name=prompt('Enter new subject name:');if(!name||!name.trim())return;const clean=name.trim(),d=requestUploadCustomData(),key=inst+'||'+c+'||'+sem;d.subjects=d.subjects||{};d.subjects[key]=d.subjects[key]||[];if(d.subjects[key].some(x=>x.toLowerCase()===clean.toLowerCase())){alert('This subject already exists for this semester.');return}d.subjects[key].push(clean);saveRequestUploadCustomData(d);loadSubjects();document.getElementById('subject').value=clean;alert('Subject added successfully.');}
 function updateAddSubjectButton(){
   const btn=document.getElementById("addSubjectBtn");
   const course=document.getElementById("course")?.value?.trim()||"";
@@ -536,7 +539,7 @@ function updateAddSubjectButton(){
   if(btn) btn.style.display=(course&&semester)?"inline-block":"none";
 }
 
-function loadSubjects(){const c=document.getElementById("course").value,sem=document.getElementById("semester").value,s=document.getElementById("subject");s.innerHTML='<option value="">All Subjects</option>';let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);if(!list.includes('Other'))list=[...list,'Other'];if(!c)list=[...new Set(Object.values(subjectData).flat())];[...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>s.innerHTML+=`<option>${x}</option>`);filterPapers()}
+function loadSubjects(){const c=document.getElementById("course").value,sem=document.getElementById("semester").value,s=document.getElementById("subject"),inst=document.getElementById("university")?.value||"";s.innerHTML='<option value="">All Subjects</option>';let list=sem?(semesterData[c]?.[sem]||[]):(subjectData[c]||[]);try{const d=requestUploadCustomData();list=[...list,...((d.subjects||{})[inst+'||'+c+'||'+sem]||[])];if(!sem){for(let i=1;i<=20;i++)list=[...list,...((d.subjects||{})[inst+'||'+c+'||'+i]||[])];}}catch(e){}if(!list.includes('Other'))list=[...list,'Other'];if(!c)list=[...new Set(Object.values(subjectData).flat())];[...new Set(list)].sort((a,b)=>a.localeCompare(b)).forEach(x=>s.innerHTML+=`<option value="${esc(x)}">${esc(x)}</option>`);updateAddSubjectButton();filterPapers()}
 function populateYearSelect(selectId){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Year</option>';for(let y=2001;y<=2099;y++)s.innerHTML+=`<option value="${y}">${y}</option>`}
 function populateInstituteSelect(selectId){const s=document.getElementById(selectId);if(!s)return;s.innerHTML='<option value="">Select Institute</option>';[...instituteData].sort((a,b)=>(a.name+' '+a.city).localeCompare(b.name+' '+b.city)).forEach(x=>{s.innerHTML+=`<option value="${esc(x.name)}">${esc(x.name)} — ${esc(x.city)}</option>`})}
 function getCoursesForSelect(institute){return institute&&courseData[institute]?[...new Set(courseData[institute])].filter(c=>courseCatalog[c]):Object.keys(courseCatalog).sort((a,b)=>a.localeCompare(b))}
