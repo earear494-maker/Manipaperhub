@@ -734,7 +734,7 @@ async function securityPrecheck(file,kind){
   const name=String(file.name||'').toLowerCase();
   const blocked=/\.(exe|dll|bat|cmd|com|scr|msi|js|jar|vbs|ps1|sh|php|asp|aspx|jsp|html?|svg)$/i;
   if(blocked.test(name)) throw new Error('Security check blocked this file type.');
-  const max=15*1024*1024;
+  const max=100*1024*1024;
   if(file.size>max) throw new Error('File exceeds the 15 MB security limit.');
   const head=new Uint8Array(await file.slice(0,8).arrayBuffer());
   if(kind==='pdf'){
@@ -744,7 +744,70 @@ async function securityPrecheck(file,kind){
   else if(kind==='video' && !String(file.type).startsWith('video/')) throw new Error('Security check failed: invalid video file.');
   return true;
 }
-async function submitStudentPaper(){const name=(document.getElementById('studentUploadName')?.value||studentStore().name||'').trim(),university=(document.getElementById('studentUploadUniversity')?.value||'').trim(),course=(document.getElementById('studentUploadCourse')?.value||'').trim(),semester=(document.getElementById('studentUploadSemester')?.value||'').trim(),subject=(document.getElementById('studentUploadSubject')?.value||'').trim(),year=(document.getElementById('studentUploadYear')?.value||'').trim(),input=document.getElementById('studentUploadFile'),file=input?.files?.[0];if(!university||!course||!semester||!subject||!year||!file){toast('Please select Institute, Course, Semester, Subject, Year and a PDF');return}try{await securityPrecheck(file,'pdf');const fileData=await fileToDataURL(file),extractedQuestions=await extractPdfQuestions(fileData);await put('submissions',{requestId:null,university,course,semester,subject,year,exam:subject+' — '+(year||'Question Paper'),fileName:file.name,fileData,extractedQuestions,submittedBy:name||'Student',created:Date.now(),status:'Pending',source:'student-upload'});document.getElementById('studentUploadName').value='';document.getElementById('studentUploadUniversity').value='';loadUploadCourses();document.getElementById('studentUploadYear').value='';;input.value='';toast('📤 Paper submitted. Admin approval is required before it becomes public.')}catch(e){toast('Upload failed: '+e.message)}}
+
+async function submitStudentPaper() {
+  const name = (
+    document.getElementById("studentUploadName")?.value ||
+    studentStore().name ||
+    "Student"
+  ).trim();
+
+  const university = document.getElementById("studentUploadUniversity")?.value.trim();
+  const course = document.getElementById("studentUploadCourse")?.value.trim();
+  const semester = document.getElementById("studentUploadSemester")?.value.trim();
+  const subject = document.getElementById("studentUploadSubject")?.value.trim();
+  const year = document.getElementById("studentUploadYear")?.value.trim();
+  const input = document.getElementById("studentUploadFile");
+  const file = input?.files?.[0];
+
+  if (!university || !course || !semester || !subject || !year || !file) {
+    toast("Please select Institute, Course, Semester, Subject, Year and a PDF");
+    return;
+  }
+
+  try {
+    await securityPrecheck(file, "pdf");
+
+    if (file.size > 100 * 1024 * 1024) {
+      throw new Error("PDF must be smaller than 100 MB.");
+    }
+
+    const formData = new FormData();
+    formData.append("title", `${subject} — ${year}`);
+    formData.append("institute", university);
+    formData.append("course", course);
+    formData.append("subject", subject);
+    formData.append("year", year);
+    formData.append("paper", file);
+
+    const response = await fetch(
+      "https://opponents-years-agricultural-arch.trycloudflare.com/api/papers",
+      {
+        method: "POST",
+        body: formData
+      }
+    );
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(result.error || `Upload failed (${response.status})`);
+    }
+
+    document.getElementById("studentUploadName").value = "";
+    document.getElementById("studentUploadUniversity").value = "";
+    document.getElementById("studentUploadCourse").value = "";
+    document.getElementById("studentUploadSemester").value = "";
+    document.getElementById("studentUploadSubject").value = "";
+    document.getElementById("studentUploadYear").value = "";
+    input.value = "";
+
+    toast("📤 PDF uploaded successfully. Admin approval is required.");
+  } catch (error) {
+    toast("Upload failed: " + error.message);
+  }
+}
+
 async function submitRequestedPaper(input){const id=window.selectedPaperRequestId;if(!id||!input.files||!input.files[0])return;const file=input.files[0];try{await securityPrecheck(file,'pdf')}catch(e){toast(e.message);input.value='';return}const rs=await getAll('requests');const r=rs.find(x=>x.id===id);if(!r)return;try{const fileData=await fileToDataURL(file),extractedQuestions=await extractPdfQuestions(fileData);await put('submissions',{requestId:id,university:r.university,course:r.course,semester:r.semester||'',subject:r.subject,year:r.year||'',exam:r.subject+' — '+(r.year||'Question Paper'),fileName:file.name,fileData,extractedQuestions,submittedBy:'Student',created:Date.now(),status:'Pending'});if(r.status==='Pending'){r.status='In Progress';await put('requests',r)};toast('📤 Paper submitted for admin review');renderRequests()}catch(e){toast('Upload failed: '+e.message)}finally{input.value='';window.selectedPaperRequestId=null}}
 
 async function loadAlertCourses(){const u=document.getElementById('alertInstitute')?.value||'';fillCourseSelect('alertCourse',u)}
