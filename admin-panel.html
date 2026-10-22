@@ -480,14 +480,65 @@ async function securityPrecheck(file,kind){
  else if(kind==='video'&&!type.startsWith('video/'))throw new Error('Security check failed: invalid video file.');
  return true;
 }
-async function uploadPaper(){
-const university=document.getElementById("university").value,course=document.getElementById("course").value,semester=document.getElementById("semester").value,subject=document.getElementById("subject").value,year=document.getElementById("year").value,exam=document.getElementById("paperExamName").value.trim(),file=document.getElementById("paperFile").files[0];
-if(!university||!course||!semester||!subject||!year||!exam||!file)return alert("Please fill all paper fields.");
-if(file.type!=="application/pdf")return alert("Please select a PDF file.");
-if(file.size>100*1024*1024)return alert("PDF must be 100 MB or smaller.");
-const existing=await getAll("papers");const duplicate=existing.find(p=>String(p.university)===String(university)&&String(p.course)===String(course)&&String(p.semester)===String(semester)&&String(p.subject)===String(subject)&&String(p.year)===String(year));if(duplicate)return alert("⚠️ Duplicate paper detected for the same Institute, Course, Semester, Subject and Year.");
-try{await securityPrecheck(file,'pdf');const fileData=await fileToDataURL(file);const extractedQuestions=await extractPdfQuestions(fileData);await add("papers",{university,course,semester,subject,year,exam,fileName:file.name,fileData,extractedQuestions,created:Date.now(),verified:true});alert("✅ Question paper uploaded and marked Verified."+(extractedQuestions.length?`\n\n${extractedQuestions.length} questions extracted for repeated-question analysis.`:"\n\nNo readable question text was detected."));document.getElementById("paperFile").value="";document.getElementById("paperExamName").value="";renderPapers()}catch(e){alert("Upload failed: "+e.message)}
+
+async function uploadPaper() {
+  const university = document.getElementById("university").value;
+  const course = document.getElementById("course").value;
+  const semester = document.getElementById("semester").value;
+  const subject = document.getElementById("subject").value;
+  const year = document.getElementById("year").value;
+  const exam = document.getElementById("paperExamName").value.trim();
+  const file = document.getElementById("paperFile").files[0];
+
+  if (!university || !course || !semester || !subject || !year || !exam || !file) {
+    alert("Please fill all paper fields.");
+    return;
+  }
+
+  if (file.type !== "application/pdf") {
+    alert("Please select a PDF file.");
+    return;
+  }
+
+  if (file.size > 100 * 1024 * 1024) {
+    alert("PDF must be 100 MB or smaller.");
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append("title", exam);
+    formData.append("institute", university);
+    formData.append("course", course);
+    formData.append("semester", semester);
+    formData.append("subject", subject);
+    formData.append("year", year);
+    formData.append("paper", file);
+
+    const response = await fetch(`${STORAGE_API}/api/papers`, {
+      method: "POST",
+      credentials: "include",
+      body: formData
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || `Upload failed (${response.status})`);
+    }
+
+    alert("✅ Paper submitted to the server for admin review.");
+    document.getElementById("paperFile").value = "";
+    document.getElementById("paperExamName").value = "";
+
+    if (typeof loadPendingPapers === "function") {
+      await loadPendingPapers();
+    }
+  } catch (error) {
+    alert("Upload failed: " + error.message);
+  }
 }
+
  
 const STORAGE_API = "https://camping-diary-invitations-carries.trycloudflare.com";
 
