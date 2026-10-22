@@ -1,0 +1,11 @@
+
+{
+  "name": "Main Paper Hub",
+  "short_name": "MainPaperHub",
+  "description": "Find Your Previous Year Question Paper",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1d4ed8"
+}
