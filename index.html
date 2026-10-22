@@ -1268,8 +1268,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(init,50));else setTimeout(init,50);
 })();
 </script>
-  <script>
-
+ 
 <script>
 const STORAGE_API = "https://camping-diary-invitations-carries.trycloudflare.com";
 
@@ -1281,18 +1280,20 @@ async function loadApprovedPapers() {
     const storagePapers = await response.json();
 
     if (!Array.isArray(window.papers)) {
-      console.error("Website papers list was not found.");
+      console.error("Main Paper Hub papers list is not ready.");
       return;
     }
 
-    const existingIds = new Set(
-      window.papers.map(p => String(p.id))
-    );
+    storagePapers.forEach(p => {
+      const paperId = -Number(p.id);
 
-    const newPapers = storagePapers
-      .filter(p => !existingIds.has("storage-" + p.id))
-      .map(p => ({
-        id: "storage-" + p.id,
+      // Avoid adding the same storage paper twice.
+      if (window.papers.some(existing => existing.id === paperId)) {
+        return;
+      }
+
+      window.papers.push({
+        id: paperId,
         exam: p.title || "Question Paper",
         university: p.institute || "",
         course: p.course || "",
@@ -1302,17 +1303,14 @@ async function loadApprovedPapers() {
         fileName: (p.title || "Question Paper") + ".pdf",
         fileData: `${STORAGE_API}/api/papers/${p.id}/download`,
         verified: true
-      }));
+      });
+    });
 
-    window.papers.push(...newPapers);
-
-    if (typeof renderPapers === "function") {
-      renderPapers(window.papers);
-    } else {
-      console.error("Search results display function was not found.");
+    if (typeof filterPapers === "function") {
+      filterPapers();
     }
 
-    console.log("Storage papers added:", newPapers);
+    console.log("Approved storage papers loaded:", storagePapers);
   } catch (error) {
     console.error("Paper loading error:", error);
   }
