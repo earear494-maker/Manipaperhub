@@ -417,6 +417,83 @@ if(file.size>100*1024*1024)return alert("PDF must be 100 MB or smaller.");
 const existing=await getAll("papers");const duplicate=existing.find(p=>String(p.university)===String(university)&&String(p.course)===String(course)&&String(p.semester)===String(semester)&&String(p.subject)===String(subject)&&String(p.year)===String(year));if(duplicate)return alert("⚠️ Duplicate paper detected for the same Institute, Course, Semester, Subject and Year.");
 try{await securityPrecheck(file,'pdf');const fileData=await fileToDataURL(file);const extractedQuestions=await extractPdfQuestions(fileData);await add("papers",{university,course,semester,subject,year,exam,fileName:file.name,fileData,extractedQuestions,created:Date.now(),verified:true});alert("✅ Question paper uploaded and marked Verified."+(extractedQuestions.length?`\n\n${extractedQuestions.length} questions extracted for repeated-question analysis.`:"\n\nNo readable question text was detected."));document.getElementById("paperFile").value="";document.getElementById("paperExamName").value="";renderPapers()}catch(e){alert("Upload failed: "+e.message)}
 }
+ 
+const STORAGE_API = "https://camping-diary-invitations-carries.trycloudflare.com";
+
+async function loadPendingPapers() {
+  const rows = document.getElementById("pendingPapersTableBody");
+
+  if (!rows) {
+    alert("Pending Papers table is not added yet.");
+    return;
+  }
+
+  rows.innerHTML = "<tr><td colspan='7'>Loading pending papers...</td></tr>";
+
+  try {
+    const response = await fetch(`${STORAGE_API}/api/admin/pending`, {
+      credentials: "include"
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || `Request failed (${response.status})`);
+    }
+
+    const pending = Array.isArray(data) ? data : data.papers;
+
+    if (!Array.isArray(pending) || pending.length === 0) {
+      rows.innerHTML = "<tr><td colspan='7'>No pending papers.</td></tr>";
+      return;
+    }
+
+    rows.innerHTML = pending.map(p => `
+      <tr>
+        <td>${p.id}</td>
+        <td>${esc(p.title || "")}</td>
+        <td>${esc(p.institute || "")}</td>
+        <td>${esc(p.course || "")}</td>
+        <td>${esc(p.subject || "")}</td>
+        <td>${esc(String(p.year || ""))}</td>
+        <td>
+          <button onclick="reviewPendingPaper(${p.id}, 'approve')">Approve</button>
+          <button onclick="reviewPendingPaper(${p.id}, 'reject')">Reject</button>
+        </td>
+      </tr>
+    `).join("");
+  } catch (error) {
+    rows.innerHTML = `<tr><td colspan="7">${esc(error.message)}</td></tr>`;
+  }
+}
+
+async function reviewPendingPaper(id, action) {
+  if (!confirm(`${action === "approve" ? "Approve" : "Reject"} this paper?`)) {
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `${STORAGE_API}/api/admin/papers/${id}/${action}`,
+      {
+        method: "POST",
+        credentials: "include"
+      }
+    );
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || `Request failed (${response.status})`);
+    }
+
+    alert(`Paper ${action}d successfully.`);
+    await loadPendingPapers();
+  } catch (error) {
+    alert("Action failed: " + error.message);
+  }
+}
+
 async function renderPapers(){
 const rows=document.getElementById("papersTableBody");if(!db)return;const a=await getAll("papers");
 rows.innerHTML=a.length?a.map((p,i)=>`<tr><td>${i+1}</td><td>${esc(p.university)}</td><td>${esc(p.course)}</td><td>Sem ${esc(p.semester||"")}</td><td>${esc(p.subject)}</td><td>${p.year}</td><td>${esc(p.exam)}</td><td><button class="info-btn" onclick="openPaper(${p.id})">Open PDF</button></td><td><button class="danger-btn" onclick="deletePaper(${p.id})">Delete</button></td></tr>`).join(""):'<tr><td colspan="9" class="empty">No papers uploaded yet.</td></tr>';
