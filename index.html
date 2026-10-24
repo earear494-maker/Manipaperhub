@@ -979,7 +979,41 @@ async function renderRequests() {
 }
 
 
-function chooseRequestedPaper(id){const rsPromise=getAll('requests');rsPromise.then(rs=>{const r=rs.find(x=>x.id===id);if(!r)return;window.selectedPaperRequestId=id;const f=document.getElementById('requestPaperFile');if(f){f.value='';f.click()}})}
+
+async function chooseRequestedPaper(id) {
+  try {
+    const response = await fetch(
+      'https://displayed-isolated-milton-gnu.trycloudflare.com/api/requests'
+    );
+
+    if (!response.ok) {
+      throw new Error('Could not load paper requests');
+    }
+
+    const requests = await response.json();
+    const r = requests.find(x => Number(x.id) === Number(id));
+
+    if (!r) {
+      alert('Paper request not found. Please refresh the page.');
+      return;
+    }
+
+    window.selectedPaperRequestId = Number(r.id);
+
+    const f = document.getElementById('requestPaperFile');
+
+    if (f) {
+      f.value = '';
+      f.click();
+    } else {
+      alert('PDF upload field was not found on this page.');
+    }
+  } catch (error) {
+    console.error('Choose request error:', error);
+    alert('Could not load the request. Please try again.');
+  }
+}
+
 function mphPublicRateLimit(key,max=8,windowMs=60000){const now=Date.now(),k='mphPublicRL_'+key;let a=[];try{a=JSON.parse(localStorage.getItem(k)||'[]')}catch(e){}a=a.filter(t=>now-t<windowMs);if(a.length>=max)throw new Error('Too many requests. Please wait and try again.');a.push(now);localStorage.setItem(k,JSON.stringify(a));return true}
 async function securityPrecheck(file,kind){
   mphPublicRateLimit(kind==='pdf'?'upload-pdf':kind,8,60000);
