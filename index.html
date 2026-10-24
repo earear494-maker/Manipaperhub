@@ -1270,34 +1270,37 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </script>
  
 <script>
+
 const STORAGE_API = "https://nothing-tropical-poems-performing.trycloudflare.com";
 
 async function loadApprovedPapers() {
   try {
     const response = await fetch(`${STORAGE_API}/api/papers`);
-    if (!response.ok) throw new Error("API request failed");
+
+    if (!response.ok) {
+      throw new Error("API request failed: " + response.status);
+    }
 
     const storagePapers = await response.json();
 
-    if (!Array.isArray(window.papers)) {
-      console.error("Main Paper Hub papers list is not ready.");
+    if (!Array.isArray(papers)) {
+      console.error("Papers list is not available.");
       return;
     }
 
     storagePapers.forEach(p => {
       const paperId = -Number(p.id);
 
-      // Avoid adding the same storage paper twice.
-      if (window.papers.some(existing => existing.id === paperId)) {
+      if (papers.some(existing => Number(existing.id) === paperId)) {
         return;
       }
 
-      window.papers.push({
+      papers.push({
         id: paperId,
         exam: p.title || "Question Paper",
         university: p.institute || "",
         course: p.course || "",
-        semester: p.semester || "",
+        semester: String(p.semester || ""),
         subject: p.subject || "",
         year: String(p.year || ""),
         fileName: (p.title || "Question Paper") + ".pdf",
@@ -1306,17 +1309,16 @@ async function loadApprovedPapers() {
       });
     });
 
-    if (typeof filterPapers === "function") {
-      filterPapers();
-    }
+    filterPapers();
 
-    console.log("Approved storage papers loaded:", storagePapers);
+    console.log("Storage papers loaded:", storagePapers.length);
   } catch (error) {
     console.error("Paper loading error:", error);
   }
 }
 
 loadApprovedPapers();
+
 </script>
 </body>
 </html>
