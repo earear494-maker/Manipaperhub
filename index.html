@@ -730,26 +730,31 @@ const today=new Date().toISOString().slice(0,10);
 const active=ads.filter(a=>(a.placement||"download")==="popup"&&a.views<a.maxViews&&today>=a.start&&today<=a.end);
 return active[0]||null;
 }
-function startAdPopupLoop(){
-clearInterval(adRepeatTimer);
-// Page popup: wait 3 minutes after page load, then repeat every 3 minutes.
-adRepeatTimer=setTimeout(()=>{
-  const runPopup=()=>{
-    if (
-  document.getElementById("adModal").style.display !== "block" &&
-  !pendingPaper
-) {
-  const ad = getPopupAd();
-  if (ad) showAd(ad, true);
+
+function startAdPopupLoop() {
+  clearTimeout(adRepeatTimer);
+  clearInterval(adRepeatTimer);
+
+  adRepeatTimer = setTimeout(() => {
+    const runPopup = () => {
+      const modal = document.getElementById("adModal");
+
+      // Popup ਨਾ ਦਿਖਾਓ ਜੇ Ad ਜਾਂ Share window ਖੁੱਲ੍ਹੀ ਹੈ
+      if (!modal || modal.style.display === "block") {
+        return;
+      }
+
+      const ad = getPopupAd();
+      if (ad) {
+        showAd(ad, true);
+      }
+    };
+
+    runPopup();
+    adRepeatTimer = setInterval(runPopup, 180000);
+  }, 180000);
 }
-      const ad=getPopupAd();
-      if(ad)showAd(ad,true);
-    }
-  };
-  runPopup();
-  adRepeatTimer=setInterval(runPopup,180000);
-},180000);
-}
+
 function showShareGate(){
 shareCount=0;document.getElementById("modalTitle").textContent="📲 Share to unlock PDF";document.getElementById("modalAd").innerHTML="";document.getElementById("countdown").textContent="No advertisement is available right now";document.getElementById("continueBtn").style.display="none";document.getElementById("shareGate").style.display="block";document.getElementById("downloadUnlock").style.display="none";updateShareProgress();document.getElementById("adModal").style.display="block";
 }
