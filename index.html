@@ -1122,7 +1122,73 @@ async function submitStudentPaper() {
   }
 }
 
-async function submitRequestedPaper(input){const id=window.selectedPaperRequestId;if(!id||!input.files||!input.files[0])return;const file=input.files[0];try{await securityPrecheck(file,'pdf')}catch(e){toast(e.message);input.value='';return}const rs=await getAll('requests');const r=rs.find(x=>x.id===id);if(!r)return;try{const fileData=await fileToDataURL(file),extractedQuestions=await extractPdfQuestions(fileData);await put('submissions',{requestId:id,university:r.university,course:r.course,semester:r.semester||'',subject:r.subject,year:r.year||'',exam:r.subject+' — '+(r.year||'Question Paper'),fileName:file.name,fileData,extractedQuestions,submittedBy:'Student',created:Date.now(),status:'Pending'});if(r.status==='Pending'){r.status='In Progress';await put('requests',r)};toast('📤 Paper submitted for admin review');renderRequests()}catch(e){toast('Upload failed: '+e.message)}finally{input.value='';window.selectedPaperRequestId=null}}
+
+async function submitRequestedPaper(input) {
+  const id = window.selectedPaperRequestId;
+  const file = input?.files?.[0];
+
+  if (!id || !file) return;
+
+  try {
+    await securityPrecheck(file, "pdf");
+
+    if (file.size > 100 * 1024 * 1024) {
+      throw new Error("PDF must be smaller than 100 MB.");
+    }
+
+    // Load the selected request from the Node.js API
+    const apiBase =
+  "https://displayed-isolated-milton-gnu.trycloudflare.com";
+
+    const requestsResponse = await fetch(`${apiBase}/api/requests`);
+
+    if (!requestsResponse.ok) {
+      throw new Error("Could not load paper requests.");
+    }
+
+    const requests = await requestsResponse.json();
+    const request = requests.find(
+      item => Number(item.id) === Number(id)
+    );
+
+    if (!request) {
+      throw new Error("Paper request not found. Refresh and try again.");
+    }
+
+    // Upload PDF to the Node.js server for admin approval
+    const formData = new FormData();
+    formData.append(
+      "title",
+      `${request.subject} — ${request.year || "Question Paper"}`
+    );
+    formData.append("institute", request.institute || "");
+    formData.append("course", request.course || "");
+    formData.append("semester", request.semester || "");
+    formData.append("subject", request.subject || "");
+    formData.append("year", request.year || "");
+    formData.append("paper", file);
+
+    const uploadResponse = await fetch(`${apiBase}/api/papers`, {
+      method: "POST",
+      body: formData
+    });
+
+    const result = await uploadResponse.json().catch(() => ({}));
+
+    if (!uploadResponse.ok) {
+      throw new Error(result.error || `Upload failed (${uploadResponse.status})`);
+    }
+
+    toast("📤 PDF submitted for admin approval.");
+
+  } catch (error) {
+    console.error("Requested paper upload error:", error);
+    toast("Upload failed: " + error.message);
+  } finally {
+    input.value = "";
+    window.selectedPaperRequestId = null;
+  }
+}
 
 async function loadAlertCourses(){const u=document.getElementById('alertInstitute')?.value||'';fillCourseSelect('alertCourse',u)}
 function savePersonalAlert(){const u=document.getElementById('alertInstitute')?.value||'',c=document.getElementById('alertCourse')?.value||'';if(!u||!c){toast('Please select Institute and Course');return}localStorage.setItem('mphPersonalAlert',JSON.stringify({institute:u,course:c,enabled:true}));const el=document.getElementById('personalAlertStatus');if(el)el.textContent=`🔔 Alert saved for ${u} + ${c}`;toast('🔔 Personalized alert saved')}
