@@ -824,7 +824,64 @@ async function buildRepeatedQuestionsPage(p){
     return 'data:application/pdf;base64,'+btoa(bin);
   }catch(e){console.warn('Repeated-question PDF page skipped',e);return p?.fileData||''}
 }
-async function downloadPaper(p){trackEvent("paperDownloads");addDownloadHistory(p.id);recordAnalyticsDetail("paperDownload",{paperId:p.id,university:p.university||"",course:p.course||"",semester:p.semester||"",subject:p.subject||"",year:p.year||"",paper:p.exam||p.fileName||"Question Paper"});const data=await buildRepeatedQuestionsPage(p);const a=document.createElement("a");a.href=data;a.download=p.fileName||"question-paper.pdf";document.body.appendChild(a);a.click();a.remove();toast("📥 PDF download started with Most Repeated Questions page")}
+
+async function downloadPaper(p) {
+  if (!p) return;
+
+  try {
+    trackEvent("paperDownloads");
+    addDownloadHistory(p.id);
+
+    recordAnalyticsDetail("paperDownload", {
+      paperId: p.id,
+      university: p.university || "",
+      course: p.course || "",
+      semester: p.semester || "",
+      subject: p.subject || "",
+      year: p.year || "",
+      paper: p.exam || p.fileName || "Question Paper"
+    });
+
+    // Node.js Storage paper
+    if (Number(p.id) < 0 && p.fileData) {
+      const response = await fetch(p.fileData);
+      if (!response.ok) {
+        throw new Error("PDF request failed: " + response.status);
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+
+      a.href = url;
+      a.download = p.fileName || "question-paper.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      toast("PDF download started.");
+      return;
+    }
+
+    // Existing papers
+    const data = await buildRepeatedQuestionsPage(p);
+    if (!data) throw new Error("PDF file not available.");
+
+    const a = document.createElement("a");
+    a.href = data;
+    a.download = p.fileName || "question-paper.pdf";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    toast("📥 PDF download started with Most Repeated Questions page");
+  } catch (error) {
+    console.error("PDF download error:", error);
+    toast("PDF download failed. Please try again.");
+  }
+}
+
 async function slugifySEO(v){return String(v||"").toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")}
 function seoParam(name){return new URLSearchParams(window.location.search).get(name)||""}
 function setupSEO(){
