@@ -735,7 +735,13 @@ clearInterval(adRepeatTimer);
 // Page popup: wait 3 minutes after page load, then repeat every 3 minutes.
 adRepeatTimer=setTimeout(()=>{
   const runPopup=()=>{
-    if(document.getElementById("adModal").style.display!=="block"){
+    if (
+  document.getElementById("adModal").style.display !== "block" &&
+  !pendingPaper
+) {
+  const ad = getPopupAd();
+  if (ad) showAd(ad, true);
+}
       const ad=getPopupAd();
       if(ad)showAd(ad,true);
     }
