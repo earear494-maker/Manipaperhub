@@ -710,14 +710,24 @@ function applyDarkMode(){document.body.classList.toggle('dark-mode',localStorage
 function toggleDarkMode(){localStorage.setItem('mphDarkMode',document.body.classList.contains('dark-mode')?'0':'1');applyDarkMode()}
 function setupAppFeatures(){if(!document.getElementById('darkToggle')){const b=document.createElement('button');b.id='darkToggle';b.className='dark-toggle';b.onclick=toggleDarkMode;document.body.appendChild(b)}if(!document.getElementById('offlineBadge')){const b=document.createElement('div');b.id='offlineBadge';b.className='offline-badge';b.textContent='⚡ Offline mode';document.body.appendChild(b)}const update=()=>document.getElementById('offlineBadge')?.classList.toggle('show',!navigator.onLine);window.addEventListener('online',update);window.addEventListener('offline',update);update();applyDarkMode();updateAlertUI();if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}}
 
-async function requestDownload(id){
-pendingPaper=papers.find(p=>p.id===id);if(!pendingPaper)return;addRecent(id);
-const available=getActiveAds(pendingPaper.exam);
-if(!available.length){showShareGate();return}
-const ad=available[0];
-// Count a view only after the ad countdown is completed.
-showAd(ad);
+
+async function requestDownload(id) {
+  pendingPaper = papers.find(p => p.id === id);
+  if (!pendingPaper) return;
+
+  addRecent(id);
+
+  const available = getActiveAds(pendingPaper.exam);
+
+  if (!available.length) {
+    showShareGate();
+    return;
+  }
+
+  const ad = available[0];
+  showAd(ad);
 }
+
 async function showAd(a,autoPopup=false){
 if(!a)return;trackEvent('adImpressions');a.impressions=(a.impressions||0)+1;put('ads',a).catch(()=>{});
 document.getElementById("modalTitle").textContent=a.title||"Advertisement";const c=document.getElementById("modalAd");
