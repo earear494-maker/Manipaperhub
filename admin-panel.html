@@ -656,10 +656,9 @@ async function renderPapers() {
         ? `<button class="info-btn" onclick="openPaper(${Number(p.id)})">Open PDF</button>`
         : `<button class="info-btn" onclick="openServerPaper(${Number(p.id)})">Open PDF</button>`;
 
-      const action = p._source === "local"
-        ? `<button class="danger-btn" onclick="deletePaper(${Number(p.id)})">Delete</button>`
-        : "Approved on server";
-
+   const action = p._source === "local"
+  ? `<button class="danger-btn" onclick="deletePaper(${Number(p.id)})">Delete</button>`
+  : `<button class="danger-btn" onclick="deleteServerPaper(${Number(p.id)})">Delete</button>`;
       return `<tr>
         <td>${i + 1}</td>
         <td>${esc(institute)}</td>
