@@ -466,8 +466,35 @@ const semesterOptions=["1","2","3","4","5","6","7","8","9","10"];
 
 
 function openDB(){return new Promise((resolve,reject)=>{const r=indexedDB.open(DB_NAME,DB_VERSION);r.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains("papers"))d.createObjectStore("papers",{keyPath:"id",autoIncrement:true});if(!d.objectStoreNames.contains("ads"))d.createObjectStore("ads",{keyPath:"id",autoIncrement:true});if(!d.objectStoreNames.contains("jobs"))d.createObjectStore("jobs",{keyPath:"id",autoIncrement:true});if(!d.objectStoreNames.contains("requests"))d.createObjectStore("requests",{keyPath:"id",autoIncrement:true});if(!d.objectStoreNames.contains("submissions"))d.createObjectStore("submissions",{keyPath:"id",autoIncrement:true});if(!d.objectStoreNames.contains("analyticsEvents"))d.createObjectStore("analyticsEvents",{keyPath:"id",autoIncrement:true})};r.onsuccess=e=>{db=e.target.result;resolve(db)};r.onerror=()=>reject(r.error)})}
-function getAll(store){return new Promise((res,rej)=>{const r=db.transaction(store).objectStore(store).getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
-function put(store,obj){return new Promise((res,rej)=>{const r=db.transaction(store,"readwrite").objectStore(store).put(obj);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+
+async function getAll(store) {
+  const database = db || await openDB();
+
+  return new Promise((resolve, reject) => {
+    const request = database
+      .transaction(store, "readonly")
+      .objectStore(store)
+      .getAll();
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function put(store, obj) {
+  const database = db || await openDB();
+
+  return new Promise((resolve, reject) => {
+    const request = database
+      .transaction(store, "readwrite")
+      .objectStore(store)
+      .put(obj);
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
 
 function toggleMenu(){document.getElementById("navLinks").classList.toggle("show")}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
