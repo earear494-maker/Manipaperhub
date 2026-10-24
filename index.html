@@ -942,7 +942,7 @@ async function renderRequests() {
 
   try {
     const response = await fetch(
-      'https://displayed-isolated-milton-gnu.trycloudflare.com/api/requests'
+      'https://responded-funny-builds-scenes.trycloudflare.com/api/requests'
     );
 
     if (!response.ok) {
@@ -1010,7 +1010,7 @@ async function renderRequests() {
 async function chooseRequestedPaper(id) {
   try {
     const response = await fetch(
-      'https://displayed-isolated-milton-gnu.trycloudflare.com/api/requests'
+      'https://responded-funny-builds-scenes.trycloudflare.com/api/requests'
     );
 
     if (!response.ok) {
@@ -1095,7 +1095,7 @@ async function submitStudentPaper() {
     formData.append("paper", file);
 
     const response = await fetch(
-      "https://displayed-isolated-milton-gnu.trycloudflare.com/api/papers",
+      "https://responded-funny-builds-scenes.trycloudflare.com/api/papers",
       {
         method: "POST",
         body: formData
@@ -1138,7 +1138,7 @@ async function submitRequestedPaper(input) {
 
     // Load the selected request from the Node.js API
     const apiBase =
-  "https://displayed-isolated-milton-gnu.trycloudflare.com";
+  "https://responded-funny-builds-scenes.trycloudflare.com";
 
     const requestsResponse = await fetch(`${apiBase}/api/requests`);
 
