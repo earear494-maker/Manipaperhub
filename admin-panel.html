@@ -689,35 +689,40 @@ async function openPaper(id) {
 }
 
 async function openServerPaper(id) {
+  const url = `${STORAGE_API}/api/papers/${encodeURIComponent(id)}/download`;
+
   try {
-    const response = await fetch(`${STORAGE_API}/api/papers`);
-    if (!response.ok) throw new Error("Could not load papers.");
+    const response = await fetch(url, {
+      method: "GET",
+      credentials: "include"
+    });
 
-    const papers = await response.json();
-    const paper = papers.find(p => Number(p.id) === Number(id));
-    if (!paper) throw new Error("Paper not found.");
+    if (!response.ok) {
+      let message = "PDF ਨਹੀਂ ਖੁੱਲ੍ਹੀ।";
 
-    const fileUrl = paper.fileUrl || paper.url || paper.filePath;
+      try {
+        const result = await response.json();
+        if (result.error) message = result.error;
+      } catch (_) {}
 
-    if (!fileUrl) {
-      alert("The API does not provide a PDF URL yet.");
-      return;
+      throw new Error(message);
     }
 
-    const url = fileUrl.startsWith("http")
-      ? fileUrl
-      : `${STORAGE_API}/${fileUrl.replace(/^\/+/, "")}`;
+    const blob = await response.blob();
+    const pdfUrl = URL.createObjectURL(blob);
+    const newTab = window.open(pdfUrl, "_blank");
 
-    window.open(url, "_blank", "noopener");
+    if (!newTab) {
+      const link = document.createElement("a");
+      link.href = pdfUrl;
+      link.download = `paper-${id}.pdf`;
+      link.click();
+    }
+
+    setTimeout(() => URL.revokeObjectURL(pdfUrl), 60000);
+
   } catch (error) {
-    alert("Could not open PDF: " + error.message);
-  }
-}
-
-async function deletePaper(id) {
-  if (confirm("Delete this paper?")) {
-    await remove("papers", id);
-    renderPapers();
+    alert("PDF ਖੋਲ੍ਹਣ ਵਿੱਚ ਸਮੱਸਿਆ: " + error.message);
   }
 }
 
