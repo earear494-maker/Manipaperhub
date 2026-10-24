@@ -721,6 +721,34 @@ async function deletePaper(id) {
   }
 }
 
+  
+async function deleteServerPaper(id) {
+  if (!confirm("Are you sure you want to permanently delete this approved paper?")) {
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `${STORAGE_API}/api/admin/papers/${id}`,
+      {
+        method: "DELETE",
+        credentials: "include"
+      }
+    );
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(result.error || `Delete failed (${response.status})`);
+    }
+
+    alert("Paper deleted successfully.");
+    await renderPapers();
+  } catch (error) {
+    alert("Could not delete paper: " + error.message);
+  }
+}
+
 async function extractPdfTextAndPages(fileData){
  try{
   if(!window.pdfjsLib) return {pages:0,text:""};
