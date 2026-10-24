@@ -616,12 +616,111 @@ async function reviewPendingPaper(id, action) {
   }
 }
 
-async function renderPapers(){
-const rows=document.getElementById("papersTableBody");if(!db)return;const a=await getAll("papers");
-rows.innerHTML=a.length?a.map((p,i)=>`<tr><td>${i+1}</td><td>${esc(p.university)}</td><td>${esc(p.course)}</td><td>Sem ${esc(p.semester||"")}</td><td>${esc(p.subject)}</td><td>${p.year}</td><td>${esc(p.exam)}</td><td><button class="info-btn" onclick="openPaper(${p.id})">Open PDF</button></td><td><button class="danger-btn" onclick="deletePaper(${p.id})">Delete</button></td></tr>`).join(""):'<tr><td colspan="9" class="empty">No papers uploaded yet.</td></tr>';
+
+async function renderPapers() {
+  const rows = document.getElementById("papersTableBody");
+  if (!rows) return;
+
+  rows.innerHTML = '<tr><td colspan="9">Loading papers...</td></tr>';
+
+  try {
+    const localPapers = db ? await getAll("papers") : [];
+    let serverPapers = [];
+
+    try {
+      const response = await fetch(`${STORAGE_API}/api/papers`);
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data)) serverPapers = data;
+      }
+    } catch (error) {
+      console.error("Server papers error:", error);
+    }
+
+    const allPapers = [
+      ...localPapers.map(p => ({ ...p, _source: "local" })),
+      ...serverPapers.map(p => ({ ...p, _source: "server" }))
+    ];
+
+    if (!allPapers.length) {
+      rows.innerHTML =
+        '<tr><td colspan="9">No papers uploaded yet.</td></tr>';
+      return;
+    }
+
+    rows.innerHTML = allPapers.map((p, i) => {
+      const institute = p.university || p.institute || "";
+      const exam = p.exam || p.title || p.subject || "";
+
+      const openButton = p._source === "local"
+        ? `<button class="info-btn" onclick="openPaper(${Number(p.id)})">Open PDF</button>`
+        : `<button class="info-btn" onclick="openServerPaper(${Number(p.id)})">Open PDF</button>`;
+
+      const action = p._source === "local"
+        ? `<button class="danger-btn" onclick="deletePaper(${Number(p.id)})">Delete</button>`
+        : "Approved on server";
+
+      return `<tr>
+        <td>${i + 1}</td>
+        <td>${esc(institute)}</td>
+        <td>${esc(p.course || "")}</td>
+        <td>Sem ${esc(p.semester || "")}</td>
+        <td>${esc(p.subject || "")}</td>
+        <td>${esc(String(p.year || ""))}</td>
+        <td>${esc(exam)}</td>
+        <td>${openButton}</td>
+        <td>${action}</td>
+      </tr>`;
+    }).join("");
+  } catch (error) {
+    console.error(error);
+    rows.innerHTML = '<tr><td colspan="9">Could not load papers.</td></tr>';
+  }
 }
-async function openPaper(id){const p=(await getAll("papers")).find(x=>x.id===id);if(!p)return;const a=document.createElement("a");a.href=p.fileData;a.target="_blank";a.click()}
-async function deletePaper(id){if(confirm("Delete this paper?")){await remove("papers",id);renderPapers()}}
+
+async function openPaper(id) {
+  const p = (await getAll("papers")).find(x => x.id === id);
+  if (!p) return;
+
+  const a = document.createElement("a");
+  a.href = p.fileData;
+  a.target = "_blank";
+  a.rel = "noopener";
+  a.click();
+}
+
+async function openServerPaper(id) {
+  try {
+    const response = await fetch(`${STORAGE_API}/api/papers`);
+    if (!response.ok) throw new Error("Could not load papers.");
+
+    const papers = await response.json();
+    const paper = papers.find(p => Number(p.id) === Number(id));
+    if (!paper) throw new Error("Paper not found.");
+
+    const fileUrl = paper.fileUrl || paper.url || paper.filePath;
+
+    if (!fileUrl) {
+      alert("The API does not provide a PDF URL yet.");
+      return;
+    }
+
+    const url = fileUrl.startsWith("http")
+      ? fileUrl
+      : `${STORAGE_API}/${fileUrl.replace(/^\/+/, "")}`;
+
+    window.open(url, "_blank", "noopener");
+  } catch (error) {
+    alert("Could not open PDF: " + error.message);
+  }
+}
+
+async function deletePaper(id) {
+  if (confirm("Delete this paper?")) {
+    await remove("papers", id);
+    renderPapers();
+  }
+}
 
 async function extractPdfTextAndPages(fileData){
  try{
