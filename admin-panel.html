@@ -688,17 +688,16 @@ async function openPaper(id) {
   a.click();
 }
 
+
 async function openServerPaper(id) {
-  const url = `${STORAGE_API}/api/papers/${encodeURIComponent(id)}/download`;
+  const url =
+    `${STORAGE_API}/api/papers/${encodeURIComponent(id)}/download`;
 
   try {
-    const response = await fetch(url, {
-      method: "GET",
-      credentials: "include"
-    });
+    const response = await fetch(url);
 
     if (!response.ok) {
-      let message = "PDF ਨਹੀਂ ਖੁੱਲ੍ਹੀ।";
+      let message = `PDF ਖੋਲ੍ਹਣ ਵਿੱਚ ਅਸਫਲ (${response.status})`;
 
       try {
         const result = await response.json();
@@ -710,21 +709,20 @@ async function openServerPaper(id) {
 
     const blob = await response.blob();
     const pdfUrl = URL.createObjectURL(blob);
-    const newTab = window.open(pdfUrl, "_blank");
 
-    if (!newTab) {
-      const link = document.createElement("a");
-      link.href = pdfUrl;
-      link.download = `paper-${id}.pdf`;
-      link.click();
-    }
+    const link = document.createElement("a");
+    link.href = pdfUrl;
+    link.download = `paper-${id}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
 
     setTimeout(() => URL.revokeObjectURL(pdfUrl), 60000);
-
   } catch (error) {
-    alert("PDF ਖੋਲ੍ਹਣ ਵਿੱਚ ਸਮੱਸਿਆ: " + error.message);
+    alert("PDF ਡਾਊਨਲੋਡ ਨਹੀਂ ਹੋਈ: " + error.message);
   }
 }
+
 
   
 async function deleteServerPaper(id) {
