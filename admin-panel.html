@@ -48,7 +48,64 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 <style>
 .search-dropdown{display:none;position:absolute;left:0;right:0;top:calc(100% + 4px);max-height:260px;overflow-y:auto;background:#fff;border:1px solid #cbd5e1;border-radius:10px;box-shadow:0 10px 25px rgba(15,23,42,.15);z-index:9999;padding:5px}.search-dropdown.open{display:block}.search-option{display:block;width:100%;text-align:left;border:0;background:#fff;padding:10px 12px;border-radius:7px;cursor:pointer;font:inherit}.search-option:hover{background:#f1f5f9}.form-group{position:relative}</style>
 
-<style id="languageControlStyle">#languageControl{font-family:Arial,sans-serif}@media(max-width:700px){#languageControl{top:8px;right:8px}.navbar{padding-right:145px}}</style>
+
+<style id="languageControlStyle">
+#languageControl {
+  font-family: Arial, sans-serif;
+}
+
+@media (max-width: 700px) {
+  #languageControl {
+    top: 8px;
+    right: 8px;
+  }
+
+  .navbar {
+    padding-right: 145px;
+  }
+}
+
+/* Advertisement upload form design */
+.ad-upload-card {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.ad-upload-card .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+  align-items: start;
+}
+
+.ad-upload-card .form-grid > div {
+  min-width: 0;
+}
+
+.ad-upload-card .form-grid .full {
+  grid-column: 1 / -1;
+}
+
+.ad-upload-card input,
+.ad-upload-card select {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .ad-upload-card .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ad-upload-card .form-grid .full {
+    grid-column: auto;
+  }
+}
+</style>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body><section id="adminSecurityCenter" class="container" style="margin:20px auto;max-width:1200px" style="display:none !important"><div style="padding:20px;border:1px solid #bfdbfe;border-left:5px solid #2563eb;border-radius:14px;background:linear-gradient(135deg,#eff6ff,#fff);box-shadow:0 8px 24px rgba(37,99,235,.08)"><h2 style="margin:0 0 8px">🛡️ Security & Backup Center</h2><p style="margin:0 0 12px;color:#475569">Production security controls and backup requirements.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge">🔐 Secure Admin Auth</span><span class="badge">🚦 Rate Limiting</span><span class="badge">📄 File Validation</span><span class="badge">🦠 Malware Scan</span><span class="badge">💾 Daily Backup</span><span class="badge">☁️ Off-site Backup</span><span class="badge">🔐 Encrypted Backup</span><span class="badge">🔄 Restore Testing</span></div><div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px"><div style="padding:12px;background:#fff;border:1px solid #dbeafe;border-radius:10px"><strong>💾 Backup</strong><br><small>Daily database/PDF backup, weekly full backup, encrypted off-site copy and verified restore process.</small></div><div style="padding:12px;background:#fff;border:1px solid #dbeafe;border-radius:10px"><strong>🛡️ Protection</strong><br><small>Server-side validation, malware quarantine, secure authentication, rate limits and abuse monitoring.</small></div></div></div></section>
