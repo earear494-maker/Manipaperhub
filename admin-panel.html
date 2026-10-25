@@ -1216,17 +1216,103 @@ async function uploadAdvertisement() {
     );
   }
 }
-async function uploadPopupAdvertisement(){
-const f=document.getElementById("popupAdFile").files[0];if(!f) return alert("Select an advertisement file.");
-try{await securityPrecheck(f, f.type.startsWith("image/")?"image":"video");}catch(e){return alert(e.message)}
-const title=document.getElementById("popupAdTitle").value.trim(),type=document.getElementById("popupAdType").value,file=document.getElementById("popupAdFile").files[0],link=document.getElementById("popupAdLink").value.trim(),max=Number(document.getElementById("popupMaxImpressions").value),maxClicks=Math.max(0,Number(document.getElementById("popupMaxClicks").value)||0),
-examDate=document.getElementById("popupExamDate").value,start=document.getElementById("popupStartDate").value,end=document.getElementById("popupEndDate").value;
-if(!title||!type||!file||!max||!start||!end||!examDate||maxClicks<0)return alert("Please fill all page popup advertisement fields.");
-if(end<start)return alert("End date cannot be before start date.");
-if(type==="image"&&!file.type.startsWith("image/"))return alert("Select an image file.");if(type==="video"&&!file.type.startsWith("video/"))return alert("Select a video file.");
-await add("ads",{title,type,placement:"popup",fileData:await fileToDataURL(file),fileName:file.name,link,maxViews:max,maxImpressions:max,views:0,exam:"ALL",examDate,start,end,created:Date.now(),impressions:0,clicks:0,maxClicks});
-alert("✅ Page popup advertisement published.");["popupAdTitle","popupAdLink","popupMaxImpressions","popupMaxClicks","popupExamDate","popupStartDate","popupEndDate"].forEach(id=>document.getElementById(id).value="");document.getElementById("popupAdFile").value="";document.getElementById("popupAdType").value="";renderAds();
+
+async function uploadPopupAdvertisement() {
+  const file = document.getElementById("popupAdFile").files[0];
+  if (!file) return alert("Select an advertisement file.");
+
+  try {
+    await securityPrecheck(
+      file,
+      file.type.startsWith("image/") ? "image" : "video"
+    );
+  } catch (e) {
+    return alert(e.message);
+  }
+
+  const title = document.getElementById("popupAdTitle").value.trim();
+  const type = document.getElementById("popupAdType").value;
+  const max = Number(document.getElementById("popupMaxImpressions").value);
+  const maxClicks = Math.max(
+    0,
+    Number(document.getElementById("popupMaxClicks").value) || 0
+  );
+  const start = document.getElementById("popupStartDate").value;
+  const end = document.getElementById("popupEndDate").value;
+  const examDate = document.getElementById("popupExamDate").value;
+
+  if (!title || !type || !max || !start || !end || !examDate) {
+    return alert("Please fill all page popup advertisement fields.");
+  }
+  if (end < start) {
+    return alert("End date cannot be before start date.");
+  }
+  if (type === "image" && !file.type.startsWith("image/")) {
+    return alert("Select an image file.");
+  }
+  if (type === "video" && !file.type.startsWith("video/")) {
+    return alert("Select a video file.");
+  }
+
+  const formData = new FormData();
+  formData.append("adFile", file);
+  formData.append("title", title);
+  formData.append("adType", type);
+  formData.append("placement", "popup");
+  formData.append("maxImpressions", String(max));
+  formData.append("maxClicks", String(maxClicks));
+  formData.append("startDate", start);
+  formData.append("endDate", end);
+
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:4000/api/admin/ads",
+      {
+        method: "POST",
+        credentials: "include",
+        body: formData
+      }
+    );
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      return alert(
+        "Popup advertisement upload failed: " +
+        (result.error || "HTTP " + response.status) +
+        "\nCheck that you are logged in to the Node.js Admin API."
+      );
+    }
+
+    alert(
+      "Popup advertisement uploaded to the server.\n" +
+      "ID: " + result.id +
+      "\nFilename: " + result.filename +
+      "\nNote: link and exam settings are not yet saved by this API."
+    );
+
+    [
+      "popupAdTitle",
+      "popupAdLink",
+      "popupMaxImpressions",
+      "popupMaxClicks",
+      "popupExamDate",
+      "popupStartDate",
+      "popupEndDate"
+    ].forEach(id => {
+      document.getElementById(id).value = "";
+    });
+
+    document.getElementById("popupAdFile").value = "";
+    document.getElementById("popupAdType").value = "";
+  } catch (error) {
+    alert(
+      "Could not contact the Node.js API.\n" +
+      "Make sure the API is running on this computer."
+    );
+  }
 }
+
 async function postJob(){const title=document.getElementById("jobTitle").value.trim(),category=document.getElementById("jobCategory").value,company=document.getElementById("jobCompany").value.trim(),location=document.getElementById("jobLocation").value.trim(),type=document.getElementById("jobType").value,salary=document.getElementById("jobSalary").value.trim(),lastDate=document.getElementById("jobLastDate").value,link=document.getElementById("jobLink").value.trim(),description=document.getElementById("jobDescription").value.trim();if(!title||!company||!description)return alert("Please enter Job Title, Company and Job Description.");if(link&&!/^https?:\/\//i.test(link))return alert("Apply Link must start with http:// or https://");await add("jobs",{title,category,company,location,type,salary,lastDate,link,description,created:Date.now()});["jobTitle","jobCompany","jobLocation","jobSalary","jobLastDate","jobLink","jobDescription"].forEach(id=>document.getElementById(id).value="");document.getElementById("jobType").value="";renderJobs();alert("✅ Job posted successfully.");}
 async function renderRequests(){const rows=document.getElementById('requestsTableBody');if(!rows)return;const rs=await getAll('requests');rs.sort((a,b)=>(b.created||0)-(a.created||0));rows.innerHTML=rs.length?rs.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.subject||'')}</td><td>${esc(r.university||'')}</td><td>${esc(r.course||'')}</td><td>${esc(r.semester||'')}</td><td>${esc(r.year||'')}</td><td>${esc(r.name||'Anonymous')}</td><td><select onchange="updateRequestStatus(${r.id},this.value)"><option ${r.status==='Pending'?'selected':''}>Pending</option><option ${r.status==='In Progress'?'selected':''}>In Progress</option><option ${r.status==='Completed'?'selected':''}>Completed</option><option ${r.status==='Rejected'?'selected':''}>Rejected</option></select></td><td><button class="danger-btn" onclick="deleteRequest(${r.id})">Delete</button></td></tr>`).join(''):'<tr><td colspan="9" class="empty">No paper requests yet.</td></tr>'}
 async function updateRequestStatus(id,status){const rs=await getAll('requests');const r=rs.find(x=>x.id===id);if(!r)return;r.status=status;await put('requests',r);renderRequests()}
