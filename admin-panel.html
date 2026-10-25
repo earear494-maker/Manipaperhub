@@ -1110,19 +1110,111 @@ loadNoteYears();
 function changeExamSelectMode(){document.getElementById("individualExamSection").style.display=document.getElementById("individualExam").checked?"block":"none"}
 function changeEditExamMode(){document.getElementById("editIndividualExamSection").style.display=document.getElementById("editIndividualExam").checked?"block":"none"}
 
-async function uploadAdvertisement(){
-const f=document.getElementById("adFile").files[0];if(!f) return alert("Select an advertisement file.");
-try{await securityPrecheck(f, f.type.startsWith("image/")?"image":"video");}catch(e){return alert(e.message)}
-const title=document.getElementById("adTitle").value.trim(),type=document.getElementById("adType").value,file=document.getElementById("adFile").files[0],link=document.getElementById("adLink").value.trim(),max=Number(document.getElementById("maxImpressions").value),maxClicks=Math.max(0,Number(document.getElementById("maxClicks").value)||0),
-examDate=document.getElementById("examDate").value,start=document.getElementById("startDate").value,end=document.getElementById("endDate").value;
-const mode=document.querySelector('input[name="examSelectMode"]:checked').value,exam=mode==="ALL"?"ALL":document.getElementById("individualExamName").value.trim();
-if(!title||!type||!file||!max||!start||!end||!examDate||maxClicks<0)return alert("Please fill all advertisement fields.");
-if(mode==="INDIVIDUAL"&&!exam)return alert("Enter individual exam name.");
-if(end<start)return alert("End date cannot be before start date.");
-if(type==="image"&&!file.type.startsWith("image/"))return alert("Select an image file.");if(type==="video"&&!file.type.startsWith("video/"))return alert("Select a video file.");
-const placement=document.getElementById("adPlacement").value;
-await add("ads",{title,type,placement,fileData:await fileToDataURL(file),fileName:file.name,link,maxViews:max,maxImpressions:max,maxClicks,views:0,exam,examDate,start,end,created:Date.now(),impressions:0,clicks:0});
-alert("✅ Advertisement published.");["adTitle","adLink","maxImpressions","maxClicks","examDate","startDate","endDate","individualExamName"].forEach(id=>document.getElementById(id).value="");document.getElementById("adFile").value="";document.getElementById("allExams").checked=true;changeExamSelectMode();renderAds();
+async function uploadAdvertisement() {
+  const file = document.getElementById("adFile").files[0];
+  if (!file) return alert("Select an advertisement file.");
+
+  try {
+    await securityPrecheck(
+      file,
+      file.type.startsWith("image/") ? "image" : "video"
+    );
+  } catch (e) {
+    return alert(e.message);
+  }
+
+  const title = document.getElementById("adTitle").value.trim();
+  const type = document.getElementById("adType").value;
+  const link = document.getElementById("adLink").value.trim();
+  const max = Number(document.getElementById("maxImpressions").value);
+  const maxClicks = Math.max(
+    0,
+    Number(document.getElementById("maxClicks").value) || 0
+  );
+  const examDate = document.getElementById("examDate").value;
+  const start = document.getElementById("startDate").value;
+  const end = document.getElementById("endDate").value;
+  const mode = document.querySelector(
+    'input[name="examSelectMode"]:checked'
+  ).value;
+  const exam = mode === "ALL"
+    ? "ALL"
+    : document.getElementById("individualExamName").value.trim();
+  const placement = document.getElementById("adPlacement").value;
+
+  if (!title || !type || !max || !start || !end || !examDate) {
+    return alert("Please fill all advertisement fields.");
+  }
+  if (mode === "INDIVIDUAL" && !exam) {
+    return alert("Enter individual exam name.");
+  }
+  if (end < start) {
+    return alert("End date cannot be before start date.");
+  }
+  if (type === "image" && !file.type.startsWith("image/")) {
+    return alert("Select an image file.");
+  }
+  if (type === "video" && !file.type.startsWith("video/")) {
+    return alert("Select a video file.");
+  }
+  if (!["download", "popup"].includes(placement)) {
+    return alert("Invalid advertisement placement.");
+  }
+
+  const formData = new FormData();
+  formData.append("adFile", file);
+  formData.append("title", title);
+  formData.append("adType", type);
+  formData.append("placement", placement);
+  formData.append("maxImpressions", String(max));
+  formData.append("maxClicks", String(maxClicks));
+  formData.append("startDate", start);
+  formData.append("endDate", end);
+
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:4000/api/admin/ads",
+      {
+        method: "POST",
+        credentials: "include",
+        body: formData
+      }
+    );
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      return alert(
+        "Advertisement upload failed: " +
+        (result.error || "HTTP " + response.status) +
+        "\nCheck that you are logged in to the Node.js Admin API."
+      );
+    }
+
+    alert(
+      "Advertisement uploaded to the server.\n" +
+      "ID: " + result.id +
+      "\nFilename: " + result.filename +
+      "\nNote: link and exam settings are not yet saved by this API."
+    );
+
+    [
+      "adTitle", "adLink", "maxImpressions", "maxClicks",
+      "examDate", "startDate", "endDate", "individualExamName"
+    ].forEach(id => {
+      document.getElementById(id).value = "";
+    });
+
+    document.getElementById("adFile").value = "";
+    document.getElementById("allExams").checked = true;
+    changeExamSelectMode();
+
+  } catch (error) {
+    alert(
+      "Could not contact the Node.js API.\n" +
+      "The API must be running and reachable from this browser."
+    );
+  }
 }
 async function uploadPopupAdvertisement(){
 const f=document.getElementById("popupAdFile").files[0];if(!f) return alert("Select an advertisement file.");
