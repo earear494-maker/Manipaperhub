@@ -264,25 +264,98 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 
 <div class="card"><h2>💼 Posted Jobs</h2><div class="table-wrapper"><table><thead><tr><th>#</th><th>Job Title</th><th>Category</th><th>Company</th><th>Location</th><th>Type</th><th>Last Date</th><th>Action</th></tr></thead><tbody id="jobsTableBody"></tbody></table></div></div>
 
-<div class="card">
-<h2>📥 Upload Ads — Before PDF Download</h2>
-<p class="small-text">Shown when a student clicks Download PDF. Countdown: 30 seconds.</p>
-<h2>📢 Advertisement Details</h2>
-<div class="form-grid">
-<input type="hidden" id="adPlacement" value="download">
-<div><label>Advertisement Title</label><input id="adTitle" placeholder="Example: Coaching Advertisement"></div>
-<div><label>Advertisement Type</label><select id="adType"><option value="">Select Type</option><option value="image">Image</option><option value="video">Video</option></select></div>
-<div class="full"><label>Advertisement File</label><input type="file" id="adFile" accept="image/*,video/*"></div>
-<div class="full"><label>Advertisement Link</label><input type="url" id="adLink" placeholder="https://example.com"></div>
-<div><label>Maximum Impressions</label><input type="number" id="maxImpressions" min="1" placeholder="1000"></div><div><label>Maximum Clicks</label><input type="number" id="maxClicks" min="0" placeholder="100"></div><div><div><div><label>Exam Date</label><input type="date" id="examDate"></div>
-<div class="full"><label>Exam Select</label><div class="exam-box">
-<div class="exam-option"><input type="radio" name="examSelectMode" id="allExams" value="ALL" checked onchange="changeExamSelectMode()"><label for="allExams"><strong>All Exams</strong></label></div>
-<div class="exam-option"><input type="radio" name="examSelectMode" id="individualExam" value="INDIVIDUAL" onchange="changeExamSelectMode()"><label for="individualExam"><strong>Individual Exam</strong></label></div>
-<div id="individualExamSection" class="individual-section"><label>Type Exam Name</label><input id="individualExamName" placeholder="Example: B.Ed Entrance 2026"><div class="small-text">Enter the exact exam name for this advertisement.</div></div>
-</div></div>
-<div><label>Advertisement Start Date</label><input type="date" id="startDate"></div>
-<div><label>Advertisement End Date</label><input type="date" id="endDate"></div>
-</div><br><button class="primary-btn" onclick="uploadAdvertisement()">📤 Publish Advertisement</button>
+
+<div class="card ad-upload-card">
+  <h2>📥 Upload Ads — Before PDF Download</h2>
+  <p class="small-text">
+    Shown when a student clicks Download PDF. Countdown: 30 seconds.
+  </p>
+
+  <h2>📢 Advertisement Details</h2>
+
+  <div class="form-grid">
+    <input type="hidden" id="adPlacement" value="download">
+
+    <div>
+      <label for="adTitle">Advertisement Title</label>
+      <input id="adTitle" placeholder="Example: Coaching Advertisement">
+    </div>
+
+    <div>
+      <label for="adType">Advertisement Type</label>
+      <select id="adType">
+        <option value="">Select Type</option>
+        <option value="image">Image</option>
+        <option value="video">Video</option>
+      </select>
+    </div>
+
+    <div class="full">
+      <label for="adFile">Advertisement File</label>
+      <input type="file" id="adFile" accept="image/*,video/*">
+    </div>
+
+    <div class="full">
+      <label for="adLink">Advertisement Link</label>
+      <input type="url" id="adLink" placeholder="https://example.com">
+    </div>
+
+    <div>
+      <label for="maxImpressions">Maximum Impressions</label>
+      <input type="number" id="maxImpressions" min="1" placeholder="1000">
+    </div>
+
+    <div>
+      <label for="maxClicks">Maximum Clicks</label>
+      <input type="number" id="maxClicks" min="0" placeholder="100">
+    </div>
+
+    <div>
+      <label for="examDate">Exam Date</label>
+      <input type="date" id="examDate">
+    </div>
+
+    <div class="full">
+      <label>Exam Select</label>
+      <div class="exam-box">
+        <div class="exam-option">
+          <input type="radio" name="examSelectMode" id="allExams"
+            value="ALL" checked onchange="changeExamSelectMode()">
+          <label for="allExams"><strong>All Exams</strong></label>
+        </div>
+
+        <div class="exam-option">
+          <input type="radio" name="examSelectMode" id="individualExam"
+            value="INDIVIDUAL" onchange="changeExamSelectMode()">
+          <label for="individualExam"><strong>Individual Exam</strong></label>
+        </div>
+
+        <div id="individualExamSection" class="individual-section">
+          <label for="individualExamName">Type Exam Name</label>
+          <input id="individualExamName"
+            placeholder="Example: B.Ed Entrance 2026">
+          <div class="small-text">
+            Enter the exact exam name for this advertisement.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label for="startDate">Advertisement Start Date</label>
+      <input type="date" id="startDate">
+    </div>
+
+    <div>
+      <label for="endDate">Advertisement End Date</label>
+      <input type="date" id="endDate">
+    </div>
+  </div>
+
+  <button type="button" class="primary-btn"
+    onclick="uploadAdvertisement()">
+    📤 Publish Advertisement
+  </button>
 </div>
 
 
