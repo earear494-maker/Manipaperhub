@@ -199,20 +199,100 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 </div><br><button class="primary-btn" onclick="uploadAdvertisement()">📤 Publish Advertisement</button>
 </div>
 
-<div class="card">
-<h2>📺 Upload Ads — Page Popup Every 2 Minutes</h2>
-<p class="small-text">Shown automatically on the website every 2 minutes while the page is open. Video ads can autoplay.</p>
-<div class="form-grid">
-<div><label>Advertisement Title</label><input id="popupAdTitle" placeholder="Example: Website Promotion"></div>
-<div><label>Advertisement Type</label><select id="popupAdType"><option value="">Select Type</option><option value="image">Image</option><option value="video">Video</option></select></div>
-<div class="full"><label>Advertisement File</label><input type="file" id="popupAdFile" accept="image/*,video/*"></div>
-<div class="full"><label>Advertisement Link</label><input type="url" id="popupAdLink" placeholder="https://example.com"></div>
-<div><label>Maximum Impressions</label><input type="number" id="popupMaxImpressions" min="1" placeholder="1000"></div><div><label>Maximum Clicks</label><input type="number" id="popupMaxClicks" min="0" placeholder="100"></div><div><div>
-<div><label>Exam Date</label><input type="date" id="popupExamDate"></div>
-<div><label>Advertisement Start Date</label><input type="date" id="popupStartDate"></div>
-<div><label>Advertisement End Date</label><input type="date" id="popupEndDate"></div>
-</div><br><button class="primary-btn" onclick="uploadPopupAdvertisement()">📤 Publish Page Popup Ad</button>
+
+<div class="card ad-upload-card">
+  <h2>📺 Upload Ads — Page Popup Every 2 Minutes</h2>
+
+  <p class="small-text">
+    Shown automatically on the website every 2 minutes while the page is open.
+    Video ads can autoplay.
+  </p>
+
+  <div class="form-grid">
+
+    <div>
+      <label for="popupAdTitle">Advertisement Title</label>
+      <input
+        type="text"
+        id="popupAdTitle"
+        placeholder="Example: Website Promotion"
+      >
+    </div>
+
+    <div>
+      <label for="popupAdType">Advertisement Type</label>
+      <select id="popupAdType">
+        <option value="">Select Type</option>
+        <option value="image">Image</option>
+        <option value="video">Video</option>
+      </select>
+    </div>
+
+    <div class="full">
+      <label for="popupAdFile">Advertisement File</label>
+      <input
+        type="file"
+        id="popupAdFile"
+        accept="image/*,video/*"
+      >
+      <p class="small-text">Select an image or video file.</p>
+    </div>
+
+    <div class="full">
+      <label for="popupAdLink">Advertisement Link</label>
+      <input
+        type="url"
+        id="popupAdLink"
+        placeholder="https://example.com"
+      >
+    </div>
+
+    <div>
+      <label for="popupMaxImpressions">Maximum Impressions</label>
+      <input
+        type="number"
+        id="popupMaxImpressions"
+        min="1"
+        placeholder="1000"
+      >
+    </div>
+
+    <div>
+      <label for="popupMaxClicks">Maximum Clicks</label>
+      <input
+        type="number"
+        id="popupMaxClicks"
+        min="0"
+        placeholder="100"
+      >
+    </div>
+
+    <div>
+      <label for="popupExamDate">Exam Date</label>
+      <input type="date" id="popupExamDate">
+    </div>
+
+    <div>
+      <label for="popupStartDate">Advertisement Start Date</label>
+      <input type="date" id="popupStartDate">
+    </div>
+
+    <div>
+      <label for="popupEndDate">Advertisement End Date</label>
+      <input type="date" id="popupEndDate">
+    </div>
+
+  </div>
+
+  <button
+    type="button"
+    class="primary-btn"
+    onclick="uploadPopupAdvertisement()"
+  >
+    📤 Publish Page Popup Ad
+  </button>
 </div>
+
 
 <div class="card"><h2>📢 Published Advertisements</h2><div class="table-wrapper"><table>
 <thead><tr><th>#</th><th>Title</th><th>Exam</th><th>Type</th><th>Placement</th><th>Impressions</th><th>Clicks</th><th>Maximum Impressions</th><th>Remaining Impressions</th><th>Maximum Clicks</th><th>Remaining Clicks</th><th>Start</th><th>End</th><th>Status</th><th>Action</th></tr></thead>
