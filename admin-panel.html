@@ -49,6 +49,7 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 .search-dropdown{display:none;position:absolute;left:0;right:0;top:calc(100% + 4px);max-height:260px;overflow-y:auto;background:#fff;border:1px solid #cbd5e1;border-radius:10px;box-shadow:0 10px 25px rgba(15,23,42,.15);z-index:9999;padding:5px}.search-dropdown.open{display:block}.search-option{display:block;width:100%;text-align:left;border:0;background:#fff;padding:10px 12px;border-radius:7px;cursor:pointer;font:inherit}.search-option:hover{background:#f1f5f9}.form-group{position:relative}</style>
 
 
+
 <style id="languageControlStyle">
 #languageControl {
   font-family: Arial, sans-serif;
@@ -65,22 +66,32 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
   }
 }
 
-/* Advertisement upload form design */
+/* Advertisement cards */
+.ad-upload-card,
+.ad-upload-card * {
+  box-sizing: border-box;
+}
+
 .ad-upload-card {
   width: 100%;
   max-width: 100%;
-  box-sizing: border-box;
+  min-width: 0;
+  margin: 0;
 }
 
 .ad-upload-card .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px 20px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   align-items: start;
 }
 
 .ad-upload-card .form-grid > div {
   min-width: 0;
+  max-width: 100%;
 }
 
 .ad-upload-card .form-grid .full {
@@ -88,14 +99,31 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 }
 
 .ad-upload-card input,
-.ad-upload-card select {
+.ad-upload-card select,
+.ad-upload-card textarea {
   width: 100%;
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
 }
 
-@media (max-width: 600px) {
+.ad-upload-card input[type="file"] {
+  font-size: 14px;
+}
+
+/* Prevent the admin content from overflowing */
+.card {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 700px) {
   .ad-upload-card .form-grid {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -105,6 +133,7 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
   }
 }
 </style>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
@@ -257,7 +286,7 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 </div>
 
 
-<div class="card ad-upload-card">
+<div class="card ad-upload-card popup-ad-card">
   <h2>📺 Upload Ads — Page Popup Every 2 Minutes</h2>
 
   <p class="small-text">
