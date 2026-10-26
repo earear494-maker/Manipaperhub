@@ -1438,13 +1438,69 @@ const a=(await getAll("ads")).find(x=>x.id===id);if(!a)return;
 document.getElementById("editAdId").value=a.id;document.getElementById("editAdTitle").value=a.title;document.getElementById("editAdPlacement").value=a.placement||"download";document.getElementById("editAdType").value=a.type;document.getElementById("editAdLink").value=a.link||"";document.getElementById("editMaxViews").value=a.maxViews;document.getElementById("editExamDate").value=a.examDate;document.getElementById("editStartDate").value=a.start;document.getElementById("editEndDate").value=a.end;
 if(a.exam==="ALL"){document.getElementById("editAllExams").checked=true}else{document.getElementById("editIndividualExam").checked=true;document.getElementById("editIndividualExamName").value=a.exam}changeEditExamMode();document.getElementById("editModal").style.display="block";
 }
-async function saveAdvertisementEdit(){
-const id=Number(document.getElementById("editAdId").value),a=(await getAll("ads")).find(x=>x.id===id);if(!a)return;
-a.title=document.getElementById("editAdTitle").value.trim();a.placement=document.getElementById("editAdPlacement").value;a.type=document.getElementById("editAdType").value;a.link=document.getElementById("editAdLink").value.trim();a.maxViews=Number(document.getElementById("editMaxViews").value);a.examDate=document.getElementById("editExamDate").value;a.start=document.getElementById("editStartDate").value;a.end=document.getElementById("editEndDate").value;
-const mode=document.querySelector('input[name="editExamSelectMode"]:checked').value;a.exam=mode==="ALL"?"ALL":document.getElementById("editIndividualExamName").value.trim();
-const f=document.getElementById("editAdFile").files[0];if(f){try{await securityPrecheck(f,a.type)}catch(e){return alert(e.message)}if((a.type==="image"&&!f.type.startsWith("image/"))||(a.type==="video"&&!f.type.startsWith("video/")))return alert("Wrong file type.");a.fileData=await fileToDataURL(f);a.fileName=f.name}
-if(!a.title||!a.maxViews||!a.start||!a.end||!a.examDate)return alert("Please complete all fields.");await put("ads",a);closeEditModal();renderAds();alert("✅ Advertisement updated.");
+
+async function saveAdvertisementEdit() {
+  const id = Number(document.getElementById("editAdId").value);
+
+  const maxInput = document.getElementById("editMaxViews");
+  const startDate = document.getElementById("editStartDate").value;
+  const endDate = document.getElementById("editEndDate").value;
+
+  const maxImpressions = Number(maxInput.value);
+
+  if (!Number.isInteger(id) || id < 1) {
+    alert("Invalid advertisement ID.");
+    return;
+  }
+
+  if (!Number.isInteger(maxImpressions) || maxImpressions < 0) {
+    alert("Maximum Impressions must be 0 or a positive whole number.");
+    return;
+  }
+
+  if (!startDate || !endDate) {
+    alert("Please enter Start Date and End Date.");
+    return;
+  }
+
+  if (startDate > endDate) {
+    alert("End Date cannot be before Start Date.");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `${STORAGE_API}/api/admin/ads/${id}`,
+      {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          maxImpressions,
+          startDate,
+          endDate
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Advertisement update failed.");
+    }
+
+    closeEditModal();
+    await renderAds();
+
+    alert("Advertisement dates and maximum impressions updated!");
+  } catch (error) {
+    console.error("Advertisement update failed:", error);
+    alert("Could not update advertisement: " + error.message);
+  }
 }
+
 function closeEditModal(){document.getElementById("editModal").style.display="none"}
 async function deleteAd(id){if(confirm("Delete this advertisement?")){await remove("ads",id);renderAds()}}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
