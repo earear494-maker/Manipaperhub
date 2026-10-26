@@ -1773,12 +1773,85 @@ const PUBLIC_ADS_API =
 
 const PUBLIC_ADS_MEDIA =
   "https://msgid-efficiency-pennsylvania-also.trycloudflare.com/api/public/ads";
+window.addEventListener("load", () => {
+  setTimeout(showHomePopupAd, 1500);
+});
+
+async function showHomePopupAd() {
+  try {
+    const response = await fetch(PUBLIC_ADS_API);
+    if (!response.ok) return;
+
+    const data = await response.json();
+    const ad = (data.ads || []).find(a =>
+      a.placement === "popup" &&
+      !a.media_deleted &&
+      a.id != null
+    );
+
+    if (!ad || document.getElementById("mph-ad-popup")) return;
+
+    const overlay = document.createElement("div");
+    overlay.id = "mph-ad-popup";
+    overlay.style.cssText =
+      "position:fixed;inset:0;background:#000b;z-index:99999;" +
+      "display:flex;align-items:center;justify-content:center;padding:18px";
+
+    const box = document.createElement("div");
+    box.style.cssText =
+      "position:relative;background:white;padding:18px;border-radius:12px;" +
+      "max-width:600px;width:100%;text-align:center";
+
+    const close = document.createElement("button");
+    close.textContent = "✕";
+    close.onclick = () => overlay.remove();
+
+    const heading = document.createElement("h3");
+    heading.textContent = ad.title || "Advertisement";
+
+    const media = document.createElement(
+      ad.ad_type === "video" ? "video" : "img"
+    );
+    media.src = `${PUBLIC_ADS_MEDIA}/${encodeURIComponent(ad.id)}/media`;
+    media.style.cssText = "width:100%;max-height:65vh;object-fit:contain;cursor:pointer";
+
+    if (media.tagName === "VIDEO") {
+      media.controls = true;
+      media.autoplay = true;
+      media.muted = true;
+    } else {
+      media.alt = heading.textContent;
+    }
+
+    media.addEventListener("click", () => {
+      fetch(`${PUBLIC_ADS_MEDIA}/${encodeURIComponent(ad.id)}/track`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ event: "click" })
+      }).then(r => console.log("Home popup click status:", r.status))
+        .catch(console.error);
+    });
+
+    box.append(close, heading, media);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    fetch(`${PUBLIC_ADS_MEDIA}/${encodeURIComponent(ad.id)}/track`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ event: "impression" })
+    }).then(r => console.log("Home popup impression status:", r.status))
+      .catch(console.error);
+
+  } catch (error) {
+    console.error("Popup advertisement error:", error);
+  }
+}
 
 window.addEventListener("load", () => {
   setTimeout(showHomePopupAd, 1500);
-});window.addEventListener("load", () => {
-  setTimeout(showHomePopupAd, 1500);
 });
+
 </script>
 
 </body>
