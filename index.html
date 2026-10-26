@@ -852,8 +852,78 @@ async function buildRepeatedQuestionsPage(p){
   }catch(e){console.warn('Repeated-question PDF page skipped',e);return p?.fileData||''}
 }
 
+async function showDownloadAd() {
+  try {
+    const response = await fetch(PUBLIC_ADS_API);
+    if (!response.ok) return true;
+
+    const data = await response.json();
+    const ads = (data.ads || []).filter(ad =>
+      ad.placement === "download" &&
+      !ad.media_deleted
+    );
+
+    if (!ads.length) return true;
+
+    const ad = ads[0];
+
+    return await new Promise(resolve => {
+      const overlay = document.createElement("div");
+      overlay.style.cssText =
+        "position:fixed;inset:0;background:#000c;z-index:100000;" +
+        "display:flex;align-items:center;justify-content:center;padding:18px;";
+
+      const box = document.createElement("div");
+      box.style.cssText =
+        "position:relative;background:white;padding:18px;border-radius:12px;" +
+        "max-width:650px;width:100%;text-align:center;";
+
+      const heading = document.createElement("h3");
+      heading.textContent = ad.title || "Advertisement";
+
+      const mediaUrl = `${PUBLIC_ADS_MEDIA}/${ad.id}/media`;
+
+      if (ad.ad_type === "video") {
+        const video = document.createElement("video");
+        video.src = mediaUrl;
+        video.controls = true;
+        video.autoplay = true;
+        video.muted = true;
+        video.style.cssText = "width:100%;max-height:55vh;";
+        box.appendChild(video);
+      } else {
+        const img = document.createElement("img");
+        img.src = mediaUrl;
+        img.alt = ad.title || "Advertisement";
+        img.style.cssText = "width:100%;max-height:55vh;object-fit:contain;";
+        box.appendChild(img);
+      }
+
+      const button = document.createElement("button");
+      button.textContent = "Continue to PDF";
+      button.style.cssText =
+        "margin-top:16px;padding:12px 22px;cursor:pointer;";
+
+      button.onclick = () => {
+        overlay.remove();
+        resolve(true);
+      };
+
+      box.append(heading, button);
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+    });
+  } catch (error) {
+    console.error("Download advertisement error:", error);
+    return true;
+  }
+}
+
 async function downloadPaper(p) {
   if (!p) return;
+
+  const adCompleted = await showDownloadAd();
+  if (!adCompleted) return;
 
   try {
     trackEvent("paperDownloads");
@@ -1598,6 +1668,83 @@ loadApprovedPapers();
 
 // ਹਰ 30 ਸਕਿੰਟ ਬਾਅਦ ਨਵੇਂ approved papers ਲੋਡ ਕਰੋ
 setInterval(loadApprovedPapers, 30000);
+
+  
+/* Main Paper Hub: Home page popup advertisement */
+const PUBLIC_ADS_API =
+  "https://msgid-efficiency-pennsylvania-also.trycloudflare.com/api/public/ads";
+
+const PUBLIC_ADS_MEDIA =
+  "https://msgid-efficiency-pennsylvania-also.trycloudflare.com/api/public/ads";
+
+async function showHomePopupAd() {
+  try {
+    const response = await fetch(PUBLIC_ADS_API);
+    if (!response.ok) return;
+
+    const data = await response.json();
+    const ads = (data.ads || []).filter(ad =>
+      ad.placement === "popup" &&
+      !ad.media_deleted
+    );
+
+    if (!ads.length) return;
+
+    const ad = ads[0];
+    if (document.getElementById("mph-ad-popup")) return;
+
+    const overlay = document.createElement("div");
+    overlay.id = "mph-ad-popup";
+    overlay.style.cssText =
+      "position:fixed;inset:0;background:#000b;z-index:99999;" +
+      "display:flex;align-items:center;justify-content:center;padding:18px;";
+
+    const box = document.createElement("div");
+    box.style.cssText =
+      "position:relative;background:white;padding:18px;border-radius:12px;" +
+      "max-width:600px;width:100%;text-align:center;";
+
+    const close = document.createElement("button");
+    close.textContent = "✕";
+    close.setAttribute("aria-label", "Close advertisement");
+    close.style.cssText =
+      "position:absolute;right:8px;top:8px;font-size:22px;cursor:pointer;";
+
+    close.onclick = () => overlay.remove();
+
+    const heading = document.createElement("h3");
+    heading.textContent = ad.title || "Advertisement";
+
+    box.append(close, heading);
+
+    const mediaUrl = `${PUBLIC_ADS_MEDIA}/${ad.id}/media`;
+
+    if (ad.ad_type === "video") {
+      const video = document.createElement("video");
+      video.src = mediaUrl;
+      video.controls = true;
+      video.autoplay = true;
+      video.muted = true;
+      video.style.cssText = "width:100%;max-height:65vh;";
+      box.appendChild(video);
+    } else {
+      const img = document.createElement("img");
+      img.src = mediaUrl;
+      img.alt = ad.title || "Advertisement";
+      img.style.cssText = "width:100%;max-height:65vh;object-fit:contain;";
+      box.appendChild(img);
+    }
+
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+  } catch (error) {
+    console.error("Popup advertisement error:", error);
+  }
+}
+
+window.addEventListener("load", () => {
+  setTimeout(showHomePopupAd, 1500);
+});
 
 </script>
 
