@@ -803,9 +803,16 @@ if (adLink) {
 } else {
   c.innerHTML = mediaHtml;
 
-  c.querySelector("img, video")?.addEventListener("click", () => {
+const adMedia = c.querySelector("img, video");
+
+if (adMedia) {
+  adMedia.style.cursor = "pointer";
+
+  adMedia.addEventListener("click", () => {
+    console.log("Ad media clicked! ID:", a.id);
     trackAdClick(a.id);
   });
+}
 }
 
 document.getElementById("adModal").style.display="block";document.getElementById("shareGate").style.display="none";const btn=document.getElementById("continueBtn");const closeBtn=document.getElementById("closeAdBtn");btn.style.display="inline-block";btn.disabled=true;if(closeBtn)closeBtn.style.display=autoPopup?"none":"inline-block";let n=autoPopup?3:20;let closeWait=0;document.getElementById("countdown").textContent=`Advertisement finishing in ${n} seconds`;clearInterval(timer);
