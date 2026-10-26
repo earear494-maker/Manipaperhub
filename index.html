@@ -772,8 +772,22 @@ async function showAd(a, autoPopup = false) {
 trackEvent("adImpressions");
 a.impressions = (a.impressions || 0) + 1;
 put("ads", a).catch(() => {});
-document.getElementById("modalTitle").textContent=a.title||"Advertisement";const c=document.getElementById("modalAd");
-c.innerHTML=a.link?(a.type==="image"?`<a href="${esc(a.link)}" target="_blank" rel="noopener" onclick="trackAdClick(${a.id})"><img src="${a.fileData}" alt="${esc(a.title)}" style="cursor:pointer"></a>`:`<a href="${esc(a.link)}" target="_blank" rel="noopener" onclick="trackAdClick(${a.id})"><video src="${a.fileData}" autoplay controls></video></a>`):(a.type==="image"?`<img src="${a.fileData}" alt="${esc(a.title)}">`:`<video src="${a.fileData}" autoplay controls></video>`);
+
+document.getElementById("modalTitle").textContent = a.title || "Advertisement";
+
+const c = document.getElementById("modalAd");
+const mediaUrl = `${PUBLIC_ADS_MEDIA}/${a.id}/media`;
+const adType = a.ad_type || a.type || "image";
+const adLink = a.link || a.link_url || "";
+
+const mediaHtml = adType === "image"
+  ? `<img src="${mediaUrl}" alt="${esc(a.title || "Advertisement")}" style="max-width:100%;height:auto;">`
+  : `<video src="${mediaUrl}" autoplay controls style="max-width:100%;height:auto;"></video>`;
+
+c.innerHTML = adLink
+  ? `<a href="${esc(adLink)}" target="_blank" rel="noopener" onclick="trackAdClick(${a.id})">${mediaHtml}</a>`
+  : mediaHtml;
+
 document.getElementById("adModal").style.display="block";document.getElementById("shareGate").style.display="none";const btn=document.getElementById("continueBtn");const closeBtn=document.getElementById("closeAdBtn");btn.style.display="inline-block";btn.disabled=true;if(closeBtn)closeBtn.style.display=autoPopup?"none":"inline-block";let n=autoPopup?3:20;let closeWait=0;document.getElementById("countdown").textContent=`Advertisement finishing in ${n} seconds`;clearInterval(timer);
 timer=setInterval(async()=>{n--;if(autoPopup&&closeWait>0){closeWait--;if(closeWait<=0&&closeBtn)closeBtn.style.display="inline-block";}document.getElementById("countdown").textContent=n>0?`Advertisement finishing in ${n} seconds`:"Advertisement complete";if(n<=0){clearInterval(timer);const current=ads.find(x=>x.id===a.id);if(current&&current.views<current.maxViews){current.views++;await put("ads",current);ads=await getAll("ads");renderTopAd();}btn.disabled=false;if(autoPopup){if(document.getElementById("adModal").style.display==="block")closeModal()}}},1000)
 }
