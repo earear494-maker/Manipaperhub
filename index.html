@@ -661,8 +661,10 @@ function getActiveAds(exam){
 const today=new Date().toISOString().slice(0,10);
 return ads.filter(a=>(a.placement||"download")==="download"&&a.views<a.maxViews&&today>=a.start&&today<=a.end&&(a.exam==="ALL"||a.exam===exam))
 }
-function renderTopAd(){
-const box=document.getElementById("topAd"),a=getPopupAd();
+async function renderTopAd(){
+const box = document.getElementById("topAd");
+if (!box) return;
+const a = await getPopupAd();
 if(!a){box.innerHTML='<span style="color:#64748b">Advertisement space</span>';return}
 const media = a.type === "image"
   ? (a.fileData && a.fileData !== "undefined"
@@ -670,7 +672,7 @@ const media = a.type === "image"
       : '<span style="color:#64748b">Advertisement image unavailable</span>')
   : (a.fileData && a.fileData !== "undefined"
       ? `<video src="${a.fileData}" controls ${a.link ? `onclick="trackAdClick(${a.id})"` : ''}></video>`
-      : '<span style="color:#64748b">Advertisement video unavailable</span>');`<img src="${a.fileData}" alt="${esc(a.title)}" style="cursor:${a.link?'pointer':'default'}" ${a.link?`onclick="trackAdClick(${a.id})"`:''}>`:`<video src="${a.fileData}" controls ${a.link?`onclick="trackAdClick(${a.id})"`:''}></video>`;
+      : '<span style="color:#64748b">Advertisement video unavailable</span>');
 box.innerHTML=a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener" onclick="trackAdClick(${a.id})">${media}</a><br><a class="ad-link" href="${esc(a.link)}" target="_blank" rel="noopener" onclick="trackAdClick(${a.id})">Visit Advertisement</a>`:media;
 }
 function trackAdClick(id) {
