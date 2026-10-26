@@ -738,22 +738,21 @@ function toggleDarkMode(){localStorage.setItem('mphDarkMode',document.body.class
 function setupAppFeatures(){if(!document.getElementById('darkToggle')){const b=document.createElement('button');b.id='darkToggle';b.className='dark-toggle';b.onclick=toggleDarkMode;document.body.appendChild(b)}if(!document.getElementById('offlineBadge')){const b=document.createElement('div');b.id='offlineBadge';b.className='offline-badge';b.textContent='⚡ Offline mode';document.body.appendChild(b)}const update=()=>document.getElementById('offlineBadge')?.classList.toggle('show',!navigator.onLine);window.addEventListener('online',update);window.addEventListener('offline',update);update();applyDarkMode();updateAlertUI();if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}}
 
 
+
 async function requestDownload(id) {
-  pendingPaper = papers.find(p => p.id === id);
-  if (!pendingPaper) return;
-
-  addRecent(id);
-
-  const available = getActiveAds(pendingPaper.exam);
-
-  if (!available.length) {
-    showShareGate();
+  const p = papers.find(p => Number(p.id) === Number(id));
+  if (!p) {
+    toast("Paper not found.");
     return;
   }
 
-  const ad = available[0];
-  showAd(ad);
+  addRecent(id);
+  await downloadPaper(p);
 }
+
+async function showAd(a, autoPopup = false) {
+  // ਤੁਹਾਡਾ ਪਹਿਲਾਂ ਵਾਲਾ showAd ਫੰਕਸ਼ਨ ਇੱਥੋਂ ਜਾਰੀ ਰਹੇਗਾ
+
 
 async function showAd(a,autoPopup=false){
 if(!a)return;trackEvent('adImpressions');a.impressions=(a.impressions||0)+1;put('ads',a).catch(()=>{});
