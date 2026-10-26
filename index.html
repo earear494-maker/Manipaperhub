@@ -847,12 +847,13 @@ async function getPopupAd() {
 
     const today = new Date().toISOString().slice(0, 10);
 
-    const active = data.ads.filter(a =>
-      a.placement === "popup" &&
-      (a.max_impressions <= 0 || a.impressions < a.max_impressions) &&
-      (!a.start_date || a.start_date <= today) &&
-      (!a.end_date || a.end_date >= today)
-    );
+  const active = data.ads.filter(a =>
+  a.placement === "popup" &&
+  !a.media_deleted &&
+  (a.max_impressions <= 0 || a.impressions < a.max_impressions) &&
+  (!a.start_date || a.start_date <= today) &&
+  (!a.end_date || a.end_date >= today)
+);
 
     if (!active.length) return null;
 
