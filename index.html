@@ -667,7 +667,25 @@ if(!a){box.innerHTML='<span style="color:#64748b">Advertisement space</span>';re
 const media=a.type==="image"?`<img src="${a.fileData}" alt="${esc(a.title)}" style="cursor:${a.link?'pointer':'default'}" ${a.link?`onclick="trackAdClick(${a.id})"`:''}>`:`<video src="${a.fileData}" controls ${a.link?`onclick="trackAdClick(${a.id})"`:''}></video>`;
 box.innerHTML=a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener" onclick="trackAdClick(${a.id})">${media}</a><br><a class="ad-link" href="${esc(a.link)}" target="_blank" rel="noopener" onclick="trackAdClick(${a.id})">Visit Advertisement</a>`:media;
 }
-function trackAdClick(id){trackEvent('adClicks');const a=ads.find(x=>x.id===id);if(a){a.clicks=(a.clicks||0)+1;put('ads',a).catch(()=>{})}}
+function trackAdClick(id) {
+  trackEvent('adClicks');
+
+  fetch(`${PUBLIC_ADS_MEDIA}/${id}/track`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ event: "click" })
+  })
+  .then(async response => {
+    console.log("Ad click tracking status:", response.status);
+
+    if (!response.ok) {
+      console.error("Ad click tracking failed:", await response.text());
+    }
+  })
+  .catch(error => {
+    console.error("Ad click tracking failed:", error);
+  });
+}
 
 function studentStore(){const raw=localStorage.getItem("mphStudentData");try{return raw?JSON.parse(raw):{name:"",saved:[],recent:[],downloads:[],favUniversity:"",favCourse:""}}catch(e){return {name:"",saved:[],recent:[],downloads:[],favUniversity:"",favCourse:""}}}
 function saveStudentData(d){localStorage.setItem("mphStudentData",JSON.stringify(d));renderStudentAccount();}
