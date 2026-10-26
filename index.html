@@ -862,6 +862,11 @@ async function showDownloadAd() {
     if (!ads.length) return true;
 
     const ad = ads[0];
+    fetch(`${PUBLIC_ADS_MEDIA}/${ad.id}/track`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ event: "impression" })
+}).catch(error => console.error("Ad impression tracking failed:", error));
 
     return await new Promise(resolve => {
       const overlay = document.createElement("div");
