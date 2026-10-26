@@ -754,8 +754,8 @@ async function requestDownload(id) {
 async function showAd(a,autoPopup=false){
     console.log("POPUP showAd called:", a);
   if(!a)return;
-  fetch(`${PUBLIC_ADS_MEDIA}/${a.id}/track`, {
-    console.log("Popup tracking started. Ad ID:", a.id);
+  console.log("Popup tracking started. Ad ID:", a.id);
+fetch(`${PUBLIC_ADS_MEDIA}/${a.id}/track`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ event: "impression" })
