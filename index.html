@@ -755,6 +755,7 @@ async function showAd(a,autoPopup=false){
     console.log("POPUP showAd called:", a);
   if(!a)return;
   fetch(`${PUBLIC_ADS_MEDIA}/${a.id}/track`, {
+    console.log("Popup tracking started. Ad ID:", a.id);
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ event: "impression" })
