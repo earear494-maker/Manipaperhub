@@ -752,6 +752,15 @@ async function requestDownload(id) {
 
 
 async function showAd(a,autoPopup=false){
+  fetch(`${PUBLIC_ADS_MEDIA}/${a.id}/track`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ event: "impression" })
+})
+.then(async r => {
+  if (!r.ok) console.error("Popup impression tracking failed:", r.status, await r.text());
+})
+.catch(e => console.error("Popup impression tracking failed:", e));
 if(!a)return;trackEvent('adImpressions');a.impressions=(a.impressions||0)+1;put('ads',a).catch(()=>{});
 document.getElementById("modalTitle").textContent=a.title||"Advertisement";const c=document.getElementById("modalAd");
 c.innerHTML=a.link?(a.type==="image"?`<a href="${esc(a.link)}" target="_blank" rel="noopener" onclick="trackAdClick(${a.id})"><img src="${a.fileData}" alt="${esc(a.title)}" style="cursor:pointer"></a>`:`<a href="${esc(a.link)}" target="_blank" rel="noopener" onclick="trackAdClick(${a.id})"><video src="${a.fileData}" autoplay controls></video></a>`):(a.type==="image"?`<img src="${a.fileData}" alt="${esc(a.title)}">`:`<video src="${a.fileData}" autoplay controls></video>`);
