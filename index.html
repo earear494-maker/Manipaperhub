@@ -798,9 +798,15 @@ const mediaHtml = adType === "image"
   ? `<img src="${mediaUrl}" alt="${esc(a.title || "Advertisement")}" style="max-width:100%;height:auto;">`
   : `<video src="${mediaUrl}" autoplay controls style="max-width:100%;height:auto;"></video>`;
 
-c.innerHTML = adLink
-  ? `<a href="${esc(adLink)}" target="_blank" rel="noopener" onclick="trackAdClick(${a.id})">${mediaHtml}</a>`
-  : mediaHtml;
+if (adLink) {
+  c.innerHTML = `<a href="${esc(adLink)}" target="_blank" rel="noopener" onclick="trackAdClick(${a.id})">${mediaHtml}</a>`;
+} else {
+  c.innerHTML = mediaHtml;
+
+  c.querySelector("img, video")?.addEventListener("click", () => {
+    trackAdClick(a.id);
+  });
+}
 
 document.getElementById("adModal").style.display="block";document.getElementById("shareGate").style.display="none";const btn=document.getElementById("continueBtn");const closeBtn=document.getElementById("closeAdBtn");btn.style.display="inline-block";btn.disabled=true;if(closeBtn)closeBtn.style.display=autoPopup?"none":"inline-block";let n=autoPopup?3:20;let closeWait=0;document.getElementById("countdown").textContent=`Advertisement finishing in ${n} seconds`;clearInterval(timer);
 timer=setInterval(async()=>{n--;if(autoPopup&&closeWait>0){closeWait--;if(closeWait<=0&&closeBtn)closeBtn.style.display="inline-block";}document.getElementById("countdown").textContent=n>0?`Advertisement finishing in ${n} seconds`:"Advertisement complete";if(n<=0){clearInterval(timer);const current=ads.find(x=>x.id===a.id);if(current&&current.views<current.maxViews){current.views++;await put("ads",current);ads=await getAll("ads");renderTopAd();}btn.disabled=false;if(autoPopup){if(document.getElementById("adModal").style.display==="block")closeModal()}}},1000)
