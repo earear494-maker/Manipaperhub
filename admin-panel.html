@@ -1407,10 +1407,15 @@ async function renderAds() {
         <td>${esc(ad.end_date || "")}</td>
         <td><span class="status ${statusClass}">${status}</span></td>
         <td>
-          <button class="info-btn"
-            onclick="alert('Advertisement ID: ${Number(ad.id)}')">
-            Details
-          </button>
+         <button class="info-btn"
+  onclick="alert('Advertisement ID: ${Number(ad.id)}')">
+  Details
+</button>
+
+<button class="primary-btn"
+  onclick="editAd(${Number(ad.id)})">
+  ✏️ Edit
+</button>
         </td>
       </tr>`;
     }).join("");
@@ -1433,11 +1438,49 @@ document.getElementById("adDetailsModal").style.display="block";
 }
 function closeAdDetails(){document.getElementById("adDetailsModal").style.display="none"}
 
-async function editAd(id){
-const a=(await getAll("ads")).find(x=>x.id===id);if(!a)return;
-document.getElementById("editAdId").value=a.id;document.getElementById("editAdTitle").value=a.title;document.getElementById("editAdPlacement").value=a.placement||"download";document.getElementById("editAdType").value=a.type;document.getElementById("editAdLink").value=a.link||"";document.getElementById("editMaxViews").value=a.maxViews;document.getElementById("editExamDate").value=a.examDate;document.getElementById("editStartDate").value=a.start;document.getElementById("editEndDate").value=a.end;
-if(a.exam==="ALL"){document.getElementById("editAllExams").checked=true}else{document.getElementById("editIndividualExam").checked=true;document.getElementById("editIndividualExamName").value=a.exam}changeEditExamMode();document.getElementById("editModal").style.display="block";
+
+async function editAd(id) {
+  try {
+    const response = await fetch(
+      `${STORAGE_API}/api/admin/ads`,
+      { credentials: "include" }
+    );
+
+    if (response.status === 401) {
+      alert("Admin session expired. Please log in again.");
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error("API error: " + response.status);
+    }
+
+    const result = await response.json();
+    const ad = (result.ads || []).find(
+      item => Number(item.id) === Number(id)
+    );
+
+    if (!ad) {
+      alert("Advertisement not found.");
+      return;
+    }
+
+    document.getElementById("editAdId").value = ad.id;
+    document.getElementById("editAdTitle").value = ad.title || "";
+    document.getElementById("editMaxViews").value =
+      Number(ad.max_impressions || 0);
+    document.getElementById("editStartDate").value =
+      ad.start_date || "";
+    document.getElementById("editEndDate").value =
+      ad.end_date || "";
+
+    document.getElementById("editModal").style.display = "block";
+  } catch (error) {
+    console.error("Could not open advertisement:", error);
+    alert("Could not load advertisement: " + error.message);
+  }
 }
+
 
 async function saveAdvertisementEdit() {
   const id = Number(document.getElementById("editAdId").value);
