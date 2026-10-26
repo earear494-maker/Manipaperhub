@@ -1774,75 +1774,11 @@ const PUBLIC_ADS_API =
 const PUBLIC_ADS_MEDIA =
   "https://msgid-efficiency-pennsylvania-also.trycloudflare.com/api/public/ads";
 
-async function showHomePopupAd() {
-  try {
-    const response = await fetch(PUBLIC_ADS_API);
-    if (!response.ok) return;
-
-    const data = await response.json();
-    const ads = (data.ads || []).filter(ad =>
-      ad.placement === "popup" &&
-      !ad.media_deleted
-    );
-
-    if (!ads.length) return;
-
-    const ad = ads[0];
-    if (document.getElementById("mph-ad-popup")) return;
-
-    const overlay = document.createElement("div");
-    overlay.id = "mph-ad-popup";
-    overlay.style.cssText =
-      "position:fixed;inset:0;background:#000b;z-index:99999;" +
-      "display:flex;align-items:center;justify-content:center;padding:18px;";
-
-    const box = document.createElement("div");
-    box.style.cssText =
-      "position:relative;background:white;padding:18px;border-radius:12px;" +
-      "max-width:600px;width:100%;text-align:center;";
-
-    const close = document.createElement("button");
-    close.textContent = "✕";
-    close.setAttribute("aria-label", "Close advertisement");
-    close.style.cssText =
-      "position:absolute;right:8px;top:8px;font-size:22px;cursor:pointer;";
-
-    close.onclick = () => overlay.remove();
-
-    const heading = document.createElement("h3");
-    heading.textContent = ad.title || "Advertisement";
-
-    box.append(close, heading);
-
-    const mediaUrl = `${PUBLIC_ADS_MEDIA}/${ad.id}/media`;
-
-    if (ad.ad_type === "video") {
-      const video = document.createElement("video");
-      video.src = mediaUrl;
-      video.controls = true;
-      video.autoplay = true;
-      video.muted = true;
-      video.style.cssText = "width:100%;max-height:65vh;";
-      box.appendChild(video);
-    } else {
-      const img = document.createElement("img");
-      img.src = mediaUrl;
-      img.alt = ad.title || "Advertisement";
-      img.style.cssText = "width:100%;max-height:65vh;object-fit:contain;";
-      box.appendChild(img);
-    }
-
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
-  } catch (error) {
-    console.error("Popup advertisement error:", error);
-  }
-}
-
 window.addEventListener("load", () => {
   setTimeout(showHomePopupAd, 1500);
+});window.addEventListener("load", () => {
+  setTimeout(showHomePopupAd, 1500);
 });
-
 </script>
 
 </body>
