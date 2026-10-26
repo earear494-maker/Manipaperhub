@@ -1327,10 +1327,101 @@ async function renderJobs(){const rows=document.getElementById("jobsTableBody");
 async function deleteJob(id){if(confirm("Delete this job post?")){await remove("jobs",id);renderJobs();}}
 
 function adStatus(a){const today=new Date().toISOString().slice(0,10);if(a.views>=a.maxViews)return["Complete","disabled"];if(today<a.start)return["Waiting","waiting"];if(today>a.end)return["Expired","expired"];return["Active","active"]}
-async function renderAds(){
-const rows=document.getElementById("adsTableBody");if(!db)return;const a=await getAll("ads");
-rows.innerHTML=a.length?a.map((x,i)=>{const [st,cl]=adStatus(x);const impressions=Number(x.impressions||0),clicks=Number(x.clicks||0),maxImpressions=Number(x.maxImpressions||x.maxViews||0),remaining=Math.max(0,maxImpressions-impressions),remainingImpressions=remaining,maxClicks=Number(x.maxClicks||0),remainingClicks=Math.max(0,maxClicks-clicks);return `<tr><td>${i+1}</td><td>${esc(x.title)}</td><td>${esc(x.exam)}</td><td>${x.type}</td><td>${x.placement==='popup'?'Page Popup (2 min)':'Before Download (30 sec)'}</td><td><strong>${impressions}</strong></td><td><strong>${clicks}</strong></td><td>${maxImpressions}</td><td><strong>${remainingImpressions}</strong></td><td>${maxClicks}</td><td><strong>${remainingClicks}</strong></td><td>${x.start}</td><td>${x.end}</td><td><span class="status ${cl}">${st}</span></td><td><button class="info-btn" onclick="showAdDetails(${x.id})">Details</button> <button class="edit-btn" onclick="editAd(${x.id})">Edit</button> <button class="danger-btn" onclick="deleteAd(${x.id})">Delete</button></td></tr>`}).join(""):'<tr><td colspan="15" class="empty">No advertisements published yet.</td></tr>';
+
+async function renderAds() {
+  const rows = document.getElementById("adsTableBody");
+
+  rows.innerHTML =
+    '<tr><td colspan="15">Loading advertisements...</td></tr>';
+
+  try {
+    const response = await fetch(
+      `${STORAGE_API}/api/admin/ads`,
+      { credentials: "include" }
+    );
+
+    if (response.status === 401) {
+      rows.innerHTML =
+        '<tr><td colspan="15">Admin session expired. Please log in again.</td></tr>';
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error("API error: " + response.status);
+    }
+
+    const result = await response.json();
+    const ads = result.ads || [];
+
+    if (ads.length === 0) {
+      rows.innerHTML =
+        '<tr><td colspan="15">No advertisements published yet.</td></tr>';
+      return;
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+
+    rows.innerHTML = ads.map((ad, i) => {
+      const impressions = Number(ad.impressions || 0);
+      const clicks = Number(ad.clicks || 0);
+      const maxImpressions = Number(ad.max_impressions || 0);
+      const maxClicks = Number(ad.max_clicks || 0);
+
+      const remainingImpressions =
+        Math.max(0, maxImpressions - impressions);
+      const remainingClicks =
+        Math.max(0, maxClicks - clicks);
+
+      let status = "Active";
+      let statusClass = "active";
+
+      if (ad.media_deleted) {
+        status = "Media deleted";
+        statusClass = "expired";
+      } else if (impressions >= maxImpressions) {
+        status = "Complete";
+        statusClass = "disabled";
+      } else if (ad.start_date && today < ad.start_date) {
+        status = "Waiting";
+        statusClass = "waiting";
+      } else if (ad.end_date && today > ad.end_date) {
+        status = "Expired";
+        statusClass = "expired";
+      }
+
+      return `<tr>
+        <td>${i + 1}</td>
+        <td>${esc(ad.title || "")}</td>
+        <td>ALL / Not provided</td>
+        <td>${esc(ad.ad_type || "")}</td>
+        <td>${ad.placement === "popup"
+          ? "Page Popup"
+          : "Before PDF Download"}</td>
+        <td><strong>${impressions}</strong></td>
+        <td><strong>${clicks}</strong></td>
+        <td>${maxImpressions}</td>
+        <td><strong>${remainingImpressions}</strong></td>
+        <td>${maxClicks}</td>
+        <td><strong>${remainingClicks}</strong></td>
+        <td>${esc(ad.start_date || "")}</td>
+        <td>${esc(ad.end_date || "")}</td>
+        <td><span class="status ${statusClass}">${status}</span></td>
+        <td>
+          <button class="info-btn"
+            onclick="alert('Advertisement ID: ${Number(ad.id)}')">
+            Details
+          </button>
+        </td>
+      </tr>`;
+    }).join("");
+
+  } catch (error) {
+    console.error("Could not load advertisements:", error);
+    rows.innerHTML =
+      '<tr><td colspan="15">Could not load advertisements. Check the API connection.</td></tr>';
+  }
 }
+
 async function showAdDetails(id){
 const a=(await getAll("ads")).find(x=>x.id===id);if(!a)return;
 const impressions=Number(a.impressions||0),clicks=Number(a.clicks||0),ctr=impressions?((clicks/impressions)*100).toFixed(2):"0.00",remaining=Math.max(0,Number(a.maxViews||0)-Number(a.views||0));
