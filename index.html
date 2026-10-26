@@ -661,20 +661,30 @@ function getActiveAds(exam){
 const today=new Date().toISOString().slice(0,10);
 return ads.filter(a=>(a.placement||"download")==="download"&&a.views<a.maxViews&&today>=a.start&&today<=a.end&&(a.exam==="ALL"||a.exam===exam))
 }
-async function renderTopAd(){
-const box = document.getElementById("topAd");
-if (!box) return;
-const a = await getPopupAd();
-if(!a){box.innerHTML='<span style="color:#64748b">Advertisement space</span>';return}
-const media = a.type === "image"
-  ? (a.fileData && a.fileData !== "undefined"
-      ? `<img src="${a.fileData}" alt="${esc(a.title)}" style="cursor:${a.link ? 'pointer' : 'default'}" ${a.link ? `onclick="trackAdClick(${a.id})"` : ''}>`
-      : '<span style="color:#64748b">Advertisement image unavailable</span>')
-  : (a.fileData && a.fileData !== "undefined"
-      ? `<video src="${a.fileData}" controls ${a.link ? `onclick="trackAdClick(${a.id})"` : ''}></video>`
-      : '<span style="color:#64748b">Advertisement video unavailable</span>');
-box.innerHTML=a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener" onclick="trackAdClick(${a.id})">${media}</a><br><a class="ad-link" href="${esc(a.link)}" target="_blank" rel="noopener" onclick="trackAdClick(${a.id})">Visit Advertisement</a>`:media;
+
+async function renderTopAd() {
+  const box = document.getElementById("topAd");
+  if (!box) return;
+
+  const a = await getPopupAd();
+
+  if (!a) {
+    box.innerHTML = '<span style="color:#64748b">Advertisement space</span>';
+    return;
+  }
+
+  const mediaUrl =
+    `${PUBLIC_ADS_MEDIA}/${encodeURIComponent(a.id)}/media`;
+
+  const media = a.type === "image"
+    ? `<img src="${mediaUrl}" alt="${esc(a.title || "Advertisement")}" style="max-width:100%;max-height:400px;object-fit:contain;cursor:${a.link ? "pointer" : "default"}">`
+    : `<video src="${mediaUrl}" controls style="max-width:100%;max-height:400px"></video>`;
+
+  box.innerHTML = a.link
+    ? `<a href="${esc(a.link)}" target="_blank" rel="noopener">${media}</a>`
+    : media;
 }
+
 function trackAdClick(id) {
   trackEvent('adClicks');
 
