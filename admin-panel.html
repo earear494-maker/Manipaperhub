@@ -1467,6 +1467,7 @@ async function editAd(id) {
 
     document.getElementById("editAdId").value = ad.id;
     document.getElementById("editAdTitle").value = ad.title || "";
+    document.getElementById("editAdLink").value = ad.link || "";
     document.getElementById("editMaxViews").value =
       Number(ad.max_impressions || 0);
     document.getElementById("editStartDate").value =
