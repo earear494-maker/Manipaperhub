@@ -483,7 +483,13 @@ th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-alig
 <label style="margin-top:15px">Advertisement Type</label><select id="editAdType"><option value="image">Image</option><option value="video">Video</option></select>
 <label style="margin-top:15px">Replace Advertisement File</label><input type="file" id="editAdFile" accept="image/*,video/*"><div class="small-text">Leave empty to keep existing file.</div>
 <label style="margin-top:15px">Advertisement Link</label><input type="url" id="editAdLink">
-<label style="margin-top:15px">Maximum Views</label><input type="number" id="editMaxViews" min="1">
+
+<label style="margin-top:15px">Maximum Views</label>
+<input type="number" id="editMaxViews" min="0" step="1">
+
+<label style="margin-top:15px">Maximum Clicks</label>
+<input type="number" id="editMaxClicks" min="0" step="1">
+
 <label style="margin-top:15px">Exam Select</label><div class="exam-box">
 <div class="exam-option"><input type="radio" name="editExamSelectMode" id="editAllExams" value="ALL" onchange="changeEditExamMode()"><label for="editAllExams"><strong>All Exams</strong></label></div>
 <div class="exam-option"><input type="radio" name="editExamSelectMode" id="editIndividualExam" value="INDIVIDUAL" onchange="changeEditExamMode()"><label for="editIndividualExam"><strong>Individual Exam</strong></label></div>
@@ -1407,15 +1413,25 @@ async function renderAds() {
         <td>${esc(ad.end_date || "")}</td>
         <td><span class="status ${statusClass}">${status}</span></td>
         <td>
-         <button class="info-btn"
-  onclick="alert('Advertisement ID: ${Number(ad.id)}')">
-  Details
-</button>
 
-<button class="primary-btn"
-  onclick="editAd(${Number(ad.id)})">
-  ✏️ Edit
-</button>
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+  <button class="info-btn"
+    onclick="alert('Advertisement ID: ${Number(ad.id)}')">
+    Details
+  </button>
+
+  <button class="primary-btn"
+    onclick="editAd(${Number(ad.id)})">
+    ✏️ Edit
+  </button>
+
+  <button
+    style="background:#dc2626;color:white;border:0;border-radius:6px;padding:8px 12px;cursor:pointer;"
+    onclick="deleteAd(${Number(ad.id)})">
+    🗑️ Delete
+  </button>
+</div>
+
         </td>
       </tr>`;
     }).join("");
@@ -1470,6 +1486,8 @@ async function editAd(id) {
     document.getElementById("editAdLink").value = ad.link || "";
     document.getElementById("editMaxViews").value =
       Number(ad.max_impressions || 0);
+    document.getElementById("editMaxClicks").value =
+      Number(ad.max_clicks || 0);
     document.getElementById("editStartDate").value =
       ad.start_date || "";
     document.getElementById("editEndDate").value =
@@ -1483,22 +1501,24 @@ async function editAd(id) {
 }
 
 
+
 async function saveAdvertisementEdit() {
   const id = Number(document.getElementById("editAdId").value);
-
-  const maxInput = document.getElementById("editMaxViews");
+  const maxImpressions = Number(document.getElementById("editMaxViews").value);
+  const maxClicks = Number(document.getElementById("editMaxClicks").value);
   const startDate = document.getElementById("editStartDate").value;
   const endDate = document.getElementById("editEndDate").value;
 
-  const maxImpressions = Number(maxInput.value);
-
-  if (!Number.isInteger(id) || id < 1) {
+  if (!Number.isSafeInteger(id) || id < 1) {
     alert("Invalid advertisement ID.");
     return;
   }
 
-  if (!Number.isInteger(maxImpressions) || maxImpressions < 0) {
-    alert("Maximum Impressions must be 0 or a positive whole number.");
+  if (
+    !Number.isInteger(maxImpressions) || maxImpressions < 0 ||
+    !Number.isInteger(maxClicks) || maxClicks < 0
+  ) {
+    alert("Maximum Views and Maximum Clicks must be non-negative whole numbers.");
     return;
   }
 
@@ -1518,11 +1538,10 @@ async function saveAdvertisementEdit() {
       {
         method: "PATCH",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           maxImpressions,
+          maxClicks,
           startDate,
           endDate
         })
@@ -1537,16 +1556,50 @@ async function saveAdvertisementEdit() {
 
     closeEditModal();
     await renderAds();
-
-    alert("Advertisement dates and maximum impressions updated!");
+    alert("Maximum Views, Maximum Clicks and dates updated successfully!");
   } catch (error) {
     console.error("Advertisement update failed:", error);
     alert("Could not update advertisement: " + error.message);
   }
 }
 
+ 
+
 function closeEditModal(){document.getElementById("editModal").style.display="none"}
-async function deleteAd(id){if(confirm("Delete this advertisement?")){await remove("ads",id);renderAds()}}
+
+async function deleteAd(id) {
+  if (!confirm("Are you sure you want to permanently delete this advertisement?")) {
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `${STORAGE_API}/api/admin/ads/${Number(id)}`,
+      {
+        method: "DELETE",
+        credentials: "include"
+      }
+    );
+
+    const result = await response.json();
+
+    if (response.status === 401) {
+      alert("Admin session expired. Please log in again.");
+      return;
+    }
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Could not delete advertisement.");
+    }
+
+    await renderAds();
+    alert("Advertisement deleted successfully.");
+  } catch (error) {
+    console.error("Delete advertisement failed:", error);
+    alert("Could not delete advertisement: " + error.message);
+  }
+}
+
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 
 openDB().then(()=>{if(sessionStorage.getItem("mphAdmin")==="1")showAdmin()});
