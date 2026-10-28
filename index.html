@@ -1868,7 +1868,7 @@ close.disabled = false;
       }).catch(console.error);
     });
 
-    close.style.display = "none";
+close.style.display = "none";
 
 box.append(close, heading, countdown, media);
 overlay.appendChild(box);
@@ -1877,8 +1877,6 @@ document.body.appendChild(overlay);
 setTimeout(() => {
   close.style.display = "block";
 }, 3000);
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
 
     fetch(`${PUBLIC_ADS_MEDIA}/${encodeURIComponent(ad.id)}/track`, {
       method: "POST",
