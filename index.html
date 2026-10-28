@@ -833,12 +833,58 @@ if (adMedia) {
 }
 }
 
-document.getElementById("adModal").style.display="block";document.getElementById("shareGate").style.display="none";const btn=document.getElementById("continueBtn");const closeBtn=document.getElementById("closeAdBtn");btn.style.display="inline-block";btn.disabled=true;if(closeBtn)closeBtn.style.display=autoPopup?"none":"inline-block";let n=autoPopup?3:20;
-let closeWait=3;
-if(closeBtn){
-  closeBtn.style.display="none";
-  closeBtn.disabled=true;
-}document.getElementById("countdown").textContent=`Advertisement finishing in ${n} seconds`;clearInterval(timer);
+document.getElementById("adModal").style.display="block";document.getElementById("shareGate").style.display="none";const btn=document.getElementById("continueBtn");const closeBtn=document.getElementById("closeAdBtn");btn.style.display="inline-block";btn.disabled=true;if(closeBtn)closeBtn.style.display=autoPopup?"none":"inline-block";
+let n = autoPopup ? 3 : 20;
+let closeWait = 3;
+
+clearInterval(timer);
+clearTimeout(adCloseTimer);
+
+btn.style.display = "inline-block";
+btn.disabled = true;
+
+if (closeBtn) {
+    closeBtn.style.display = "none";
+    closeBtn.disabled = true;
+    closeBtn.textContent = "✕ Cancel";
+}
+
+document.getElementById("countdown").textContent =
+    `Advertisement finishing in ${n} seconds`;
+
+timer = setInterval(async function () {
+    n--;
+
+    // 3 seconds ਬਾਅਦ Cancel button ਦਿਖਾਓ
+    if (closeWait > 0) {
+        closeWait--;
+
+        if (closeWait <= 0 && closeBtn) {
+            closeBtn.style.display = "inline-block";
+            closeBtn.disabled = false;
+        }
+    }
+
+    document.getElementById("countdown").textContent =
+        n > 0
+            ? `Advertisement finishing in ${n} seconds`
+            : "Advertisement complete";
+
+    if (n <= 0) {
+        clearInterval(timer);
+
+        const current = ads.find(x => x.id === a.id);
+
+        if (current && current.views < current.maxViews) {
+            current.views++;
+            await put("ads", current);
+            ads = await getAll("ads");
+            renderTopAd();
+        }
+
+        btn.disabled = false;
+    }
+}, 1000);
 timer=setInterval(async()=>{
 n--;
 
