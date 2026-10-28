@@ -1593,7 +1593,50 @@ function renderPopularPapers(){const box=document.getElementById('popularPapersG
 function trackDownloadCount(id){const d=JSON.parse(localStorage.getItem('mphDownloadCounts')||'{}');d[id]=(d[id]||0)+1;localStorage.setItem('mphDownloadCounts',JSON.stringify(d))}
 const _oldDownloadPaper=downloadPaper;downloadPaper=async function(p){trackDownloadCount(p.id);await _oldDownloadPaper(p);renderPopularPapers()}
 const _oldInit=init;
-async function init(){try{setupSEO();setupAppFeatures();await openDB();recordAnalyticsDetail("pageView",{path:location.pathname||"/",referrer:document.referrer||""});trackEvent("siteVisits");papers=await getAll("papers");ads=await getAll("ads");checkNewPaperAlerts();initInstitutes();initPersonalAlert();renderRequests();renderJobs();renderStudentAccount();renderPapers();renderPopularPapers();renderContributorLeaderboard();analyzeMissingPdfQuestions();renderTopAd();startAdPopupLoop();document.getElementById("totalPapers").textContent=papers.length;document.getElementById("totalUniversities").textContent=new Set(papers.map(p=>p.university)).size;document.getElementById("totalCourses").textContent=new Set(papers.map(p=>p.course)).size}catch(e){toast("Database could not be opened")}}
+async function init() {
+  try {
+    setupSEO();
+    setupAppFeatures();
+
+    await openDB();
+
+    recordAnalyticsDetail("pageView", {
+      path: location.pathname || "/",
+      referrer: document.referrer || ""
+    });
+
+    trackEvent("siteVisits");
+
+    papers = await getAll("papers");
+    ads = await getAll("ads");
+
+    checkNewPaperAlerts();
+    initInstitutes();
+    initPersonalAlert();
+    renderRequests();
+    renderJobs();
+    renderStudentAccount();
+    renderPapers();
+    renderPopularPapers();
+    renderContributorLeaderboard();
+
+    analyzeMissingPdfQuestions();
+
+    renderTopAd();
+    startAdPopupLoop();
+
+    document.getElementById("totalPapers").textContent = papers.length;
+    document.getElementById("totalUniversities").textContent =
+      new Set(papers.map(p => p.university)).size;
+    document.getElementById("totalCourses").textContent =
+      new Set(papers.map(p => p.course)).size;
+
+  } catch (e) {
+    console.error("Init error:", e);
+    toast("Database could not be opened");
+  }
+}
+
 init();
 </script>
 <script>
