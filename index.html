@@ -1910,7 +1910,6 @@ async function showHomePopupAd() {
       "border-radius:12px;max-width:600px;width:100%;text-align:center";
 
     const close = document.createElement("button");
-    close.textContent = "✕ Close";
 close.textContent = "✕ Close";
 close.style.cssText =
   "display:block;visibility:visible;opacity:1;" +
@@ -1949,7 +1948,7 @@ close.disabled = false;
 
 close.style.display = "none";
 
-box.append(close, heading, countdown, media);
+box.append(close, heading, media);
 overlay.appendChild(box);
 document.body.appendChild(overlay);
 
