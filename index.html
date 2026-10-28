@@ -1831,6 +1831,7 @@ async function showHomePopupAd() {
       "border-radius:12px;max-width:600px;width:100%;text-align:center";
 
     const close = document.createElement("button");
+    close.textContent = "✕ Close";
 close.textContent = "✕ Close";
 close.style.cssText =
   "display:block;visibility:visible;opacity:1;" +
@@ -1867,7 +1868,15 @@ close.disabled = false;
       }).catch(console.error);
     });
 
-    box.append(close, heading, countdown, media);
+    close.style.display = "none";
+
+box.append(close, heading, countdown, media);
+overlay.appendChild(box);
+document.body.appendChild(overlay);
+
+setTimeout(() => {
+  close.style.display = "block";
+}, 3000);
     overlay.appendChild(box);
     document.body.appendChild(overlay);
 
