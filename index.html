@@ -609,6 +609,13 @@ function selectCategory(c){
   if(typeof filterPapers==='function') filterPapers();
   document.getElementById("papers")?.scrollIntoView({behavior:"smooth",block:"start"});
 }
+  // Make dropdown search functions available to HTML
+window.searchInstitutes = searchInstitutes;
+window.searchCourses = searchCourses;
+window.uploadSearchInstitutes = uploadSearchInstitutes;
+window.uploadSearchCourses = uploadSearchCourses;
+window.requestSearchInstitutes = requestSearchInstitutes;
+window.requestSearchCourses = requestSearchCourses;
 function heroSearchKey(e){if(e.key==="Enter")searchFromHero()}
 function searchFromHero(){document.getElementById("searchInput").value=document.getElementById("heroSearch").value;document.getElementById("papers").scrollIntoView({behavior:"smooth"});filterPapers(true)}
 
