@@ -1832,9 +1832,13 @@ async function showHomePopupAd() {
 
     const close = document.createElement("button");
     close.textContent = "✕ Close";
-    close.style.cssText =
-      "display:block;margin:0 0 12px auto;padding:8px 14px;" +
-      "cursor:pointer;border:0;border-radius:6px;background:#222;color:white";
+close.textContent = "✕ Close";
+close.style.cssText =
+  "display:block;visibility:visible;opacity:1;" +
+  "margin:0 0 12px auto;padding:8px 14px;" +
+  "cursor:pointer;border:0;border-radius:6px;" +
+  "background:#222;color:white;position:relative;z-index:100000";
+close.disabled = false;
 
     const heading = document.createElement("h3");
     heading.textContent = ad.title || "Advertisement";
