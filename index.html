@@ -895,7 +895,25 @@ if(autoPopup && closeWait>0){
     closeBtn.disabled=false;
     closeBtn.textContent="✕ Cancel";
   }
-}document.getElementById("countdown").textContent=n>0?`Advertisement finishing in ${n} seconds`:"Advertisement complete";if(n<=0){clearInterval(timer);const current=ads.find(x=>x.id===a.id);if(current&&current.views<current.maxViews){current.views++;await put("ads",current);ads=await getAll("ads");renderTopAd();}btn.disabled=false;}},1000)
+}document.getElementById("countdown").textContent=n>0?`Advertisement finishing in ${n} seconds`:"Advertisement complete";if (n <= 0) {
+    clearInterval(timer);
+
+    // Continue ਬਟਨ ਨੂੰ ਤੁਰੰਤ ਚਾਲੂ ਕਰੋ
+    btn.disabled = false;
+
+    try {
+        const current = ads.find(x => x.id === a.id);
+
+        if (current && current.views < current.maxViews) {
+            current.views++;
+            await put("ads", current);
+            ads = await getAll("ads");
+            renderTopAd();
+        }
+    } catch (error) {
+        console.error("Ad views update failed:", error);
+    }
+}},1000)
 }
 
 async function getPopupAd() {
