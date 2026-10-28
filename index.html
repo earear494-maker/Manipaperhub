@@ -915,29 +915,31 @@ if(navigator.share){try{await navigator.share({title:"MainPaper Hub",text,url});
 if(!shared){window.open("https://wa.me/?text="+encodeURIComponent(text),"_blank","noopener");shared=true}
 if(shared){shareCount++;updateShareProgress();}
 }
-function unlockPDF(){if(shareCount>=shareRequired&&pendingPaper){closeModal();downloadPaper(pendingPaper)}}
-function continueToPDF(){closeModal();if(pendingPaper)downloadPaper(pendingPaper)}
 function closeModal() {
   clearInterval(timer);
+  clearTimeout(adCloseTimer);
 
   const modal = document.getElementById("adModal");
-  if (modal) {
-    modal.style.display = "none";
-  }
+  if (modal) modal.style.display = "none";
 }
 
-// Show the Cancel button after 3 seconds
-function enableAdCloseButton() {
-  const closeBtn = document.getElementById("closeAdBtn");
+let adCloseTimer = null;
 
-  if (closeBtn) {
+function startAdCloseCountdown() {
+  const closeBtn = document.getElementById("closeAdBtn");
+  if (!closeBtn) return;
+
+  clearTimeout(adCloseTimer);
+
+  closeBtn.style.display = "none";
+  closeBtn.disabled = true;
+
+  adCloseTimer = setTimeout(() => {
     closeBtn.style.display = "inline-block";
     closeBtn.disabled = false;
     closeBtn.textContent = "✕ Cancel";
-  }
+  }, 3000);
 }
-
-setTimeout(enableAdCloseButton, 3000);
 async function buildRepeatedQuestionsPage(p){
   try{
     if(!window.PDFLib||!p||!p.fileData)return p?.fileData||'';
