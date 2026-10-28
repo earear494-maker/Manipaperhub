@@ -1839,8 +1839,7 @@ async function showHomePopupAd() {
     const heading = document.createElement("h3");
     heading.textContent = ad.title || "Advertisement";
 
-    const countdown = document.createElement("p");
-    countdown.textContent = "3";
+  
 
     const media = document.createElement(
       ad.ad_type === "video" ? "video" : "img"
