@@ -1802,6 +1802,7 @@ window.addEventListener("load", () => {
   setTimeout(showHomePopupAd, 1500);
 });
 
+
 async function showHomePopupAd() {
   try {
     if (document.getElementById("mph-ad-popup")) return;
@@ -1844,9 +1845,7 @@ async function showHomePopupAd() {
     const media = document.createElement(
       ad.ad_type === "video" ? "video" : "img"
     );
-
-    media.src =
-      `${PUBLIC_ADS_MEDIA}/${encodeURIComponent(ad.id)}/media`;
+    media.src = `${PUBLIC_ADS_MEDIA}/${encodeURIComponent(ad.id)}/media`;
     media.style.cssText =
       "width:100%;max-height:65vh;object-fit:contain;cursor:pointer";
 
@@ -1878,30 +1877,31 @@ async function showHomePopupAd() {
 
     let seconds = 3;
 
-    popupCountdownTimer = setInterval(() => {
+    const countdownTimer = setInterval(() => {
       seconds--;
 
       if (seconds > 0) {
         countdown.textContent = String(seconds);
       } else {
-        clearInterval(popupCountdownTimer);
+        clearInterval(countdownTimer);
         countdown.textContent =
           "Advertisement — close whenever you like";
       }
     }, 1000);
 
-    close.onclick = () => {
-      clearInterval(popupCountdownTimer);
+    close.addEventListener("click", () => {
+      clearInterval(countdownTimer);
       overlay.remove();
 
       clearTimeout(popupRepeatTimer);
       popupRepeatTimer = setTimeout(showHomePopupAd, 180000);
-    };
+    });
 
   } catch (error) {
     console.error("Popup advertisement error:", error);
   }
 }
+
 </script>
 
 </body>
