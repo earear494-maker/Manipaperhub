@@ -1899,6 +1899,7 @@ async function loadApprovedPapers() {
     filterPapers();
 
     console.log("Storage papers loaded:", storagePapers.length);
+    console.log("Papers available in page:", papers.length);
   } catch (error) {
     console.error("Paper loading error:", error);
   }
