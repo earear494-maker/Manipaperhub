@@ -833,8 +833,23 @@ if (adMedia) {
 }
 }
 
-document.getElementById("adModal").style.display="block";document.getElementById("shareGate").style.display="none";const btn=document.getElementById("continueBtn");const closeBtn=document.getElementById("closeAdBtn");btn.style.display="inline-block";btn.disabled=true;if(closeBtn)closeBtn.style.display=autoPopup?"none":"inline-block";let n=autoPopup?3:20;let closeWait=0;document.getElementById("countdown").textContent=`Advertisement finishing in ${n} seconds`;clearInterval(timer);
-timer=setInterval(async()=>{n--;if(autoPopup&&closeWait>0){closeWait--;if(closeWait<=0&&closeBtn)closeBtn.style.display="inline-block";}document.getElementById("countdown").textContent=n>0?`Advertisement finishing in ${n} seconds`:"Advertisement complete";if(n<=0){clearInterval(timer);const current=ads.find(x=>x.id===a.id);if(current&&current.views<current.maxViews){current.views++;await put("ads",current);ads=await getAll("ads");renderTopAd();}btn.disabled=false;if(autoPopup){if(document.getElementById("adModal").style.display==="block")closeModal()}}},1000)
+document.getElementById("adModal").style.display="block";document.getElementById("shareGate").style.display="none";const btn=document.getElementById("continueBtn");const closeBtn=document.getElementById("closeAdBtn");btn.style.display="inline-block";btn.disabled=true;if(closeBtn)closeBtn.style.display=autoPopup?"none":"inline-block";let n=autoPopup?3:20;
+let closeWait=3;
+if(closeBtn){
+  closeBtn.style.display="none";
+  closeBtn.disabled=true;
+}document.getElementById("countdown").textContent=`Advertisement finishing in ${n} seconds`;clearInterval(timer);
+timer=setInterval(async()=>{
+n--;
+
+if(autoPopup && closeWait>0){
+  closeWait--;
+  if(closeWait<=0 && closeBtn){
+    closeBtn.style.display="inline-block";
+    closeBtn.disabled=false;
+    closeBtn.textContent="✕ Cancel";
+  }
+}document.getElementById("countdown").textContent=n>0?`Advertisement finishing in ${n} seconds`:"Advertisement complete";if(n<=0){clearInterval(timer);const current=ads.find(x=>x.id===a.id);if(current&&current.views<current.maxViews){current.views++;await put("ads",current);ads=await getAll("ads");renderTopAd();}btn.disabled=false;}},1000)
 }
 
 async function getPopupAd() {
