@@ -1875,19 +1875,6 @@ async function showHomePopupAd() {
       body: JSON.stringify({ event: "impression" })
     }).catch(console.error);
 
-    let seconds = 3;
-
-    const countdownTimer = setInterval(() => {
-      seconds--;
-
-      if (seconds > 0) {
-        countdown.textContent = String(seconds);
-      } else {
-        clearInterval(countdownTimer);
-        countdown.textContent =
-          "Advertisement — close whenever you like";
-      }
-    }, 1000);
 
     close.addEventListener("click", () => {
       clearInterval(countdownTimer);
