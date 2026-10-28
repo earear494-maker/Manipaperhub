@@ -1859,7 +1859,9 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script>
 
 const STORAGE_API = "https://packs-featured-arms-expressions.trycloudflare.com";
-
+if (typeof papers === "undefined") {
+  var papers = [];
+}
 async function loadApprovedPapers() {
   try {
     const response = await fetch(`${STORAGE_API}/api/papers`);
@@ -1871,9 +1873,9 @@ async function loadApprovedPapers() {
     const storagePapers = await response.json();
 
     if (!Array.isArray(papers)) {
-      console.error("Papers list is not available.");
-      return;
-    }
+  console.error("papers is not an array. Check its declaration.");
+  return;
+}
 
     storagePapers.forEach(p => {
       const paperId = -Number(p.id);
